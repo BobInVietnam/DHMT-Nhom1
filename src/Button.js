@@ -1,11 +1,9 @@
-class Button {
-  constructor(x, y, w, h, label, onClick) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
+class Button extends Entity {
+  constructor(x, y, w, h, label, eventTag, eventData) {
+    super(x, y, w, h)
     this.label = label;
-    this.onClick = onClick;
+    this.eventTag = eventTag
+    this.eventData = eventData
   }
 
   display() {
@@ -46,7 +44,7 @@ class Button {
 
   checkClick() {
     if (this.isHovered()) {
-      this.onClick(); // Run the provided function
+      bus.emit(this.eventTag, this.eventData)
     }
   }
 }
