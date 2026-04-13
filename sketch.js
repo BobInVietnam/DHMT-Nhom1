@@ -38,7 +38,6 @@ function mousePressed() {
   let isClickOnUI = thuyetMinh.checkClick(mouseX, mouseY);
   
   if (isClickOnUI) {
-    bus.emit("HIDE_INFO"); 
     return; 
   }
 
