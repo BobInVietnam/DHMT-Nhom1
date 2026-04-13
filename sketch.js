@@ -17,7 +17,7 @@ function setup() {
   bus.on("SWITCH_SCENE", (name) => { sm.switchTo(name); });
 
   bus.on("SHOW_INFO", (data) => {
-    thuyetMinh.show(data.text, data.boxX, data.boxY);
+    thuyetMinh.show(data.texts, data.boxX, data.boxY); 
     nhanVat.show(data.charX, data.charY);
   });
 

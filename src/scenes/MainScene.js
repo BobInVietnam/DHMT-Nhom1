@@ -17,24 +17,23 @@ class MainScene extends Scene {
         this.bodyParts = [
             { 
                 id: "brain", name: "Hệ thần kinh", x: 400, y: 120, r: 40, 
-                info: "Hệ thần kinh bao gồm não bộ, tủy sống và các dây thần kinh. Não bộ là trung tâm điều khiển mọi hoạt động có ý thức của cơ thể.",
+                texts: [
+                  "Chào các bạn, đây là hệ thần kinh trung ương.",
+                  "Nó bao gồm não bộ nằm trong hộp sọ, và tủy sống nằm trong cột sống.",
+                  "Não bộ là cơ quan phức tạp nhất, giúp điều khiển mọi hoạt động có ý thức của chúng ta."
+                ],
                 boxX: 500, boxY: 50, charX: 420, charY: 100
             },
             { 
                 id: "eye", name: "Cơ quan thị giác", x: 400, y: 180, r: 30,
-                info: "Mắt là cơ quan phân tích thị giác, giúp chúng ta tiếp nhận ánh sáng, hình ảnh và màu sắc từ môi trường xung quanh.",
+                texts: [
+                  "Các bạn đang xem cấu tạo của mắt.",
+                  "Mắt đóng vai trò như một chiếc máy ảnh sinh học thu nhận ánh sáng.",
+                  "Nhờ có mắt, ta có thể phân biệt được màu sắc và hình dáng của vạn vật."
+                ],
                 boxX: 500, boxY: 150, charX: 420, charY: 180
-            },
-            { 
-                id: "skin", name: "Da", x: 400, y: 300, r: 80,
-                info: "Da bao bọc toàn thân, là cơ quan có diện tích lớn nhất. Da có chức năng bảo vệ cơ thể, điều hòa thân nhiệt và bài tiết mồ hôi.",
-                boxX: 500, boxY: 270, charX: 420, charY: 300
-            },
-            { 
-                id: "reproductive", name: "Hệ sinh dục", x: 400, y: 500, r: 60,
-                info: "Hệ sinh dục đảm nhiệm chức năng sinh sản, duy trì nòi giống qua các thế hệ. Cấu tạo cơ quan sinh dục nam và nữ có sự khác biệt rõ rệt.",
-                boxX: 500, boxY: 450, charX: 420, charY: 480
             }
+            //tương tự thêm ngoặc vuông [] phân tách bằng dấu phẩy cho Da và Hệ sinh dục
         ];
     }
 
@@ -88,13 +87,12 @@ class MainScene extends Scene {
 
             if (d < part.r) {
                 bus.emit("SHOW_INFO", {
-                    text: part.info,
+                    texts: part.texts, 
                     boxX: part.boxX,
                     boxY: part.boxY,
                     charX: part.charX,
                     charY: part.charY
                 });
-         
                 return true; 
             }
         }
