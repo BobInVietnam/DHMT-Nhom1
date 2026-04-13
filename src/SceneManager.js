@@ -1,34 +1,35 @@
 class SceneManager {
     constructor() {
-        this.scenes = {}
-        this.currentScene = null
+        this.scenes = {};
+        this.currentScene = null;
+
+        // Lắng nghe tín hiệu chuyển cảnh từ các Button phát ra
+        bus.on("SWITCH_SCENE", (sceneName) => {
+            console.log("Chuyển sang cảnh:", sceneName);
+            this.switchScene(sceneName);
+        });
     }
 
     addScene(name, scene) {
-        this.scenes[name] = scene
+        this.scenes[name] = scene;
     }
 
-    switchTo(name) {
+    // Tên hàm switchScene để khớp với main.js của bạn
+    switchScene(name) {
         if (this.scenes[name]) {
-            if (this.currentScene) {
-                this.currentScene.exit()
-            }
-            this.currentScene = this.scenes[name]
-            if (typeof this.currentScene.enter === 'function') {
-                this.currentScene.enter()
-            }
+            if (this.currentScene) this.currentScene.exit();
+            this.currentScene = this.scenes[name];
+            if (this.currentScene.enter) this.currentScene.enter();
         } else {
-            console.error(`Scene ${name} not found.`);
+            console.error(`Không tìm thấy cảnh: ${name}`);
         }
     }
 
     draw() {
-        if (this.currentScene && typeof this.currentScene.draw === 'function') {
-            this.currentScene.draw()
-        }
+        if (this.currentScene) this.currentScene.draw();
     }
 
     checkClick() {
-        this.currentScene.checkClick()
+        if (this.currentScene) this.currentScene.checkClick();
     }
 }
