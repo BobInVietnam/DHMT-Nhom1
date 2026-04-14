@@ -10,6 +10,10 @@ class SceneManager {
         });
     }
 
+    preload() {
+        this.currentScene.preload()
+    }
+
     addScene(name, scene) {
         this.scenes[name] = scene;
     }

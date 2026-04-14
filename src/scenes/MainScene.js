@@ -6,8 +6,9 @@ class MainScene extends Scene {
         let btnY = height / 2;
 
         this.startBtn = new Button(btnX, btnY, 250, 60, "START", "SWITCH_SCENE", "BodyMap");
-
+        this.imgBtn = new ImageButton(100, 100, 100, 100, "Body::Liver", "SWITCH_SCENE", "BodyMap");
         this.objects.push(this.startBtn);
+        this.objects.push(this.imgBtn);
     }
 
     draw() {
