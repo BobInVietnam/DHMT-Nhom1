@@ -2,10 +2,12 @@ let sceneManager
 
 async function setup() {
     createCanvas(1200, 800);
+
+    // Loading assets
+    await assets.loadAll("./assets/assets.json")
+
+    // Loading scenes
     sceneManager = new SceneManager();
-    let img = await loadImage("assets/g403.png")
-    console.log(img)
-    assetLoader.assets["Body::Liver"] = img
 
     sceneManager.addScene("Main", new MainScene());
     sceneManager.addScene("BodyMap", new BodyMapScene());

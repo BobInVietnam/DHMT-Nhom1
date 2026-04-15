@@ -1,7 +1,7 @@
 class ImageButton extends Clickable {
     constructor(x, y, w, h, imageName, eventTag, eventData) {
         super(x, y, w, h, eventTag, eventData);
-        this.dispimage = assetLoader.assets[imageName]
+        this.dispimage = assets.get(imageName)
     }
 
     display() {
