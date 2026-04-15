@@ -14,8 +14,11 @@ class Scene {
     exit() {}
 
     checkClick() {
-        for (let object of this.objects) {
-            object.checkClick();
+        for (let i = this.objects.length - 1; i >= 0; i--) {
+            let object = this.objects[i];
+            if (typeof object.checkClick === 'function') {
+                if (object.checkClick()) return;
+            }
         }
     }
 }

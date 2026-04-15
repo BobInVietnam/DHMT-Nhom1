@@ -10,15 +10,10 @@ class SceneManager {
         });
     }
 
-    preload() {
-        this.currentScene.preload()
-    }
-
     addScene(name, scene) {
         this.scenes[name] = scene;
     }
 
-    // Tên hàm switchScene để khớp với main.js của bạn
     switchScene(name) {
         if (this.scenes[name]) {
             if (this.currentScene) this.currentScene.exit();
