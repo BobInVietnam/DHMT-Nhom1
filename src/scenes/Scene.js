@@ -5,9 +5,17 @@ class Scene {
     }
     enter() {}
 
+    update(dt) {
+        for (let object of this.objects) {
+            if (typeof object.update === 'function') {
+                object.update(dt);
+            }
+        }
+    }
+
     draw() {
-        for (object in this.objects) {
-            object.display()
+        for (let object of this.objects) {
+            object.display();
         } 
     }
 

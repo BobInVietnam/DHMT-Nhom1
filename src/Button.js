@@ -2,8 +2,13 @@ class Button extends Entity {
   constructor(x, y, w, h, label, eventTag, eventData) {
     super(x, y, w, h)
     this.label = label;
-    this.eventTag = eventTag
-    this.eventData = eventData
+    this.eventTag = eventTag;
+    this.eventData = eventData;
+    
+    // Sử dụng chuỗi màu thay vì đối tượng color() của p5.js trong constructor
+    this.baseColorHex = "#ffffff";
+    this.hoverColorHex = "#dde6ff";
+    this.shadowColorHex = "rgba(0, 0, 0, 0.1)";
   }
 
   display() {
@@ -11,24 +16,32 @@ class Button extends Entity {
     rectMode(CENTER);
     textAlign(CENTER, CENTER);
 
-    // Change color if hovering
-    if (this.isHovered()) {
-      fill(200);
+    // Kiểm tra trạng thái chuột
+    let isHover = this.isHovered();
+
+    // Hiệu ứng bóng đổ
+    noStroke();
+    fill(this.shadowColorHex);
+    rect(this.x + 4, this.y + 4, this.w, this.h, 12);
+
+    // Vẽ thân nút
+    if (isHover) {
+      fill(this.hoverColorHex);
+      stroke("#0078ff");
+      strokeWeight(3);
       cursor(HAND);
     } else {
-      fill(240);
-      cursor(ARROW);
+      fill(this.baseColorHex);
+      stroke("#969696");
+      strokeWeight(2);
     }
-
-    // Draw button shape
-    stroke(50);
-    strokeWeight(2);
     rect(this.x, this.y, this.w, this.h, 10);
 
-    // Draw label
+    // Vẽ nhãn (Label)
     fill(0);
     noStroke();
-    textSize(16);
+    textSize(20);
+    textStyle(BOLD);
     text(this.label, this.x, this.y);
     pop();
   }
@@ -44,7 +57,9 @@ class Button extends Entity {
 
   checkClick() {
     if (this.isHovered()) {
-      bus.emit(this.eventTag, this.eventData)
+      if (this.eventTag) {
+        bus.emit(this.eventTag, this.eventData);
+      }
     }
   }
 }
