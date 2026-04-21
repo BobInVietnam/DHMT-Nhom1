@@ -10,7 +10,7 @@ class Button extends Clickable {
     textAlign(CENTER, CENTER);
 
     // Change color if hovering
-    if (this.isHovered()) {
+    if (this.isHovered) {
       fill(200);
       cursor(HAND);
     } else {

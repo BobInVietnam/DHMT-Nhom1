@@ -31,4 +31,13 @@ class SceneManager {
     checkClick() {
         if (this.currentScene) this.currentScene.checkClick();
     }
+    checkMouseWheel(event) {
+        if (this.currentScene) this.currentScene.checkMouseWheel(event);
+    }
+    checkMouseReleased() {
+        if (this.currentScene) this.currentScene.checkMouseReleased();
+    }
+    checkMouseDragged() {
+        if (this.currentScene) this.currentScene.checkMouseDragged();
+    }
 }

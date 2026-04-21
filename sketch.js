@@ -26,3 +26,11 @@ function draw() {
 function mousePressed() {
   sceneManager.checkClick();
 }
+
+function mouseWheel(event) {
+  sceneManager.checkMouseWheel(event)
+}
+
+function mouseDragged(event) {
+  sceneManager.checkMouseDragged()
+}

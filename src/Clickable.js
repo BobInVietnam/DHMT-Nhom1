@@ -3,20 +3,22 @@ class Clickable extends Entity {
         super(x, y, w, h);
         this.eventTag = eventTag
         this.eventData = eventData
+        this.isHovered = false;
     }
 
     display() {}
     
-    isHovered() {
-        return (
-        mouseX > this.x - this.w / 2 &&
-        mouseX < this.x + this.w / 2 &&
-        mouseY > this.y - this.h / 2 &&
-        mouseY < this.y + this.h / 2
+    checkHovered(mx = mouseX, my = mouseY) {
+        this.isHovered = (
+        mx > this.x - this.w / 2 &&
+        mx < this.x + this.w / 2 &&
+        my > this.y - this.h / 2 &&
+        my < this.y + this.h / 2
         );
     }
-    checkClick() {
-        if (this.isHovered()) {
+
+    checkClick(mx, my) {
+        if (this.isHovered) {
             bus.emit(this.eventTag, this.eventData)
         }   
     }

@@ -9,11 +9,9 @@ class ImageButton extends Clickable {
         push();
         imageMode(CENTER);
 
-        if (this.isHovered()) {
-            tint(255, 255, 255, this.transparency);
-            cursor(HAND);
-        } else {
-            cursor(ARROW);
+        if (this.isHovered) {
+            blendMode(ADD); 
+            fill(100, 100, 100); 
         }
         image(this.dispimage, this.x, this.y, this.w, this.h)
         pop();
