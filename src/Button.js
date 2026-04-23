@@ -1,9 +1,7 @@
-class Button extends Entity {
+class Button extends Clickable {
   constructor(x, y, w, h, label, eventTag, eventData) {
-    super(x, y, w, h)
+    super(x, y, w, h, eventTag, eventData)
     this.label = label;
-    this.eventTag = eventTag
-    this.eventData = eventData
   }
 
   display() {
@@ -12,7 +10,7 @@ class Button extends Entity {
     textAlign(CENTER, CENTER);
 
     // Change color if hovering
-    if (this.isHovered()) {
+    if (this.isHovered) {
       fill(200);
       cursor(HAND);
     } else {
@@ -31,20 +29,5 @@ class Button extends Entity {
     textSize(16);
     text(this.label, this.x, this.y);
     pop();
-  }
-
-  isHovered() {
-    return (
-      mouseX > this.x - this.w / 2 &&
-      mouseX < this.x + this.w / 2 &&
-      mouseY > this.y - this.h / 2 &&
-      mouseY < this.y + this.h / 2
-    );
-  }
-
-  checkClick() {
-    if (this.isHovered()) {
-      bus.emit(this.eventTag, this.eventData)
-    }
   }
 }

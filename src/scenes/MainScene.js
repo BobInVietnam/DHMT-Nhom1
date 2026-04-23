@@ -1,16 +1,13 @@
 class MainScene extends Scene {
     constructor() {
-        super()
+        super();
 
         let btnX = width / 2;
         let btnY = height / 2;
-        this.myButton = new Button(btnX, btnY, 150, 50, "CLICK ME", "SHOW_CIRCLE", null);
-        this.showCircle = false;
-        this.changeButton = new Button(btnX, btnY + 75, 200, 50, "SWITCH SCENE", "SWITCH_SCENE", "Sub");
+        this.startBtn = new Button(btnX, btnY, 250, 60, "START", "SWITCH_SCENE", "BodyMap");
 
-        bus.on("SHOW_CIRCLE", () => {
-            this.showCircle = !this.showCircle;
-        });
+        this.objects = [];
+        this.objects.push(this.startBtn);
 
         this.bodyParts = [
             { 
@@ -23,9 +20,7 @@ class MainScene extends Scene {
                 boxX: 500, boxY: 50, charX: 420, charY: 100
             },
             { 
-                id: "endocrine_system", 
-                name: "Hệ nội tiết (Tuyến tụy)", 
-                x: 400, y: 250, r: 30,
+                id: "endocrine_system", name: "Hệ nội tiết (Tuyến tụy)", x: 400, y: 250, r: 30,
                 texts: [
                   "Đây là Hệ nội tiết, và cơ quan các em đang chọn là Tuyến tụy.",
                   "Hệ nội tiết bao gồm nhiều tuyến khác nhau, đóng vai trò tiết ra hormone.",
@@ -34,9 +29,7 @@ class MainScene extends Scene {
                 boxX: 500, boxY: 180, charX: 420, charY: 230
             },
             { 
-                id: "skin_system", 
-                name: "Da & Điều hòa thân nhiệt", 
-                x: 300, y: 350, r: 45,
+                id: "skin_system", name: "Da & Điều hòa thân nhiệt", x: 300, y: 350, r: 45,
                 texts: [
                   "Chúng ta đang quan sát cấu tạo của Da.",
                   "Da được cấu tạo từ nhiều lớp: Lớp biểu bì, lớp bì và lớp mỡ dưới da.",
@@ -47,9 +40,7 @@ class MainScene extends Scene {
                 boxX: 400, boxY: 250, charX: 320, charY: 300
             },
             { 
-                id: "reproductive_system", 
-                name: "Hệ sinh sản", 
-                x: 400, y: 500, r: 50,
+                id: "reproductive_system", name: "Hệ sinh sản", x: 400, y: 500, r: 50,
                 texts: [
                   "Đây là Hệ sinh sản.",
                   "Hệ cơ quan này đảm nhiệm chức năng sinh sản, duy trì nòi giống qua các thế hệ.",
@@ -60,24 +51,21 @@ class MainScene extends Scene {
         ];
     }
 
-    enter() {
-        console.log("Đã vào Main scene - Màn hình chính");
-    }
-
     draw() {
         background(240);
 
-        push()
-        //nút test
-        this.myButton.display()
-        this.changeButton.display()
-        if (this.showCircle) {
-            circle(600, 300, 50)
+        fill(0);
+        textSize(32);
+        textAlign(CENTER);
+        text("Human Body App", width / 2, 100);
+
+        for(let obj of this.objects) {
+            if(obj.display) obj.display();
         }
 
-        //thay bằng ảnh X-ray/2D
-        this.drawBodyParts()
-        pop()
+        this.drawBodyParts();
+        
+        super.draw();
     }
 
     drawBodyParts() {
@@ -100,29 +88,27 @@ class MainScene extends Scene {
         }
     }
 
-    exit() {
-        console.log("Thoát khỏi Main scene");
-    }
-
-    //CLICK
     checkClick() {
-        this.myButton.checkClick()
-        this.changeButton.checkClick()
+        for(let obj of this.objects) {
+            if(obj.checkClick && obj.checkClick(mouseX, mouseY)) {
+                return true;
+            }
+        }
 
         for (let part of this.bodyParts) {
             let d = dist(mouseX, mouseY, part.x, part.y);
-
             if (d < part.r) {
                 bus.emit("SHOW_INFO", {
-                    texts: part.texts,  //kịch bản
+                    texts: part.texts,
                     boxX: part.boxX,
                     boxY: part.boxY,
                     charX: part.charX,
                     charY: part.charY
                 });
-
                 return true; 
             }
         }
+        
+        return false;
     }
 }

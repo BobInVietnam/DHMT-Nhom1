@@ -1,45 +1,59 @@
-let sm;
+const assets = new AssetLoader(); 
+let sceneManager;
 let thuyetMinh; 
 let nhanVat;   
 
-function setup() {
-  createCanvas(1200, 800);
+async function setup() {
+    createCanvas(1200, 800);
 
-  thuyetMinh = new Narration();
-  nhanVat = new Character();
+    await assets.loadAll("./assets/assets.json");
 
-  sm = new SceneManager();
-  sm.addScene("Main", new MainScene());
-  sm.addScene("Sub", new SubScene());
+    thuyetMinh = new Narration();
+    nhanVat = new Character();
 
-  sm.switchTo("Main");
+    sceneManager = new SceneManager();
+    sceneManager.addScene("Main", new MainScene());
+    sceneManager.addScene("BodyMap", new BodyMapScene());
+    sceneManager.addScene("Nervous", new NervousScene());
+    sceneManager.addScene("Endocrine", new EndocrineScene());
+    sceneManager.addScene("Skin", new SkinScene());
+    sceneManager.addScene("Reproductive", new ReproductiveScene());
+    sceneManager.addScene("Sub", new SubScene());
 
-  bus.on("SWITCH_SCENE", (name) => { sm.switchTo(name); });
+    sceneManager.switchScene("Main"); 
 
-  bus.on("SHOW_INFO", (data) => {
-    thuyetMinh.show(data.texts, data.boxX, data.boxY); 
-    nhanVat.show(data.charX, data.charY);
-  });
+    bus.on("SWITCH_SCENE", (name) => { sceneManager.switchScene(name); });
 
-  bus.on("HIDE_INFO", () => {
-    thuyetMinh.hide();
-    nhanVat.hide();
-  });
+    bus.on("SHOW_INFO", (data) => {
+        thuyetMinh.show(data.texts, data.boxX, data.boxY); 
+        nhanVat.show(data.charX, data.charY);
+    });
+
+    bus.on("HIDE_INFO", () => {
+        thuyetMinh.hide();
+        nhanVat.hide();
+    });
 }
 
 function draw() {
-  background(255); 
-  sm.draw(); 
-  nhanVat.draw();
-  thuyetMinh.draw();
+    background(255); 
+    sceneManager.draw(); 
+    nhanVat.display();
+    thuyetMinh.display();
 }
 
 function mousePressed() {
-  let isClickOnUI = thuyetMinh.checkClick(mouseX, mouseY);
-  
-  if (isClickOnUI) {
-    return; 
-  }
+    let isClickOnUI = thuyetMinh.checkClick(mouseX, mouseY);
+    if (isClickOnUI) {
+        return; 
+    }
+    sceneManager.checkClick();
+}
 
-  sm.checkClick();
+function mouseWheel(event) {
+    sceneManager.checkMouseWheel(event);
+}
+
+function mouseDragged(event) {
+    sceneManager.checkMouseDragged();
 }
