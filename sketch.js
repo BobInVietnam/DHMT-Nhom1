@@ -1,4 +1,3 @@
-const assets = new AssetLoader(); 
 let sceneManager;
 let thuyetMinh; 
 let nhanVat;   
