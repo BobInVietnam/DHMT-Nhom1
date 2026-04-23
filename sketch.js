@@ -1,20 +1,38 @@
-let sm
+let sceneManager;
+let thuyetMinh;  
 
-function setup() {
-  createCanvas(1200, 800);
+async function setup() {
+    createCanvas(1200, 800);
 
-  sm = new SceneManager()
-  sm.addScene("Main", new MainScene())
-  sm.addScene("Sub", new SubScene())
+    await assets.loadAll("./assets/assets.json");
 
-  sm.switchTo("Main")
-  bus.on("SWITCH_SCENE", (name) => {sm.switchTo(name)})
+    sceneManager = new SceneManager();
+    sceneManager.addScene("Main", new MainScene());
+    sceneManager.addScene("BodyMap", new BodyMapScene());
+    sceneManager.addScene("Nervous", new NervousScene());
+    sceneManager.addScene("Endocrine", new EndocrineScene());
+    sceneManager.addScene("Skin", new SkinScene());
+    sceneManager.addScene("Reproductive", new ReproductiveScene());
+    sceneManager.addScene("Sub", new SubScene());
+
+    sceneManager.switchScene("Main"); 
+
+    bus.on("SWITCH_SCENE", (name) => { sceneManager.switchScene(name); });
 }
 
 function draw() {
-  sm.draw()
+    background(255); 
+    sceneManager.draw(); 
 }
 
 function mousePressed() {
-  sm.checkClick();
+    sceneManager.checkClick();
+}
+
+function mouseWheel(event) {
+    sceneManager.checkMouseWheel(event);
+}
+
+function mouseDragged(event) {
+    sceneManager.checkMouseDragged();
 }

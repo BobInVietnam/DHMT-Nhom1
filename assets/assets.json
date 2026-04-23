@@ -1,0 +1,51 @@
+{
+    "data2d": [
+        {
+            "name": "liver",
+            "path": "g403.jpg"
+        },
+        {
+            "name": "male_xray",
+            "path": "male_xray.png"
+        },
+        {
+            "name": "kidney",
+            "path": "kidney.png"
+        },
+        {
+            "name": "brain",
+            "path": "brain.png"
+        },
+        {
+            "name": "balls",
+            "path": "male_reproduction.png"
+        },
+        {
+            "name": "teach_normal",
+            "path": "teach_normal.png"
+        },
+        {
+            "name": "teach_explain",
+            "path": "teach_explain.png"
+        }
+        ,       
+        {
+            "name": "teach_talk",
+            "path": "teach_talk.png"
+        },
+        {
+            "name": "teach_point_normal",
+            "path": "teach_point_normal.png"
+        },
+        {
+            "name": "teach_point_explain",
+            "path": "teach_point_explain.png"
+        }
+        ,       
+        {
+            "name": "teach_point_talk",
+            "path": "teach_point_talk.png"
+        }
+    ],
+    "data3d": []
+}
