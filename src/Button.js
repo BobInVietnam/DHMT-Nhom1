@@ -5,6 +5,8 @@ class Button extends Clickable {
   }
 
   display() {
+    if (!this.isVisible) return
+    
     push();
     rectMode(CENTER);
     textAlign(CENTER, CENTER);

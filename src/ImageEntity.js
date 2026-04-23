@@ -7,6 +7,8 @@ class ImageEntity extends Entity {
     }
 
     display() {
+        if (!this.isVisible) return
+        
         push()
         imageMode(CENTER)
         if (this.keepAspectRatio) {

@@ -28,6 +28,24 @@
             "name": "teach_explain",
             "path": "teach_explain.png"
         }
+        ,       
+        {
+            "name": "teach_talk",
+            "path": "teach_talk.png"
+        },
+        {
+            "name": "teach_point_normal",
+            "path": "teach_point_normal.png"
+        },
+        {
+            "name": "teach_point_explain",
+            "path": "teach_point_explain.png"
+        }
+        ,       
+        {
+            "name": "teach_point_talk",
+            "path": "teach_point_talk.png"
+        }
     ],
     "data3d": []
 }

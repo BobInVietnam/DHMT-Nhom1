@@ -1,19 +1,24 @@
 class ImageButton extends Clickable {
-    constructor(x, y, w, h, imageName, eventTag, eventData) {
+    constructor(x, y, w, h, imageName, keepAspectRatio, eventTag, eventData) {
         super(x, y, w, h, eventTag, eventData);
-        this.dispimage = assets.get(imageName)
-        this.transparency = 255;
+        this.image = assets.get(imageName)
+        this.aspectRatio = this.image.width / this.image.height
+        if (keepAspectRatio) {
+            this.w = max(w, h * this.aspectRatio)
+            this.h = max(h, w / this.aspectRatio)
+        }
     }
 
     display() {
-        push();
-        imageMode(CENTER);
+        if (!this.isVisible) return
 
+        push()
+        imageMode(CENTER)
         if (this.isHovered) {
             blendMode(ADD); 
             fill(100, 100, 100); 
         }
-        image(this.dispimage, this.x, this.y, this.w, this.h)
+        image(this.image, this.x, this.y, this.w, this.h)
         pop();
     }
 }

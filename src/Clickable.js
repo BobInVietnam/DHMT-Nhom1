@@ -6,7 +6,9 @@ class Clickable extends Entity {
         this.isHovered = false;
     }
 
-    display() {}
+    display() {
+        if (!this.isVisible) return
+    }
     
     checkHovered(mx = mouseX, my = mouseY) {
         this.isHovered = (
@@ -18,7 +20,7 @@ class Clickable extends Entity {
     }
 
     checkClick(mx, my) {
-        if (this.isHovered) {
+        if (this.isVisible && this.isHovered) {
             bus.emit(this.eventTag, this.eventData)
         }   
     }
