@@ -36,3 +36,7 @@ function mouseWheel(event) {
 function mouseDragged(event) {
     sceneManager.checkMouseDragged();
 }
+
+function keyPressed() {
+    bus.emit("KEY_PRESSED", keyCode);
+}
