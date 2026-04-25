@@ -47,5 +47,14 @@
             "path": "teach_point_talk.png"
         }
     ],
-    "data3d": []
+    "data3d": [],
+    "data_audio": [
+        { "name": "narration_open",   "path": "audio/bubble_pop.mp3" },
+        { "name": "narration_next",   "path": "audio/page_flip.mp3" },
+        { "name": "scene_transition", "path": "audio/whoosh.mp3" },
+        { "name": "model_load",       "path": "audio/chime.mp3" },
+        { "name": "skin_ambient",     "path": "audio/ambient_nature.mp3" },
+        { "name": "heat_ambient",     "path": "audio/heat_sizzle.mp3" },
+        { "name": "cold_ambient",     "path": "audio/wind_cold.mp3" }
+    ]
 }

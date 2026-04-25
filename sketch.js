@@ -5,7 +5,9 @@ async function setup() {
     createCanvas(1200, 800);
     model3DViewer.init();
 
+    const manifest = await (await fetch("./assets/assets.json")).json();
     await assets.loadAll("./assets/assets.json");
+    soundManager.wireEvents(manifest.data_audio || []);
 
     sceneManager = new SceneManager();
     sceneManager.addScene("Main", new MainScene());
@@ -27,6 +29,7 @@ function draw() {
 }
 
 function mousePressed() {
+    userStartAudio();
     sceneManager.checkClick();
 }
 

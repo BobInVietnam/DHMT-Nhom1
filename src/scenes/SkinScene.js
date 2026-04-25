@@ -41,6 +41,7 @@ class SkinScene extends Scene {
         this.step = 0;
         this.animFrame = 0;
         this.isHot = true;
+        this._lastIsHot = null;
 
         this.narration = new Narration(980, 380);
         this.narrator  = new Narrator(1000, 660, SkinNarration0);
@@ -72,29 +73,34 @@ class SkinScene extends Scene {
         this.step = 0;
         this.animFrame = 0;
         this.isHot = true;
+        this._lastIsHot = null;
         this.narrator.show();
         this.narrator.eventData = SkinNarration0;
         bus.emit("FINISH_NARRATION");
+        bus.emit("SKIN_ENTER");
         model3DViewer.hide();
         this._syncButtons();
     }
 
     exit() {
         model3DViewer.hide();
+        bus.emit("SKIN_EXIT");
     }
 
     nextStep() {
         if (this.step < 2) this.step++;
         this.animFrame = 0;
+        this._lastIsHot = null;
         bus.emit("FINISH_NARRATION");
         if (this.step === 1) {
             this.narrator.eventData = SkinNarration1;
         } else if (this.step === 2) {
-            // Set optional narrator speech; narrator stays visible per design
             this.narrator.eventData = SkinNarration2;
             model3DViewer.load('./assets/skin.glb');
             // Three.js canvas: left panel x=[30,770], y=[108,678], right of narrator
             model3DViewer.show(30, 108, 740, 570);
+            bus.emit("SKIN_THERMO_CHANGE", null);
+            bus.emit("SKIN_3D_LOADED");
         }
         this._syncButtons();
     }
@@ -120,6 +126,10 @@ class SkinScene extends Scene {
     draw() {
         this.animFrame++;
         this.isHot = (Math.floor(this.animFrame / 300) % 2 === 0);
+        if (this.step === 1 && this.isHot !== this._lastIsHot) {
+            bus.emit("SKIN_THERMO_CHANGE", this.isHot);
+            this._lastIsHot = this.isHot;
+        }
         if      (this.step === 0) this._drawOverview();
         else if (this.step === 1) this._drawThermoReg();
         else                      this._drawModel3D();
