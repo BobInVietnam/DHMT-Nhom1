@@ -27,6 +27,14 @@ const SkinNarration1 = {
     ]
 };
 
+const SkinNarration2 = {
+    text: [
+        "Đây là mô hình 3D của da người với đầy đủ ba lớp: biểu bì, lớp bì và mô dưới da.",
+        "Bạn có thể kéo chuột để xoay, cuộn để phóng to/thu nhỏ, và nhấp phải để di chuyển."
+    ],
+    sprite: [CharacterSprite.TALK, CharacterSprite.EXPL]
+};
+
 class SkinScene extends Scene {
     constructor() {
         super();
@@ -36,12 +44,28 @@ class SkinScene extends Scene {
 
         this.narration = new Narration(980, 380);
         this.narrator  = new Narrator(1000, 660, SkinNarration0);
-        this.backBtn   = new Button(80,  40, 130, 40, "← Quay lại", "SWITCH_SCENE", "BodyMap");
-        this.skipBtn   = new Button(1120, 40, 100, 35, "SKIP >>>",  "SWITCH_SCENE", "BodyMap");
-        this.nextBtn   = new Button(380, 768, 180, 46, "Tiếp theo →", "SKIN_NEXT",  null);
+        this.backBtn   = new Button(80,   40, 130, 40, "← Quay lại", "SWITCH_SCENE",    "BodyMap");
+        this.skipBtn   = new Button(1120, 40, 100, 35, "SKIP >>>",   "SWITCH_SCENE",    "BodyMap");
+        this.nextBtn   = new Button(380, 768, 180, 46, "Tiếp theo →","SKIN_NEXT",       null);
 
-        this.objects.push(this.narration, this.narrator, this.backBtn, this.skipBtn, this.nextBtn);
-        bus.on("SKIN_NEXT", () => this.nextStep());
+        // 3D model zoom controls — only visible in step 2, placed below the Three.js canvas
+        this.zoom3DPlusBtn  = new Button(560, 760, 88, 34, "Zoom +", "SKIN_3D_ZOOM_IN",  null);
+        this.zoom3DMinusBtn = new Button(656, 760, 88, 34, "Zoom −", "SKIN_3D_ZOOM_OUT", null);
+        this.zoom3DResetBtn = new Button(752, 760, 88, 34, "Reset",  "SKIN_3D_RESET",    null);
+        this.zoom3DPlusBtn.hide();
+        this.zoom3DMinusBtn.hide();
+        this.zoom3DResetBtn.hide();
+
+        this.objects.push(
+            this.narration, this.narrator,
+            this.backBtn, this.skipBtn, this.nextBtn,
+            this.zoom3DPlusBtn, this.zoom3DMinusBtn, this.zoom3DResetBtn
+        );
+
+        bus.on("SKIN_NEXT",        () => this.nextStep());
+        bus.on("SKIN_3D_ZOOM_IN",  () => model3DViewer.zoomIn());
+        bus.on("SKIN_3D_ZOOM_OUT", () => model3DViewer.zoomOut());
+        bus.on("SKIN_3D_RESET",    () => model3DViewer.resetCamera());
     }
 
     enter() {
@@ -51,24 +75,43 @@ class SkinScene extends Scene {
         this.narrator.show();
         this.narrator.eventData = SkinNarration0;
         bus.emit("FINISH_NARRATION");
-        this._syncNextBtn();
+        model3DViewer.hide();
+        this._syncButtons();
+    }
+
+    exit() {
+        model3DViewer.hide();
     }
 
     nextStep() {
         if (this.step < 2) this.step++;
         this.animFrame = 0;
         bus.emit("FINISH_NARRATION");
-        if (this.step === 1) this.narrator.eventData = SkinNarration1;
-        this._syncNextBtn();
+        if (this.step === 1) {
+            this.narrator.eventData = SkinNarration1;
+        } else if (this.step === 2) {
+            // Set optional narrator speech; narrator stays visible per design
+            this.narrator.eventData = SkinNarration2;
+            model3DViewer.load('./assets/skin.glb');
+            // Three.js canvas: left panel x=[30,770], y=[108,678], right of narrator
+            model3DViewer.show(30, 108, 740, 570);
+        }
+        this._syncButtons();
     }
 
-    _syncNextBtn() {
-        if (this.step >= 2) {
-            this.nextBtn.label    = "← Về trang chủ";
+    _syncButtons() {
+        if (this.step === 2) {
+            this.zoom3DPlusBtn.show();
+            this.zoom3DMinusBtn.show();
+            this.zoom3DResetBtn.show();
+            this.nextBtn.label     = "← Về trang chủ";
             this.nextBtn.eventTag  = "SWITCH_SCENE";
             this.nextBtn.eventData = "BodyMap";
         } else {
-            this.nextBtn.label    = "Tiếp theo →";
+            this.zoom3DPlusBtn.hide();
+            this.zoom3DMinusBtn.hide();
+            this.zoom3DResetBtn.hide();
+            this.nextBtn.label     = "Tiếp theo →";
             this.nextBtn.eventTag  = "SKIN_NEXT";
             this.nextBtn.eventData = null;
         }
@@ -274,49 +317,29 @@ class SkinScene extends Scene {
         textAlign(LEFT);
     }
 
-    // ── Step 2: 3D model placeholder ──────────────────────────────────────
+    // ── Step 2: 3D model view (Three.js overlay handles the actual rendering) ──
 
     _drawModel3D() {
         background(22, 28, 48);
 
+        // Title and instructions — drawn above the Three.js canvas area (y < 108)
         push();
-        fill(255); noStroke(); textSize(28); textStyle(BOLD); textAlign(CENTER);
-        text("Mô hình 3D của Da", 400, 66);
-        fill(160); textSize(14); textStyle(NORMAL);
-        text("Xoay: kéo chuột  |  Zoom: cuộn chuột  |  Di chuyển: giữ chuột", 400, 98);
+        fill(255); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
+        text("Mô hình 3D của Da", 400, 52);
+        fill(170); textSize(13); textStyle(NORMAL);
+        text("Kéo chuột: xoay  |  Cuộn: zoom  |  Chuột phải / Ctrl+kéo: di chuyển", 400, 80);
         pop();
 
+        // Border frame around the Three.js canvas area (x=30,y=108,w=740,h=570)
         push();
-        fill(42, 52, 82); stroke(90, 140, 255); strokeWeight(2);
-        rectMode(CENTER); rect(400, 430, 660, 510, 12);
-
-        fill(140, 180, 255); noStroke(); textSize(22); textAlign(CENTER);
-        text("[ skin.glb ]", 400, 365);
-        fill(100, 140, 210); textSize(14);
-        text("Mô hình 3D da người sẽ hiển thị tại đây", 400, 400);
-        fill(80, 110, 170); textSize(13);
-        text("( Tích hợp Three.js để render mô hình skin.glb )", 400, 428);
-
-        // wireframe cube
-        stroke(100, 155, 255); strokeWeight(1.5); noFill();
-        let cx=400, cy=510, s=58, d=33;
-        let f = [[cx-s,cy-s],[cx+s,cy-s],[cx+s,cy+s],[cx-s,cy+s]];
-        let bk= [[cx-s+d,cy-s-d],[cx+s+d,cy-s-d],[cx+s+d,cy+s-d],[cx-s+d,cy+s-d]];
-        for (let i = 0; i < 4; i++) {
-            line(f[i][0],f[i][1], f[(i+1)%4][0],f[(i+1)%4][1]);
-            line(bk[i][0],bk[i][1], bk[(i+1)%4][0],bk[(i+1)%4][1]);
-            line(f[i][0],f[i][1], bk[i][0],bk[i][1]);
-        }
+        noFill(); stroke(70, 110, 220); strokeWeight(2);
+        rect(30, 108, 740, 570, 8);
         pop();
 
-        // zoom controls
+        // Loading hint (visible briefly before model finishes loading)
         push();
-        rectMode(CENTER); textAlign(CENTER);
-        let ctrls = [["Zoom +", 220], ["Zoom -", 305], ["Reset", 390]];
-        for (let [lbl, bx] of ctrls) {
-            fill(55, 65, 100); stroke(90, 140, 255); strokeWeight(1); rect(bx, 755, 72, 34, 6);
-            fill(170, 200, 255); noStroke(); textSize(13); text(lbl, bx, 758);
-        }
+        fill(80, 100, 160); noStroke(); textSize(13); textAlign(CENTER);
+        text("Đang tải mô hình…", 400, 700);
         pop();
     }
 }
