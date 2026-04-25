@@ -7,34 +7,38 @@ class Model3DViewer {
     }
 
     init(container) {
-        this._canvas = document.createElement('canvas');
-        this._canvas.style.position = 'absolute';
-        this._canvas.style.display  = 'none';
-        this._canvas.style.zIndex   = '10';
-        this._canvas.style.borderRadius = '6px';
-        container.appendChild(this._canvas);
+        try {
+            this._canvas = document.createElement('canvas');
+            this._canvas.style.position = 'absolute';
+            this._canvas.style.display  = 'none';
+            this._canvas.style.zIndex   = '10';
+            this._canvas.style.borderRadius = '6px';
+            container.appendChild(this._canvas);
 
-        this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, alpha: true, antialias: true });
-        this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        this._renderer.outputEncoding = THREE.sRGBEncoding;
+            this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, alpha: true, antialias: true });
+            this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            this._renderer.outputEncoding = THREE.sRGBEncoding;
 
-        this._scene = new THREE.Scene();
-        this._scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-        const dir = new THREE.DirectionalLight(0xffffff, 1.0);
-        dir.position.set(5, 10, 7);
-        this._scene.add(dir);
-        this._scene.add(new THREE.HemisphereLight(0x87ceeb, 0x554433, 0.4));
+            this._scene = new THREE.Scene();
+            this._scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+            const dir = new THREE.DirectionalLight(0xffffff, 1.0);
+            dir.position.set(5, 10, 7);
+            this._scene.add(dir);
+            this._scene.add(new THREE.HemisphereLight(0x87ceeb, 0x554433, 0.4));
 
-        this._camera = new THREE.PerspectiveCamera(45, 1, 0.001, 1000);
-        this._camera.position.set(0, 0, 3);
+            this._camera = new THREE.PerspectiveCamera(45, 1, 0.001, 1000);
+            this._camera.position.set(0, 0, 3);
 
-        this._controls = new THREE.OrbitControls(this._camera, this._canvas);
-        this._controls.enableDamping  = true;
-        this._controls.dampingFactor  = 0.07;
-        this._controls.minDistance    = 0.3;
-        this._controls.maxDistance    = 20;
+            this._controls = new THREE.OrbitControls(this._camera, this._canvas);
+            this._controls.enableDamping  = true;
+            this._controls.dampingFactor  = 0.07;
+            this._controls.minDistance    = 0.3;
+            this._controls.maxDistance    = 20;
 
-        this._ready = true;
+            this._ready = true;
+        } catch (err) {
+            console.warn('Model3DViewer: init failed, 3D disabled.', err);
+        }
     }
 
     load(path) {
