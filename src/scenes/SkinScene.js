@@ -322,7 +322,7 @@ class SkinScene extends Scene {
     _drawModel3D() {
         background(22, 28, 48);
 
-        // Title and instructions — drawn above the Three.js canvas area (y < 108)
+        // Title and instructions above the Three.js canvas area (y < 108)
         push();
         fill(255); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
         text("Mô hình 3D của Da", 400, 52);
@@ -336,10 +336,19 @@ class SkinScene extends Scene {
         rect(30, 108, 740, 570, 8);
         pop();
 
-        // Loading hint (visible briefly before model finishes loading)
+        // Status line below the viewport — shows viewer state so issues are visible
         push();
-        fill(80, 100, 160); noStroke(); textSize(13); textAlign(CENTER);
-        text("Đang tải mô hình…", 400, 700);
+        textSize(13); textAlign(CENTER); noStroke();
+        if (!model3DViewer.isReady) {
+            fill(255, 80, 80);
+            text("⚠ WebGL không khả dụng — không thể hiển thị mô hình 3D", 400, 700);
+        } else if (model3DViewer.isLoading) {
+            fill(120, 160, 255);
+            text("Đang tải mô hình… (skin.glb ~27 MB)", 400, 700);
+        } else {
+            fill(80, 180, 100);
+            text("Mô hình đã tải  ·  dùng chuột để xoay / zoom", 400, 700);
+        }
         pop();
     }
 }
