@@ -6,14 +6,16 @@ class Model3DViewer {
         this._currentModel = null;
     }
 
-    init(container) {
+    // No container arg needed — appends a fixed-position overlay to body.
+    init() {
         try {
             this._canvas = document.createElement('canvas');
-            this._canvas.style.position = 'absolute';
+            this._canvas.setAttribute('data-threejs', 'true');
+            this._canvas.style.position = 'fixed';
             this._canvas.style.display  = 'none';
             this._canvas.style.zIndex   = '10';
             this._canvas.style.borderRadius = '6px';
-            container.appendChild(this._canvas);
+            document.body.appendChild(this._canvas);
 
             this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, alpha: true, antialias: true });
             this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -30,10 +32,10 @@ class Model3DViewer {
             this._camera.position.set(0, 0, 3);
 
             this._controls = new THREE.OrbitControls(this._camera, this._canvas);
-            this._controls.enableDamping  = true;
-            this._controls.dampingFactor  = 0.07;
-            this._controls.minDistance    = 0.3;
-            this._controls.maxDistance    = 20;
+            this._controls.enableDamping = true;
+            this._controls.dampingFactor = 0.07;
+            this._controls.minDistance   = 0.3;
+            this._controls.maxDistance   = 20;
 
             this._ready = true;
         } catch (err) {
@@ -50,7 +52,7 @@ class Model3DViewer {
         const loader = new THREE.GLTFLoader();
         loader.load(path, (gltf) => {
             const model = gltf.scene;
-            const box   = new THREE.Box3().setFromObject(model);
+            const box    = new THREE.Box3().setFromObject(model);
             const center = box.getCenter(new THREE.Vector3());
             const size   = box.getSize(new THREE.Vector3());
             const maxDim = Math.max(size.x, size.y, size.z) || 1;
@@ -64,14 +66,18 @@ class Model3DViewer {
         });
     }
 
+    // x, y, w, h are in p5 canvas pixel coordinates (1200×800 space).
     show(x, y, w, h) {
         if (!this._ready) return;
-        this._canvas.style.left   = x + 'px';
-        this._canvas.style.top    = y + 'px';
-        this._canvas.style.width  = w + 'px';
-        this._canvas.style.height = h + 'px';
+        const rect = this._p5CanvasRect();
+        const sx = rect.width  / 1200;
+        const sy = rect.height / 800;
+        this._canvas.style.left   = (rect.left + x * sx) + 'px';
+        this._canvas.style.top    = (rect.top  + y * sy) + 'px';
+        this._canvas.style.width  = (w * sx) + 'px';
+        this._canvas.style.height = (h * sy) + 'px';
         this._canvas.style.display = 'block';
-        this._renderer.setSize(w, h);
+        this._renderer.setSize(Math.round(w * sx), Math.round(h * sy));
         this._camera.aspect = w / h;
         this._camera.updateProjectionMatrix();
         this._visible = true;
@@ -102,6 +108,12 @@ class Model3DViewer {
         this._camera.position.set(0, 0, 3);
         this._controls.target.set(0, 0, 0);
         this._controls.update();
+    }
+
+    // Returns the bounding rect of the p5 canvas in viewport coordinates.
+    _p5CanvasRect() {
+        const c = document.querySelector('canvas:not([data-threejs])');
+        return c ? c.getBoundingClientRect() : { left: 0, top: 0, width: 1200, height: 800 };
     }
 
     _startLoop() {
