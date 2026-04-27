@@ -23,7 +23,8 @@ class SoundManager {
         if (this._loops[name]) return;
         const s = this._sounds[name];
         if (!s) return;
-        s.loop();
+        s.loop();   // set loop flag
+        s.play();   // actually start playback
         this._loops[name] = s;
     }
 
