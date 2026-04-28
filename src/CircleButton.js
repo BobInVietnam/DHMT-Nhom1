@@ -12,7 +12,7 @@ class CircleButton extends Clickable {
         if (!this.isVisible) return;
         push();
         noStroke();
-        fill(255, 255, 255, this.isHovered ? 200 : 60);
+        fill(255, 255, 255, this.isHovered ? 220 : 140);
         ellipse(this.x, this.y, this.r * 2, this.r * 2);
         pop();
     }
