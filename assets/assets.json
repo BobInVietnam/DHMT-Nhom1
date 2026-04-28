@@ -5,6 +5,8 @@
         { "name": "kidney",              "path": "kidney.png"                },
         { "name": "brain",               "path": "brain.png"                 },
         { "name": "balls",               "path": "male_reproduction.png"     },
+        { "name": "repro_male",          "path": "repro_male.png"            },
+        { "name": "repro_female",        "path": "repro_female.png"          },
         { "name": "teach_normal",        "path": "teach_normal.png"          },
         { "name": "teach_explain",       "path": "teach_explain.png"         },
         { "name": "teach_talk",          "path": "teach_talk.png"            },
