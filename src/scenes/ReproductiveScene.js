@@ -54,6 +54,20 @@ const ReproNarrationMenstrual = {
     ]
 };
 
+const ReproNarrationContraception = {
+    text: [
+        "Biện pháp tránh thai giúp ngăn ngừa mang thai ngoài ý muốn, bảo vệ sức khỏe sinh sản tuổi vị thành niên.",
+        "Bao cao su: ngăn tinh trùng tiếp xúc với trứng, đồng thời phòng ngừa bệnh lây qua đường tình dục.",
+        "Thuốc tránh thai hằng ngày: chứa hormone ngăn rụng trứng, cần uống đúng giờ mỗi ngày.",
+        "Đặt vòng tránh thai (IUD): dụng cụ đặt trong tử cung, ngăn tinh trùng thụ tinh, hiệu quả nhiều năm.",
+        "Nguyên tắc chung: mọi biện pháp đều nhằm ngăn tinh trùng gặp trứng — chỉ khác về cơ chế và thời điểm tác dụng."
+    ],
+    sprite: [
+        CharacterSprite.TALK, CharacterSprite.EXPL, CharacterSprite.P_EXPL,
+        CharacterSprite.P_TALK, CharacterSprite.EXPL
+    ]
+};
+
 const ReproNarrationGame = {
     text: [
         "Hãy đóng vai tinh trùng và vượt qua hành trình gặp trứng!",
@@ -85,11 +99,11 @@ class ReproductiveScene extends Scene {
         this.femaleBtn    = new Button(230, 768, 120, 46, "Nữ",            "REPRO_GENDER", "female");
         this.maleBtn      = new Button(360, 768, 120, 46, "Nam",           "REPRO_GENDER", "male");
 
-        // Step 3: start game replaces next
+        // Step 4: start game replaces next
         this.startGameBtn = new Button(380, 768, 210, 46, "Bắt đầu chơi", "REPRO_NEXT",   null);
         this.startGameBtn.hide();
 
-        // Step 4 game HUD buttons
+        // Step 5 game HUD buttons
         this.pauseBtn     = new Button(90,  38, 135, 36, "Tạm dừng",      "REPRO_PAUSE",  null);
         this.pauseBtn.hide();
         this.menuBtn      = new Button(600, 520, 210, 50, "Về trang chủ", "SWITCH_SCENE", "BodyMap");
@@ -108,7 +122,7 @@ class ReproductiveScene extends Scene {
         bus.on("REPRO_GENDER", (g) => this._setGender(g));
         bus.on("REPRO_PAUSE",  () => this._togglePause());
         bus.on("KEY_PRESSED",  (code) => {
-            if (this.step === 4 && (code === 32 || code === 80)) this._togglePause();
+            if (this.step === 5 && (code === 32 || code === 80)) this._togglePause();
         });
     }
 
@@ -143,13 +157,14 @@ class ReproductiveScene extends Scene {
     }
 
     nextStep() {
-        if (this.step < 4) this.step++;
+        if (this.step < 5) this.step++;
         bus.emit("FINISH_NARRATION");
         this._syncButtons();
         if (this.step === 1) this.narrator.eventData = ReproNarrationSpermEgg;
         if (this.step === 2) this.narrator.eventData = ReproNarrationMenstrual;
-        if (this.step === 3) this.narrator.eventData = ReproNarrationGame;
-        if (this.step === 4) {
+        if (this.step === 3) this.narrator.eventData = ReproNarrationContraception;
+        if (this.step === 4) this.narrator.eventData = ReproNarrationGame;
+        if (this.step === 5) {
             this._initGame();
             this.gameState = "playing";
             this.narrator.hide();
@@ -185,11 +200,11 @@ class ReproductiveScene extends Scene {
             this.femaleBtn.show(); this.maleBtn.show();
             this.nextBtn.x = 520;
         }
-        if (this.step === 3) {
+        if (this.step === 4) {
             this.nextBtn.hide();
             this.startGameBtn.show();
         }
-        if (this.step === 4) {
+        if (this.step === 5) {
             this.backBtn.hide(); this.skipBtn.hide();
             this.nextBtn.hide(); this.startGameBtn.hide();
             this.pauseBtn.show();
@@ -201,7 +216,8 @@ class ReproductiveScene extends Scene {
         if      (this.step === 0) this._drawOrgans();
         else if (this.step === 1) this._drawSpermEgg();
         else if (this.step === 2) this._drawMenstrualCycle();
-        else if (this.step === 3) this._drawGameInstructions();
+        else if (this.step === 3) this._drawContraception();
+        else if (this.step === 4) this._drawGameInstructions();
         else                      this._drawGame();
         super.draw();
     }
@@ -213,7 +229,7 @@ class ReproductiveScene extends Scene {
 
         push();
         fill(70, 20, 80); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
-        text(this.gender === "female" ? "He sinh duc nu" : "He sinh duc nam", 380, 50);
+        text(this.gender === "female" ? "Hệ sinh dục nữ" : "Hệ sinh dục nam", 380, 50);
         pop();
 
         // Highlight selected gender button
@@ -229,7 +245,6 @@ class ReproductiveScene extends Scene {
     }
 
     _drawFemaleOrgans() {
-        // TODO: add {"name":"repro_female","path":"repro_female.png"} to assets.json when file is delivered
         const femaleImg = assets.get("repro_female");
         let cx = 360, cy = 370;
 
@@ -280,18 +295,18 @@ class ReproductiveScene extends Scene {
 
         // Info box
         push();
+        if (vFont) textFont(vFont);
         fill(255, 242, 255); stroke(180, 80, 155); strokeWeight(1);
         rectMode(CORNER); rect(30, 620, 740, 118, 8);
         fill(70, 15, 55); noStroke(); textSize(12); textAlign(LEFT);
-        text("Chuc nang: San xuat trung (noan), tiet estrogen & progesterone,", 42, 640);
-        text("la noi thu tinh va thai ky phat trien trong 9 thang.", 42, 658);
-        text("Chu ky kinh nguyet: ~28 ngay, moi chu ky phong 1 trung tu buong trung.", 42, 676);
-        text("Benh thuong gap: u nang buong trung, ung thu co tu cung (soi HPV).", 42, 694);
+        text("Chức năng: Sản xuất trứng (noãn), tiết estrogen & progesterone,", 42, 640);
+        text("là nơi thụ tinh và thai kỳ phát triển trong 9 tháng.", 42, 658);
+        text("Chu kỳ kinh nguyệt: ~28 ngày, mỗi chu kỳ phóng 1 trứng từ buồng trứng.", 42, 676);
+        text("Bệnh thường gặp: u nang buồng trứng, ung thư cổ tử cung (soi HPV).", 42, 694);
         pop();
     }
 
     _drawMaleOrgans() {
-        // TODO: add {"name":"repro_male","path":"repro_male.png"} to assets.json when file is delivered
         const maleImg = assets.get("repro_male");
         let cx = 360, cy = 360;
 
@@ -350,13 +365,14 @@ class ReproductiveScene extends Scene {
 
         // Info box
         push();
+        if (vFont) textFont(vFont);
         fill(240, 240, 255); stroke(100, 80, 200); strokeWeight(1);
         rectMode(CORNER); rect(30, 620, 740, 118, 8);
         fill(25, 18, 70); noStroke(); textSize(12); textAlign(LEFT);
-        text("Chuc nang: San xuat tinh trung, tiet testosterone dieu hoa gioi tinh nam.", 42, 640);
-        text("Tinh trung truong thanh qua mao tinh, duoc nuoi duong boi dich tiet tui tinh.", 42, 658);
-        text("Moi lan xuat tinh: hang trieu tinh trung – hanh trinh khac nghiet bat dau.", 42, 676);
-        text("Nhiet do tinh hoan thap hon than nhiet ~2°C giup tinh trung phat trien tot.", 42, 694);
+        text("Chức năng: Sản xuất tinh trùng, tiết testosterone điều hòa giới tính nam.", 42, 640);
+        text("Tinh trùng trưởng thành qua mào tinh, được nuôi dưỡng bởi dịch tiết túi tinh.", 42, 658);
+        text("Mỗi lần xuất tinh: hàng triệu tinh trùng – hành trình khắc nghiệt bắt đầu.", 42, 676);
+        text("Nhiệt độ tinh hoàn thấp hơn thân nhiệt ~2°C giúp tinh trùng phát triển tốt.", 42, 694);
         pop();
     }
 
@@ -367,7 +383,7 @@ class ReproductiveScene extends Scene {
 
         push();
         fill(100, 20, 60); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
-        text("Trung va Tinh trung", 380, 50);
+        text("Trứng và Tinh trùng", 380, 50);
         pop();
 
         let af = this.animFrame;
@@ -379,12 +395,12 @@ class ReproductiveScene extends Scene {
         fill(255, 185, 70); noStroke(); ellipse(0, 0, 58, 58);
         fill(60, 30, 0); noStroke(); textSize(11); textAlign(CENTER);
         text("Zona pellucida", 0, 108);
-        text("Te bao trung", 0, -30);
-        text("Nhan", 0, 20);
+        text("Tế bào trứng", 0, -30);
+        text("Nhân", 0, 20);
         fill(120, 70, 0); textSize(10); text("~0.1 mm", 108, -78);
         pop();
         push(); fill(140, 80, 10); noStroke(); textSize(16); textStyle(BOLD); textAlign(CENTER);
-        text("Trung (Noan)", 190, 505); pop();
+        text("Trứng (Noãn)", 190, 505); pop();
 
         // SPERM cluster (right)
         push(); translate(510, 370);
@@ -395,7 +411,7 @@ class ReproductiveScene extends Scene {
         }
         pop();
         push(); fill(20, 60, 140); noStroke(); textSize(16); textStyle(BOLD); textAlign(CENTER);
-        text("Tinh trung", 510, 505); pop();
+        text("Tinh trùng", 510, 505); pop();
 
         // Animated arrow
         push();
@@ -410,17 +426,17 @@ class ReproductiveScene extends Scene {
         triangle(400, 370, 385, 362, 385, 378);
         pop();
 
-        // Info panel (moved up to y=168 to make room for waypoint diagram)
+        // Info panel
         push();
         fill(255, 245, 255); stroke(150, 100, 200); strokeWeight(1);
         rectMode(CORNER); rect(30, 168, 690, 140, 8);
         fill(60, 20, 80); noStroke(); textSize(13); textAlign(LEFT);
         let lines = [
-            "Trung: te bao lon nhat co the, khong di chuyen, chua cytoplasm nuoi phoi.",
-            "Tinh trung: te bao nho nhat, co dau (chua DNA) va duoi dai (de boi).",
-            "Hanh trinh thu tinh: tinh trung boi qua am dao → tu cung → ong dan trung.",
-            "Khi gap trung: tinh trung giai phong enzyme phan huy mang trung → thu tinh.",
-            "Hop tu (zygote) hinh thanh → phan chia → phoi → di chuyen ve tu cung lam to."
+            "Trứng: tế bào lớn nhất cơ thể, không di chuyển, chứa cytoplasm nuôi phôi.",
+            "Tinh trùng: tế bào nhỏ nhất, có đầu (chứa DNA) và đuôi dài (để bơi).",
+            "Hành trình thụ tinh: tinh trùng bơi qua âm đạo → tử cung → ống dẫn trứng.",
+            "Khi gặp trứng: tinh trùng giải phóng enzyme phân hủy màng trứng → thụ tinh.",
+            "Hợp tử (zygote) hình thành → phân chia → phôi → di chuyển về tử cung làm tổ."
         ];
         for (let i = 0; i < lines.length; i++) text(lines[i], 42, 188 + i*24);
         pop();
@@ -508,11 +524,11 @@ class ReproductiveScene extends Scene {
         stroke(220, 160, 50); strokeWeight(80);
         arc(cx, cy, 340, 340, -HALF_PI + 5 * dayAngle, -HALF_PI + 14 * dayAngle, OPEN);
 
-        // Phase 4: days 14–27 (luteal) — green
+        // Phase 3: days 14–27 (luteal) — green
         stroke(60, 150, 110); strokeWeight(80);
         arc(cx, cy, 340, 340, -HALF_PI + 14 * dayAngle, -HALF_PI + 27 * dayAngle, OPEN);
 
-        // Phase 3 ovulation marker at day 14 — pulsing circle
+        // Ovulation marker at day 14 — pulsing circle
         let ovAngle = -HALF_PI + 14 * dayAngle;
         let ovR = 8 + sin(this.animFrame * 0.1) * 3;
         fill(255, 230, 50); stroke(200, 160, 20); strokeWeight(2);
@@ -539,14 +555,15 @@ class ReproductiveScene extends Scene {
         // Phase labels
         push();
         fill(60, 20, 40); noStroke(); textSize(12); textAlign(CENTER);
-        text("Kinh nguyệt\n(ngày 1–5)",         cx - 230, cy - 160);
-        text("Niêm mạc dày lên\n(ngày 5–14)",   cx + 260, cy - 60);
-        text("Rụng trứng\n(ngày 14)",            cx + 225, cy + 100);
-        text("Niêm mạc bong ra\n(ngày 15–28)",  cx - 255, cy + 100);
+        text("Kinh nguyệt\n(ngày 1–5)",               cx - 230, cy - 160);
+        text("Niêm mạc dày lên\n(ngày 5–14)",         cx + 260, cy - 60);
+        text("Rụng trứng\n(ngày 14)",                  cx + 225, cy + 100);
+        text("Niêm mạc tiếp tục\nphát triển (14–27)", cx - 255, cy + 100);
         pop();
 
         // Info box
         push();
+        if (vFont) textFont(vFont);
         fill(255, 235, 245); stroke(180, 80, 130); strokeWeight(1);
         rectMode(CORNER); rect(30, 655, 740, 90, 8);
         fill(70, 15, 55); noStroke(); textSize(13); textAlign(CENTER);
@@ -554,14 +571,111 @@ class ReproductiveScene extends Scene {
         pop();
     }
 
-    // ── Step 3: game instructions ─────────────────────────────────────────
+    // ── Step 3: contraception ─────────────────────────────────────────────
+
+    _drawContraception() {
+        background(255, 248, 255);
+
+        push();
+        fill(100, 20, 60); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
+        text("Biện pháp tránh thai", 395, 50);
+        textStyle(NORMAL);
+        pop();
+
+        // 2×2 card grid: x 30–770, y 68–638
+        const cards = [
+            { cx: 210, cy: 210, bg: [220, 235, 255], border: [80, 120, 200] },
+            { cx: 580, cy: 210, bg: [255, 228, 244], border: [200, 80, 130] },
+            { cx: 210, cy: 490, bg: [220, 255, 232], border: [50, 160, 90]  },
+            { cx: 580, cy: 490, bg: [255, 246, 215], border: [200, 145, 40] },
+        ];
+        for (let c of cards) {
+            push();
+            fill(...c.bg); stroke(...c.border); strokeWeight(1.5); rectMode(CENTER);
+            rect(c.cx, c.cy, 356, 270, 10);
+            pop();
+        }
+
+        // ── Card 1: Bao cao su ────────────────────────────────────────────
+        push(); translate(210, 162);
+        fill(100, 155, 230); stroke(60, 100, 185); strokeWeight(2);
+        rectMode(CENTER); rect(0, 12, 38, 72, 18, 18, 6, 6);
+        fill(145, 192, 255); noStroke(); ellipse(0, -26, 30, 18);
+        stroke(60, 100, 185); strokeWeight(1.5); noFill();
+        arc(0, 50, 38, 16, 0, PI);
+        pop();
+        push(); fill(45, 75, 160); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
+        text("Bao cao su", 210, 248);
+        textStyle(NORMAL); textSize(11); fill(35, 60, 130);
+        text("Ngăn tinh trùng tiếp xúc trứng", 210, 264);
+        text("Phòng bệnh lây qua đường tình dục", 210, 279);
+        pop();
+
+        // ── Card 2: Thuốc hằng ngày ──────────────────────────────────────
+        push(); translate(580, 158);
+        for (let r = 0; r < 4; r++)
+            for (let c = 0; c < 7; c++) {
+                fill(220, 70, 120); noStroke();
+                ellipse(-48 + c * 16, -24 + r * 16, 12, 12);
+            }
+        stroke(175, 48, 98); strokeWeight(1.5); noFill(); rectMode(CENTER);
+        rect(0, 0, 120, 68, 6);
+        pop();
+        push(); fill(160, 28, 78); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
+        text("Thuốc tránh thai hằng ngày", 580, 248);
+        textStyle(NORMAL); textSize(11); fill(130, 18, 62);
+        text("Hormone ngăn rụng trứng", 580, 264);
+        text("Uống đúng giờ mỗi ngày", 580, 279);
+        pop();
+
+        // ── Card 3: Vòng tránh thai (IUD) ────────────────────────────────
+        push(); translate(210, 450);
+        stroke(38, 138, 78); strokeWeight(2.5); noFill();
+        ellipse(0, -6, 66, 66);
+        strokeWeight(3);
+        line(-24, -6, 24, -6);
+        line(0, -6, 0, 30);
+        pop();
+        push(); fill(28, 108, 58); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
+        text("Đặt vòng tránh thai (IUD)", 210, 510);
+        textStyle(NORMAL); textSize(11); fill(18, 82, 44);
+        text("Dụng cụ trong tử cung ngăn thụ tinh", 210, 526);
+        text("Hiệu quả nhiều năm", 210, 541);
+        pop();
+
+        // ── Card 4: Thuốc khẩn cấp ───────────────────────────────────────
+        push(); translate(580, 452);
+        fill(255, 195, 55); stroke(195, 132, 18); strokeWeight(2);
+        ellipse(0, 0, 48, 74);
+        fill(200, 132, 18); noStroke();
+        rectMode(CENTER); rect(0, -10, 7, 24, 3);
+        ellipse(0, 20, 8, 8);
+        pop();
+        push(); fill(158, 98, 10); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
+        text("Thuốc tránh thai khẩn cấp", 580, 510);
+        textStyle(NORMAL); textSize(11); fill(128, 78, 8);
+        text("Dùng trong 72h sau quan hệ", 580, 526);
+        text("Ngăn rụng trứng hoặc thụ tinh", 580, 541);
+        pop();
+
+        // ── Bottom info bar ───────────────────────────────────────────────
+        push();
+        if (vFont) textFont(vFont);
+        fill(255, 235, 248); stroke(180, 80, 130); strokeWeight(1);
+        rectMode(CORNER); rect(30, 645, 740, 52, 8);
+        fill(80, 20, 55); noStroke(); textSize(12); textAlign(CENTER);
+        text("Mọi biện pháp đều nhằm ngăn tinh trùng gặp trứng — chỉ khác về cơ chế và thời điểm tác dụng.", 400, 675);
+        pop();
+    }
+
+    // ── Step 4: game instructions ─────────────────────────────────────────
 
     _drawGameInstructions() {
         background(255, 242, 248);
 
         push();
         fill(100, 20, 60); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
-        text("Huong dan tro choi", 380, 50);
+        text("Hướng dẫn trò chơi", 380, 50);
         pop();
 
         // Animated sperm
@@ -575,16 +689,16 @@ class ReproductiveScene extends Scene {
         rectMode(CORNER); rect(30, 82, 560, 500, 12);
 
         fill(80, 10, 45); noStroke(); textSize(20); textStyle(BOLD); textAlign(CENTER);
-        text("Luat choi", 310, 118);
+        text("Luật chơi", 310, 118);
         textStyle(NORMAL); textSize(14); textAlign(LEFT);
 
         let rules = [
-            ["Dieu khien", "Phim len / xuong de di chuyen tinh trung"],
-            ["Muc tieu",   "Boi den trung o cuoi hanh trinh"],
-            ["Chuong ngai","Tranh bach cau (WBC) – va cham mat 1 mang"],
-            ["Mang song",  "Co 3 mang – mat het la thua"],
-            ["Tam dung",   "Nhan phim P hoac nut Tam dung de dung game"],
-            ["Diem so",    "Moi met di duoc cong them diem"],
+            ["Điều khiển", "Phím lên / xuống để di chuyển tinh trùng"],
+            ["Mục tiêu",   "Bơi đến trứng ở cuối hành trình"],
+            ["Chướng ngại","Tránh bạch cầu (WBC) – va chạm mất 1 mạng"],
+            ["Mạng sống",  "Có 3 mạng – mất hết là thua"],
+            ["Tạm dừng",   "Nhấn phím P hoặc nút Tạm dừng để dừng game"],
+            ["Điểm số",    "Mỗi mét đi được cộng thêm điểm"],
         ];
         for (let i = 0; i < rules.length; i++) {
             let y = 158 + i * 62;
@@ -596,7 +710,7 @@ class ReproductiveScene extends Scene {
         pop();
     }
 
-    // ── Step 4: sperm game ────────────────────────────────────────────────
+    // ── Step 5: sperm game ────────────────────────────────────────────────
 
     _drawGame() {
         background(255, 232, 242);
@@ -616,7 +730,7 @@ class ReproductiveScene extends Scene {
             fill(255, 225, 80); stroke(200, 160, 50); strokeWeight(3);
             ellipse(eggSX, this.playerY, 112, 112);
             fill(255, 185, 65); noStroke(); ellipse(eggSX, this.playerY, 52, 52);
-            fill(80, 40, 0); textSize(13); textAlign(CENTER); text("TRUNG", eggSX, this.playerY + 72);
+            fill(80, 40, 0); textSize(13); textAlign(CENTER); text("TRỨNG", eggSX, this.playerY + 72);
         }
 
         // Obstacles (WBC)
@@ -695,7 +809,7 @@ class ReproductiveScene extends Scene {
         let prog = constrain(this.worldX / this.GOAL, 0, 1);
         fill(225, 75, 140); noStroke(); rect(240, 12, 500 * prog, 22, 5);
         fill(80, 10, 42); textSize(12); textAlign(LEFT);
-        text("Quang duong: " + Math.floor(prog*100) + "%", 248, 28);
+        text("Quãng đường: " + Math.floor(prog*100) + "%", 248, 28);
 
         // Lives
         textSize(18); textAlign(LEFT);
@@ -706,7 +820,7 @@ class ReproductiveScene extends Scene {
 
         // Score
         fill(80, 10, 42); textSize(13); textAlign(RIGHT);
-        text("Diem: " + this.score, 1185, 34);
+        text("Điểm: " + this.score, 1185, 34);
         pop();
     }
 
@@ -714,9 +828,9 @@ class ReproductiveScene extends Scene {
         push();
         fill(0, 0, 0, 145); noStroke(); rectMode(CORNER); rect(0, 0, width, height);
         fill(255); textSize(42); textStyle(BOLD); textAlign(CENTER);
-        text("TAM DUNG", width/2, height/2 - 18);
+        text("TẠM DỪNG", width/2, height/2 - 18);
         textSize(16); textStyle(NORMAL);
-        text("Nhan P hoac nut Tiep tuc de choi tiep", width/2, height/2 + 30);
+        text("Nhấn P hoặc nút Tiếp tục để chơi tiếp", width/2, height/2 + 30);
         pop();
     }
 
@@ -724,10 +838,10 @@ class ReproductiveScene extends Scene {
         push();
         fill(0, 0, 0, 160); noStroke(); rectMode(CORNER); rect(0, 0, width, height);
         fill(255, 75, 75); textSize(52); textStyle(BOLD); textAlign(CENTER);
-        text("THUA CUOC!", width/2, height/2 - 65);
+        text("THUA CUỘC!", width/2, height/2 - 65);
         fill(255); textSize(18); textStyle(NORMAL);
-        text("Tinh trung da bi bach cau tieu diet!", width/2, height/2 - 15);
-        text("Diem: " + this.score, width/2, height/2 + 22);
+        text("Tinh trùng đã bị bạch cầu tiêu diệt!", width/2, height/2 - 15);
+        text("Điểm: " + this.score, width/2, height/2 + 22);
         pop();
     }
 
@@ -735,10 +849,10 @@ class ReproductiveScene extends Scene {
         push();
         fill(0, 0, 0, 145); noStroke(); rectMode(CORNER); rect(0, 0, width, height);
         fill(255, 225, 75); textSize(52); textStyle(BOLD); textAlign(CENTER);
-        text("THANH CONG!", width/2, height/2 - 65);
+        text("THÀNH CÔNG!", width/2, height/2 - 65);
         fill(255); textSize(18); textStyle(NORMAL);
-        text("Tinh trung da den duoc trung!", width/2, height/2 - 15);
-        text("Diem: " + this.score, width/2, height/2 + 22);
+        text("Tinh trùng đã đến được trứng!", width/2, height/2 - 15);
+        text("Điểm: " + this.score, width/2, height/2 + 22);
         fill(255, 240, 150); textSize(14); textStyle(NORMAL);
         text("Hợp tử phân chia thành phôi và làm tổ trong tử cung.", width/2, height/2 + 55);
         pop();

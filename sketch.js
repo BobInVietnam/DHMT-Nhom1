@@ -1,8 +1,15 @@
 let sceneManager;
-let thuyetMinh;  
+let thuyetMinh;
+let vFont;
 
 async function setup() {
     createCanvas(1200, 800);
+    // Load Vietnamese-capable font in background; falls back to browser default if offline
+    loadFont(
+        'https://fonts.gstatic.com/s/notosans/v36/o-0IIpQlx3QUlC5A4PNr5TRASf6M7Q.woff2',
+        (f) => { vFont = f; },
+        () => {}
+    );
     model3DViewer.init();
 
     const manifest = await (await fetch("./assets/assets.json")).json();
