@@ -41,7 +41,7 @@ const SkinNarration2 = {
     text: [
         "Da có thể mắc nhiều bệnh lý nguy hiểm nếu không được chăm sóc đúng cách.",
         "Vi khuẩn, nấm, ký sinh trùng và tia UV đều là tác nhân gây hại cho da.",
-        "Đọc kỹ từng tình huống và chọn biện pháp phòng ngừa đúng đắn nhất.",
+        "Nhấn vào từng bệnh để so sánh da lành và da bị bệnh, tìm hiểu cách phòng tránh.",
         "Chăm sóc da đúng cách giúp duy trì hàng rào bảo vệ và phòng ngừa bệnh lý."
     ],
     sprite: [
@@ -147,48 +147,35 @@ const SKIN_HOTSPOTS = [
     }
 ];
 
-// ── DISEASES + PREVENTION QUIZ  (Step 2) ──────────────────────────────
+// ── DISEASES VISUALIZATION DATA  (Step 2) ────────────────────────────
 
-const SKIN_DISEASES_QUIZ = [
+const SKIN_DISEASES_VIZ = [
     {
-        disease:  'Bỏng nắng (Sunburn)',
-        scenario: 'Bạn phải làm việc ngoài trời dưới nắng gắt suốt 3 giờ liên tục mà không có biện pháp bảo vệ. Da bắt đầu đỏ, rát và sau đó bong tróc.',
-        cause:    'Tia UV-B phá hủy DNA tế bào biểu bì, gây viêm cấp tính và thoái hóa lớp sừng.',
-        options: [
-            { text: 'Bôi kem chống nắng SPF 30+, đội mũ rộng vành và mặc áo dài tay khi ra ngoài', correct: true },
-            { text: 'Ra nắng thường xuyên để da quen dần với tia UV', correct: false },
-            { text: 'Rửa mặt nhiều lần để loại bỏ tia UV đã hấp thụ', correct: false }
-        ]
+        id: 'hac_lao',
+        name: 'Hắc lào',
+        sub: 'Tinea corporis',
+        pathogen: 'Nấm Dermatophyte',
+        desc: 'Nấm da gây vết tổn thương hình nhẫn đặc trưng, viền đỏ có vảy và ngứa. Vùng giữa thường lành dần trong khi viền tiếp tục lan rộng. Lây qua tiếp xúc trực tiếp da-da.',
+        symptoms: ['Vết hình nhẫn (ring-shaped), viền đỏ', 'Ngứa và có vảy tại viền', 'Lây trực tiếp qua da'],
+        prevention: ['Giữ da sạch và khô thoáng', 'Không dùng chung khăn tắm', 'Dùng thuốc kháng nấm theo chỉ định']
     },
     {
-        disease:  'Mụn trứng cá (Acne)',
-        scenario: 'Da mặt bạn xuất hiện nhiều nốt đỏ, có mủ ở vùng trán và cằm. Tình trạng nặng hơn khi căng thẳng hoặc vào mùa hè nắng nóng.',
-        cause:    'Tuyến nhờn tiết quá nhiều bã nhờn bít lỗ chân lông, tạo điều kiện cho vi khuẩn Propionibacterium acnes phát triển gây viêm.',
-        options: [
-            { text: 'Rửa mặt nhẹ nhàng 2 lần/ngày, không nặn mụn, dùng sản phẩm không gây bít lỗ chân lông', correct: true },
-            { text: 'Nặn mụn ngay để loại bỏ nhân mụn, tránh lây lan', correct: false },
-            { text: 'Tránh rửa mặt vì nước và xà phòng kích thích da tiết nhiều nhờn hơn', correct: false }
-        ]
+        id: 'lang_ben',
+        name: 'Lang ben',
+        sub: 'Tinea versicolor',
+        pathogen: 'Nấm Malassezia furfur',
+        desc: 'Nấm da thường trú bùng phát gây mảng đổi màu (nhạt hoặc đậm hơn da) ở ngực, lưng, cổ. Thường xuất hiện hơn khi đổ mồ hôi nhiều, khí hậu nóng ẩm.',
+        symptoms: ['Mảng da đổi màu không đều', 'Ít ngứa hoặc không ngứa', 'Nặng hơn khi nóng ẩm, mồ hôi nhiều'],
+        prevention: ['Tắm sau khi vận động ra mồ hôi', 'Mặc quần áo thoáng khí', 'Dùng dầu gội ketoconazole định kỳ']
     },
     {
-        disease:  'Ghẻ (Scabies)',
-        scenario: 'Sau chuyến đi cắm trại, bạn cảm thấy ngứa dữ dội vào ban đêm, đặc biệt ở kẽ ngón tay và cổ tay. Các thành viên cùng đi cũng có triệu chứng tương tự.',
-        cause:    'Ký sinh trùng Sarcoptes scabiei đào hang dưới lớp biểu bì để đẻ trứng, gây phản ứng dị ứng và ngứa nghiêm trọng, lây qua tiếp xúc trực tiếp.',
-        options: [
-            { text: 'Gãi mạnh cho đến khi không còn ngứa để tiêu diệt ký sinh trùng', correct: false },
-            { text: 'Dùng thuốc theo chỉ dẫn bác sĩ, giặt quần áo và chăn màn ở nhiệt độ cao (>60°C)', correct: true },
-            { text: 'Chỉ cần tắm rửa sạch hằng ngày là tự khỏi sau vài ngày', correct: false }
-        ]
-    },
-    {
-        disease:  'Nhiễm trùng da (Skin Infection)',
-        scenario: 'Bạn bị trầy xước ở đầu gối khi chơi thể thao. Vết thương không được xử lý, da xung quanh sau đó đỏ, sưng và có mủ hình thành.',
-        cause:    'Vi khuẩn từ môi trường (Staphylococcus, Streptococcus) xâm nhập qua lớp biểu bì bị tổn thương, gây viêm và sinh mủ.',
-        options: [
-            { text: 'Để vết thương tự lành, không cần xử lý vì da có khả năng tự phục hồi', correct: false },
-            { text: 'Dán kín ngay mà không rửa để máu tự đông nhanh hơn', correct: false },
-            { text: 'Rửa sạch bằng nước và xà phòng, bôi thuốc sát trùng, băng lại và thay băng hằng ngày', correct: true }
-        ]
+        id: 'mun_trung_ca',
+        name: 'Mụn trứng cá',
+        sub: 'Acne vulgaris',
+        pathogen: 'Vi khuẩn P. acnes',
+        desc: 'Tuyến nhờn tiết bã nhờn bít lỗ chân lông, vi khuẩn Propionibacterium acnes phát triển gây viêm. Phổ biến ở tuổi dậy thì do hormone kích thích tuyến nhờn hoạt động mạnh.',
+        symptoms: ['Nhân mụn đầu đen/trắng (comedone)', 'Mụn viêm đỏ, có mủ', 'Hay xuất hiện ở mặt, lưng, ngực'],
+        prevention: ['Rửa mặt nhẹ nhàng 2 lần/ngày', 'Không nặn mụn để tránh nhiễm khuẩn', 'Hạn chế đường và thực phẩm nhiều dầu mỡ']
     }
 ];
 
@@ -224,9 +211,9 @@ class SkinScene extends Scene {
 
         this._fadeAlpha = 0;
 
-        // ── Step 2: diseases + prevention quiz ────────────────────────
-        this._quizIdx     = 0;
-        this._quizAnswers = new Array(SKIN_DISEASES_QUIZ.length).fill(undefined);
+        // ── Step 2: diseases visualization ────────────────────────────
+        this._selectedDisease = null;
+        this._viewedDiseases  = new Set();
 
         // ── Shared UI ─────────────────────────────────────────────────
         this.narration = new Narration(980, 380);
@@ -276,8 +263,8 @@ class SkinScene extends Scene {
         this._show3DInStep1   = false;
         this._glbLoaded       = false;
         this._fadeAlpha       = 255;
-        this._quizIdx         = 0;
-        this._quizAnswers     = new Array(SKIN_DISEASES_QUIZ.length).fill(undefined);
+        this._selectedDisease = null;
+        this._viewedDiseases  = new Set();
 
         this.narrator.show();
         this.narrator.eventData = SkinNarration0;
@@ -315,8 +302,8 @@ class SkinScene extends Scene {
             bus.emit('SHOW_NARRATION', SkinNarration1);
         } else if (this.step === 2) {
             this.narrator.eventData = SkinNarration2;
-            this._quizIdx     = 0;
-            this._quizAnswers = new Array(SKIN_DISEASES_QUIZ.length).fill(undefined);
+            this._selectedDisease = null;
+            this._viewedDiseases  = new Set();
             bus.emit('SHOW_NARRATION', SkinNarration2);
         } else if (this.step === 3) {
             this.narrator.eventData = SkinNarration3;
@@ -368,7 +355,7 @@ class SkinScene extends Scene {
             this._updateThermoFromMouseY(mouseY);
             return;
         }
-        if (this.step === 2 && this._handleQuizClick()) return;
+        if (this.step === 2 && this._handleDiseaseClick()) return;
         super.checkClick();
     }
 
@@ -754,223 +741,287 @@ class SkinScene extends Scene {
         textAlign(LEFT);
     }
 
-    // ── STEP 2 – Diseases + Prevention quiz ───────────────────────────
+    // ── STEP 2 – Diseases visualization ──────────────────────────────
 
     _drawDiseases() {
-        background(240, 248, 242);
+        background(238, 245, 240);
 
-        // Title
         push();
-        fill(15, 85, 42); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
-        text('Bệnh Da & Cách Phòng Tránh', 390, 44);
+        fill(15, 85, 42); noStroke(); textSize(24); textStyle(BOLD); textAlign(CENTER);
+        text('Bệnh Da Phổ Biến & Cách Phòng Tránh', 390, 42);
         pop();
 
-        const q       = SKIN_DISEASES_QUIZ[this._quizIdx];
-        const answered = this._quizAnswers[this._quizIdx];
-        const total    = SKIN_DISEASES_QUIZ.length;
-        const lx = 30, ly = 68, lw = 700;
-
-        // Disease header strip
-        push();
-        rectMode(CORNER);
-        fill(190, 230, 195); stroke(110, 175, 120); strokeWeight(1.5);
-        rect(lx, ly, lw, 38, 6);
-        fill(15, 75, 35); noStroke(); textSize(14); textStyle(BOLD); textAlign(LEFT);
-        text('Benh: ' + q.disease, lx + 14, ly + 25);
-        pop();
-
-        // Scenario box
-        push();
-        rectMode(CORNER);
-        fill(255, 253, 247); stroke(175, 210, 175); strokeWeight(1);
-        rect(lx, ly + 46, lw, 108, 4);
-        fill(55, 35, 15); noStroke(); textSize(13); textStyle(BOLD); textAlign(LEFT);
-        text('Tinh huong:', lx + 12, ly + 68);
-        textStyle(NORMAL); fill(40, 40, 40);
-        text(q.scenario, lx + 12, ly + 88, lw - 24, 96);
-        pop();
-
-        // Cause
-        push();
-        fill(95, 65, 25); noStroke(); textSize(12); textStyle(ITALIC); textAlign(LEFT);
-        text('Nguyen nhan: ' + q.cause, lx + 12, ly + 170, lw - 24, 58);
-        pop();
-
-        // Question prompt
-        push();
-        fill(15, 55, 145); noStroke(); textSize(13); textStyle(BOLD); textAlign(LEFT);
-        text('-> Bien phap xu ly / phong ngua dung dan nhat la:', lx + 12, ly + 244);
-        pop();
-
-        // Options
-        const optStartY = ly + 260;
-        const optH = 42, optGap = 6;
-        for (let i = 0; i < q.options.length; i++) {
-            const opt = q.options[i];
-            const oy  = optStartY + i * (optH + optGap);
-            const isSelected  = answered === i;
-            const showResult  = answered !== undefined;
-            const hovered     = !showResult &&
-                                mouseX >= lx && mouseX <= lx + lw &&
-                                mouseY >= oy  && mouseY <= oy + optH;
-
-            let bgR, bgG, bgB, scR, scG, scB;
-            if (showResult) {
-                if (opt.correct)         { bgR=210;bgG=245;bgB=212; scR=25; scG=155;scB=65; }
-                else if (isSelected)     { bgR=248;bgG=210;bgB=210; scR=190;scG=45; scB=45; }
-                else                     { bgR=245;bgG=245;bgB=245; scR=185;scG=185;scB=185; }
-            } else {
-                if (hovered)             { bgR=218;bgG=238;bgB=218; scR=70; scG=155;scB=90; }
-                else                     { bgR=252;bgG=252;bgB=252; scR=175;scG=205;scB=175; }
-            }
-
-            push();
-            rectMode(CORNER);
-            fill(bgR, bgG, bgB); stroke(scR, scG, scB); strokeWeight(1.5);
-            rect(lx, oy, lw, optH, 5);
-            noStroke(); fill(35, 35, 35); textSize(13); textAlign(LEFT);
-            text(String.fromCharCode(65 + i) + '. ' + opt.text, lx + 14, oy + 14, lw - 56, optH);
-            if (showResult) {
-                textSize(17); textStyle(BOLD); textAlign(RIGHT);
-                if (opt.correct)     { fill(25, 155, 65); text('v', lx + lw - 10, oy + optH / 2 + 6); }
-                else if (isSelected) { fill(190, 45, 45); text('x', lx + lw - 10, oy + optH / 2 + 6); }
-            }
-            pop();
+        const cw = 230, ch = 630, gap = 10, startX = 30, startY = 62;
+        for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
+            this._drawDiseaseCard(i, startX + i * (cw + gap), startY, cw, ch);
         }
+        this._drawDiseaseDetail();
 
-        // Right panel: score + navigation
-        const rx = 756, ry = 68, rw = 424, rh = 494;
-        const correct = this._quizAnswers.reduce((n, a, i) =>
-            n + (a !== undefined && SKIN_DISEASES_QUIZ[i].options[a].correct ? 1 : 0), 0);
-        const done = this._quizAnswers.filter(a => a !== undefined).length;
-
+        const v = this._viewedDiseases.size, tot = SKIN_DISEASES_VIZ.length;
         push();
-        rectMode(CORNER);
-        fill(248, 253, 250); stroke(160, 200, 165); strokeWeight(1);
-        rect(rx, ry, rw, rh, 10);
-
-        // Score
-        fill(15, 85, 42); noStroke(); textSize(16); textStyle(BOLD); textAlign(CENTER);
-        text('Ket qua', rx + rw / 2, ry + 36);
-
-        textSize(52); textStyle(BOLD);
-        fill(correct >= 2 ? color(20, 160, 70) : color(155, 45, 45));
-        text(correct + '/' + total, rx + rw / 2, ry + 108);
-
-        textSize(13); textStyle(NORMAL); fill(75, 75, 75);
-        text('cau tra loi dung', rx + rw / 2, ry + 130);
-        text('Da tra loi: ' + done + '/' + total, rx + rw / 2, ry + 152);
-
-        // Progress dots
-        const dotSpacing = (rw - 60) / (total - 1);
-        for (let i = 0; i < total; i++) {
-            const a  = this._quizAnswers[i];
-            const dx = rx + 30 + i * dotSpacing;
-            const dy = ry + 182;
-            const active = i === this._quizIdx;
-            const sz = active ? 30 : 22;
-
-            if (a === undefined)                                       fill(active ? color(95, 175, 115) : color(200, 215, 202));
-            else if (SKIN_DISEASES_QUIZ[i].options[a].correct)        fill(20, 160, 70);
-            else                                                       fill(190, 45, 45);
-            noStroke();
-            ellipse(dx, dy, sz, sz);
-            fill(255); textSize(11); textStyle(BOLD); textAlign(CENTER);
-            text(i + 1, dx, dy + 5);
-        }
-
-        // Gate / feedback text
-        textSize(13); textAlign(CENTER);
-        if (correct >= 2) {
-            fill(20, 160, 70); textStyle(BOLD);
-            text('Gioi lam! Nhan "Tiep theo ->"', rx + rw / 2, ry + 225);
-        } else if (done >= total) {
-            fill(190, 45, 45); textStyle(NORMAL);
-            text('Can it nhat 2 cau dung.', rx + rw / 2, ry + 222);
-            text('Nhan "Lam lai" de thu lai.', rx + rw / 2, ry + 244);
+        textAlign(CENTER); noStroke();
+        if (v < tot) {
+            fill(110, 80, 25); textSize(12);
+            text('Nhấn vào từng bệnh để xem chi tiết (' + v + '/' + tot + ' đã xem)', 390, 720);
         } else {
-            fill(110, 80, 25); textStyle(NORMAL);
-            text('Can ' + (2 - correct) + ' cau dung nua de', rx + rw / 2, ry + 222);
-            text('mo khoa "Tiep theo ->"', rx + rw / 2, ry + 244);
-        }
-
-        // Reset button (only when all answered and <2 correct)
-        if (done >= total && correct < 2) {
-            const rbx = rx + rw / 2 - 68, rby = ry + 268;
-            fill(255, 238, 210); stroke(200, 140, 55); strokeWeight(1);
-            rect(rbx, rby, 136, 34, 6);
-            fill(145, 75, 15); noStroke(); textSize(13); textStyle(NORMAL); textAlign(CENTER);
-            text('Lam lai', rx + rw / 2, rby + 22);
-        }
-
-        // Prev / next navigation
-        const btnY = ry + rh - 52;
-        if (this._quizIdx > 0) {
-            fill(218, 238, 220); stroke(130, 178, 135); strokeWeight(1);
-            rect(rx + 16, btnY, 148, 36, 6);
-            fill(25, 78, 30); noStroke(); textSize(13); textStyle(NORMAL); textAlign(CENTER);
-            text('<- Cau truoc', rx + 90, btnY + 23);
-        }
-        if (this._quizIdx < total - 1) {
-            fill(218, 238, 220); stroke(130, 178, 135); strokeWeight(1);
-            rect(rx + rw - 164, btnY, 148, 36, 6);
-            fill(25, 78, 30); noStroke(); textSize(13); textStyle(NORMAL); textAlign(CENTER);
-            text('Cau sau ->', rx + rw - 90, btnY + 23);
+            fill(20, 140, 60); textSize(13); textStyle(BOLD);
+            text('Đã xem tất cả! Nhấn "Tiếp theo →" bên dưới.', 390, 720);
         }
         pop();
     }
 
-    _handleQuizClick() {
-        const q        = SKIN_DISEASES_QUIZ[this._quizIdx];
-        const answered = this._quizAnswers[this._quizIdx];
-        const total    = SKIN_DISEASES_QUIZ.length;
+    _drawDiseaseCard(idx, cx, cy, cw, ch) {
+        const d       = SKIN_DISEASES_VIZ[idx];
+        const isSel   = this._selectedDisease === idx;
+        const isView  = this._viewedDiseases.has(idx);
+        push();
+        rectMode(CORNER);
 
-        // Option clicks
-        const lx = 30, ly = 68, lw = 700;
-        const optStartY = ly + 260;
-        const optH = 42, optGap = 6;
-        if (answered === undefined) {
-            for (let i = 0; i < q.options.length; i++) {
-                const oy = optStartY + i * (optH + optGap);
-                if (mouseX >= lx && mouseX <= lx + lw &&
-                    mouseY >= oy  && mouseY <= oy + optH) {
-                    this._quizAnswers[this._quizIdx] = i;
-                    const correct = this._quizAnswers.reduce((n, a, idx) =>
-                        n + (a !== undefined && SKIN_DISEASES_QUIZ[idx].options[a].correct ? 1 : 0), 0);
-                    if (correct >= 2) this.nextBtn.show();
-                    return true;
+        // Card background
+        fill(248, 252, 248);
+        stroke(isSel  ? color(25, 140, 65) :
+               isView ? color(100, 175, 110) : color(185, 205, 185));
+        strokeWeight(isSel ? 2.5 : 1.5);
+        rect(cx, cy, cw, ch, 8);
+
+        // Header
+        fill(isSel  ? color(20, 110, 45) :
+             isView ? color(40, 130, 60) : color(65, 145, 80));
+        noStroke();
+        rect(cx, cy, cw, 42, 8, 8, 0, 0);
+        fill(255); textSize(13); textStyle(BOLD); textAlign(CENTER);
+        text(d.name, cx + cw / 2, cy + 17);
+        fill(220, 255, 220); textSize(10); textStyle(ITALIC);
+        text(d.sub, cx + cw / 2, cy + 33);
+
+        // Normal skin label
+        noStroke(); fill(65, 105, 70); textSize(9); textStyle(BOLD); textAlign(LEFT);
+        text('BÌNH THƯỜNG:', cx + 8, cy + 55);
+        this._drawSkinMiniNormal(cx + 8, cy + 59, cw - 16, 148);
+
+        // Diseased skin label
+        noStroke(); fill(160, 35, 35); textSize(9); textStyle(BOLD); textAlign(LEFT);
+        text('KHI BỊ BỆNH:', cx + 8, cy + 220);
+        this._drawSkinMiniDiseased(cx + 8, cy + 224, cw - 16, 148, idx);
+
+        // Prevention section
+        stroke(180, 210, 185); strokeWeight(1);
+        line(cx + 8, cy + 381, cx + cw - 8, cy + 381);
+        noStroke(); fill(20, 80, 35); textSize(9); textStyle(BOLD); textAlign(LEFT);
+        text('PHÒNG TRÁNH:', cx + 8, cy + 394);
+        fill(40, 55, 42); textStyle(NORMAL); textSize(9);
+        for (let j = 0; j < d.prevention.length; j++) {
+            const iy = cy + 406 + j * 44;
+            fill(20, 150, 55); noStroke(); ellipse(cx + 14, iy + 5, 6, 6);
+            fill(40, 55, 42); textAlign(LEFT);
+            text(d.prevention[j], cx + 22, iy, cw - 30, 42);
+        }
+
+        // Bottom indicator
+        if (!isView) {
+            fill(20, 140, 60, 210); noStroke();
+            rect(cx + cw / 2 - 58, cy + ch - 28, 116, 22, 11);
+            fill(255); textSize(9); textStyle(BOLD); textAlign(CENTER);
+            text('Nhấn để xem chi tiết', cx + cw / 2, cy + ch - 13);
+        } else {
+            fill(25, 155, 70); noStroke(); textSize(10); textStyle(BOLD); textAlign(CENTER);
+            text('✓ Đã xem', cx + cw / 2, cy + ch - 13);
+        }
+        pop();
+    }
+
+    _drawSkinMiniNormal(x, y, w, h) {
+        push();
+        rectMode(CORNER);
+        const eH = Math.round(h * 0.22);
+        const dH = Math.round(h * 0.48);
+        const hH = h - eH - dH;
+
+        // Epidermis
+        fill(255, 218, 182); stroke(180, 130, 90); strokeWeight(0.8);
+        rect(x, y, w, eH);
+        stroke(200, 155, 110); strokeWeight(0.6); noFill();
+        for (let bx = x; bx < x + w; bx += 14) arc(bx, y + 3, 14, 7, PI, TWO_PI);
+
+        // Dermis
+        fill(255, 185, 158); stroke(180, 100, 80); strokeWeight(0.8);
+        rect(x, y + eH, w, dH);
+        // Simple follicle
+        fill(70, 45, 22); noStroke();
+        rect(x + w * 0.38, y + eH - 8, 4, dH * 0.55, 2);
+        // Blood vessels
+        fill(210, 45, 45); noStroke(); ellipse(x + w * 0.6, y + eH + dH * 0.5, 9, 6);
+        fill(60, 75, 200);             ellipse(x + w * 0.68, y + eH + dH * 0.5, 7, 5);
+
+        // Hypodermis
+        fill(255, 235, 125); stroke(200, 180, 70); strokeWeight(0.8);
+        rect(x, y + eH + dH, w, hH);
+        fill(255, 245, 170); stroke(200, 175, 70); strokeWeight(0.6);
+        for (let fx = x + 16; fx < x + w - 10; fx += 28)
+            ellipse(fx, y + eH + dH + hH / 2, 20, 14);
+        pop();
+    }
+
+    _drawSkinMiniDiseased(x, y, w, h, idx) {
+        const af = this.animFrame;
+        const cx = x + w / 2, cy = y + h / 2;
+        push();
+        rectMode(CORNER);
+
+        if (idx === 0) {
+            // Hắc lào: ring-shaped lesion (animated pulse)
+            fill(255, 218, 182); stroke(180, 130, 90); strokeWeight(0.8);
+            rect(x, y, w, h);
+
+            const outerR = 40 + sin(af * 0.05) * 3;
+            const innerR = 25 + sin(af * 0.05) * 2;
+            // Ring fill
+            fill(175, 75, 45, 210); noStroke();
+            ellipse(cx, cy, outerR * 2, outerR * 2);
+            // Ring border
+            stroke(140, 45, 20); strokeWeight(1.5); noFill();
+            ellipse(cx, cy, outerR * 2, outerR * 2);
+            // Clear center (healed)
+            fill(245, 200, 168); noStroke();
+            ellipse(cx, cy, innerR * 2, innerR * 2);
+            // Scale dots on ring border
+            fill(120, 40, 20, 190); noStroke();
+            for (let a = 0; a < TWO_PI; a += PI / 7) {
+                ellipse(cx + (outerR - 4) * cos(a), cy + (outerR - 4) * sin(a), 4, 3);
+            }
+            fill(130, 40, 20); noStroke(); textSize(8); textStyle(ITALIC); textAlign(CENTER);
+            text('Vết hình nhẫn', cx, y + h - 5);
+
+        } else if (idx === 1) {
+            // Lang ben: irregular depigmented/hyperpigmented patches
+            fill(255, 218, 182); stroke(180, 130, 90); strokeWeight(0.8);
+            rect(x, y, w, h);
+
+            const patches = [
+                { ox: 0.25, oy: 0.28, rw: 0.22, rh: 0.18, light: true  },
+                { ox: 0.62, oy: 0.38, rw: 0.26, rh: 0.21, light: false },
+                { ox: 0.18, oy: 0.62, rw: 0.28, rh: 0.19, light: true  },
+                { ox: 0.65, oy: 0.65, rw: 0.20, rh: 0.16, light: false },
+                { ox: 0.44, oy: 0.50, rw: 0.24, rh: 0.18, light: true  },
+            ];
+            noStroke();
+            for (const p of patches) {
+                if (p.light) fill(242, 232, 212, 225);
+                else         fill(198, 142, 98, 210);
+                ellipse(x + p.ox * w, y + p.oy * h, p.rw * w, p.rh * h);
+            }
+            fill(140, 80, 28); noStroke(); textSize(8); textStyle(ITALIC); textAlign(CENTER);
+            text('Mảng đổi màu', cx, y + h - 5);
+
+        } else {
+            // Mụn trứng cá: inflamed bumps (animated pulsing redness)
+            fill(255, 218, 182); stroke(180, 130, 90); strokeWeight(0.8);
+            rect(x, y, w, h);
+
+            const pimples = [
+                { ox: 0.25, oy: 0.38, r: 13, type: 'whitehead' },
+                { ox: 0.56, oy: 0.33, r: 15, type: 'inflamed'  },
+                { ox: 0.77, oy: 0.56, r: 11, type: 'blackhead' },
+            ];
+            for (const p of pimples) {
+                const px = x + p.ox * w, py = y + p.oy * h;
+                const pulse = sin(af * 0.06 + p.ox * 3) * 2;
+                if (p.type === 'inflamed') {
+                    fill(220, 75, 55, 175 + sin(af * 0.08) * 45); noStroke();
+                    ellipse(px, py, (p.r + 8 + pulse) * 2, (p.r + 6 + pulse) * 2);
+                    fill(245, 228, 182); noStroke(); ellipse(px, py, p.r * 1.5, p.r);
+                    fill(238, 220, 148); noStroke(); ellipse(px, py - p.r * 0.4, 5, 4);
+                } else if (p.type === 'whitehead') {
+                    fill(215, 95, 70, 145); noStroke();
+                    ellipse(px, py, (p.r + 5) * 2, (p.r + 4) * 2);
+                    fill(245, 232, 208); noStroke(); ellipse(px, py, p.r * 1.4, p.r * 0.8);
+                    fill(208, 198, 182); noStroke(); ellipse(px, py - p.r * 0.3, 4, 3);
+                } else {
+                    fill(215, 95, 70, 105); noStroke();
+                    ellipse(px, py, (p.r + 4) * 2, (p.r + 3) * 2);
+                    fill(245, 218, 192); noStroke(); ellipse(px, py, p.r * 1.2, p.r * 0.7);
+                    fill(38, 18, 8); noStroke(); ellipse(px, py - p.r * 0.3, 3, 3);
                 }
             }
+            fill(140, 28, 28); noStroke(); textSize(8); textStyle(ITALIC); textAlign(CENTER);
+            text('Mụn đỏ có viêm', cx, y + h - 5);
+        }
+        pop();
+    }
+
+    _drawDiseaseDetail() {
+        const rx = 762, ry = 62, rw = 415, rh = 630;
+        push();
+        rectMode(CORNER);
+        fill(248, 252, 248); stroke(160, 200, 165); strokeWeight(1.5);
+        rect(rx, ry, rw, rh, 10);
+
+        if (this._selectedDisease === null) {
+            fill(140, 165, 145); noStroke(); textSize(13); textStyle(NORMAL); textAlign(CENTER);
+            text('Nhấn vào một bệnh', rx + rw / 2, ry + rh / 2 - 20);
+            text('để xem thông tin chi tiết', rx + rw / 2, ry + rh / 2 + 5);
+            pop();
+            return;
         }
 
-        // Nav buttons
-        const rx = 756, ry = 68, rw = 424, rh = 494;
-        const btnY = ry + rh - 52;
+        const d = SKIN_DISEASES_VIZ[this._selectedDisease];
 
-        if (this._quizIdx > 0 &&
-            mouseX >= rx + 16 && mouseX <= rx + 164 &&
-            mouseY >= btnY    && mouseY <= btnY + 36) {
-            this._quizIdx--;
-            return true;
-        }
-        if (this._quizIdx < total - 1 &&
-            mouseX >= rx + rw - 164 && mouseX <= rx + rw - 16 &&
-            mouseY >= btnY          && mouseY <= btnY + 36) {
-            this._quizIdx++;
-            return true;
+        // Disease name
+        fill(20, 95, 45); noStroke(); textSize(22); textStyle(BOLD); textAlign(CENTER);
+        text(d.name, rx + rw / 2, ry + 38);
+        fill(80, 130, 90); textSize(12); textStyle(ITALIC);
+        text(d.sub, rx + rw / 2, ry + 57);
+
+        // Pathogen
+        stroke(175, 210, 178); strokeWeight(1);
+        line(rx + 16, ry + 68, rx + rw - 16, ry + 68);
+        noStroke(); fill(115, 52, 18); textSize(11); textStyle(BOLD); textAlign(LEFT);
+        text('Tác nhân gây bệnh:', rx + 16, ry + 85);
+        fill(62, 32, 10); textStyle(NORMAL);
+        text(d.pathogen, rx + 16, ry + 101);
+
+        // Description
+        stroke(175, 210, 178); strokeWeight(1);
+        line(rx + 16, ry + 112, rx + rw - 16, ry + 112);
+        noStroke(); fill(35, 55, 40); textSize(12); textStyle(NORMAL); textAlign(LEFT);
+        text(d.desc, rx + 16, ry + 127, rw - 32, 100);
+
+        // Symptoms
+        stroke(175, 210, 178); strokeWeight(1);
+        line(rx + 16, ry + 238, rx + rw - 16, ry + 238);
+        noStroke(); fill(25, 78, 175); textSize(12); textStyle(BOLD); textAlign(LEFT);
+        text('Triệu chứng:', rx + 16, ry + 255);
+        fill(40, 48, 80); textStyle(NORMAL); textSize(12);
+        for (let i = 0; i < d.symptoms.length; i++) {
+            fill(25, 78, 175); noStroke(); ellipse(rx + 24, ry + 271 + i * 27, 6, 6);
+            fill(40, 48, 80);
+            text(d.symptoms[i], rx + 34, ry + 275 + i * 27);
         }
 
-        // Reset button
-        const done    = this._quizAnswers.filter(a => a !== undefined).length;
-        const correct = this._quizAnswers.reduce((n, a, i) =>
-            n + (a !== undefined && SKIN_DISEASES_QUIZ[i].options[a].correct ? 1 : 0), 0);
-        if (done >= total && correct < 2) {
-            const rbx = rx + rw / 2 - 68, rby = ry + 268;
-            if (mouseX >= rbx && mouseX <= rbx + 136 &&
-                mouseY >= rby && mouseY <= rby + 34) {
-                this._quizAnswers = new Array(total).fill(undefined);
-                this._quizIdx     = 0;
-                this.nextBtn.hide();
+        // Prevention
+        const prevY = ry + 362;
+        stroke(175, 210, 178); strokeWeight(1);
+        line(rx + 16, prevY, rx + rw - 16, prevY);
+        noStroke(); fill(20, 132, 58); textSize(12); textStyle(BOLD); textAlign(LEFT);
+        text('Cách phòng tránh:', rx + 16, prevY + 17);
+        fill(32, 62, 38); textStyle(NORMAL); textSize(12);
+        for (let i = 0; i < d.prevention.length; i++) {
+            fill(20, 148, 52); noStroke(); ellipse(rx + 24, prevY + 33 + i * 32, 6, 6);
+            fill(32, 62, 38);
+            text(d.prevention[i], rx + 34, prevY + 37 + i * 32, rw - 50, 30);
+        }
+        pop();
+    }
+
+    _handleDiseaseClick() {
+        const cw = 230, ch = 630, gap = 10, startX = 30, startY = 62;
+        for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
+            const cx = startX + i * (cw + gap);
+            if (mouseX >= cx && mouseX <= cx + cw &&
+                mouseY >= startY && mouseY <= startY + ch) {
+                this._selectedDisease = i;
+                this._viewedDiseases.add(i);
+                if (this._viewedDiseases.size >= SKIN_DISEASES_VIZ.length) this.nextBtn.show();
                 return true;
             }
         }
@@ -1028,9 +1079,8 @@ class SkinScene extends Scene {
             this.nextBtn.eventTag  = 'SKIN_NEXT';
             this.nextBtn.eventData = null;
         } else if (this.step === 2) {
-            const correct = this._quizAnswers.reduce((n, a, i) =>
-                n + (a !== undefined && SKIN_DISEASES_QUIZ[i].options[a].correct ? 1 : 0), 0);
-            if (correct >= 2) this.nextBtn.show(); else this.nextBtn.hide();
+            if (this._viewedDiseases.size >= SKIN_DISEASES_VIZ.length) this.nextBtn.show();
+            else this.nextBtn.hide();
             this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
             this.view3DBtn.hide();
             this.nextBtn.label     = 'Tiếp theo →';
