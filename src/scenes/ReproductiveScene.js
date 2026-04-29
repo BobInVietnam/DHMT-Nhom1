@@ -2,7 +2,8 @@ class ReproductiveScene extends Scene {
     constructor() {
         super();
         this.backBtn = new Button(100, 50, 40, 40, "X", "SWITCH_SCENE", "BodyMap");
-        this.objects.push(this.backBtn);
+        this.gameBtn = new Button(width/2, height/2, 100, 40, "Game", "SWITCH_SCENE", "Game")
+        this.objects.push(this.backBtn, this.gameBtn);
     }
 
     draw() {
