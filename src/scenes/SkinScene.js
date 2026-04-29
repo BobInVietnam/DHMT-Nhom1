@@ -179,6 +179,59 @@ const SKIN_DISEASES_VIZ = [
     }
 ];
 
+// ── PREVENTION SCENARIOS  (Step 2 – "Phòng Chống" tab) ───────────────
+
+const SKIN_SCENARIOS = [
+    {
+        situation: 'Bạn làm việc ngoài trời dưới nắng gắt hơn 2 giờ liên tục. Bạn cảm thấy đầu váng, chóng mặt và da mặt đỏ rát.',
+        context:   'Say nắng (Heat Stroke) xảy ra khi thân nhiệt vượt 40°C và cơ thể mất khả năng tự điều tiết nhiệt.',
+        options: [
+            { text: 'Tiếp tục làm việc, uống nước lạnh rồi sẽ hết', correct: false,
+              feedback: 'Chưa đúng. Tiếp tục làm việc khi đã có triệu chứng say nắng rất nguy hiểm — cần dừng ngay và vào nơi mát.' },
+            { text: 'Vào nơi mát, uống nước từng ngụm nhỏ, đặt khăn ướt lên cổ và trán', correct: true,
+              feedback: 'Đúng! Hạ nhiệt từ từ bằng cách vào nơi mát và bù nước điện giải là ưu tiên hàng đầu khi có dấu hiệu say nắng.' },
+            { text: 'Nhảy ngay vào bể nước lạnh để hạ nhiệt nhanh nhất', correct: false,
+              feedback: 'Chưa đúng. Hạ nhiệt đột ngột có thể gây sốc nhiệt (thermal shock). Cần hạ nhiệt từ từ và đúng cách.' }
+        ]
+    },
+    {
+        situation: 'Sau một trận mưa bất ngờ, quần áo bạn ướt hết. Nhiệt độ ngoài trời xuống thấp và bạn bắt đầu run rẩy.',
+        context:   'Hạ thân nhiệt (Hypothermia): quần áo ướt dẫn nhiệt gấp 25 lần không khí, khiến cơ thể mất nhiệt nhanh hơn nhiều.',
+        options: [
+            { text: 'Chịu đựng và chạy nhanh về nhà — chạy sẽ sinh nhiệt bù lại', correct: false,
+              feedback: 'Chưa đúng. Quần áo ướt liên tục hút nhiệt ra; sinh nhiệt từ chạy không bù kịp. Phải thay đồ khô trước tiên.' },
+            { text: 'Thay quần áo khô, uống đồ ấm và nghỉ ngơi ở nơi ấm áp', correct: true,
+              feedback: 'Đúng! Loại bỏ quần áo ướt — nguồn gốc mất nhiệt chính — rồi bổ sung nhiệt từ bên trong là cách xử lý đúng đắn.' },
+            { text: 'Xoa mạnh toàn thân để sinh nhiệt nhanh', correct: false,
+              feedback: 'Chưa đúng. Xoa mạnh khi hạ thân nhiệt có thể đẩy máu lạnh từ ngoại vi về tim đột ngột, gây nguy hiểm.' }
+        ]
+    },
+    {
+        situation: 'Bạn ngồi trong phòng điều hòa đặt 16°C suốt 8 tiếng. Cuối ngày bạn bị đau đầu, cứng cổ và hắt hơi liên tục.',
+        context:   'Chênh lệch nhiệt độ trong-ngoài quá lớn (>10°C) gây căng thẳng cơ chế điều hòa thân nhiệt và kích thích hệ hô hấp.',
+        options: [
+            { text: 'Điều chỉnh điều hòa lên 24–26°C, mặc thêm áo khoác nhẹ và uống nước ấm', correct: true,
+              feedback: 'Đúng! WHO khuyến nghị 24–26°C cho phòng điều hòa. Chênh lệch <7°C với ngoài trời giúp bảo vệ hệ hô hấp và điều hòa thân nhiệt.' },
+            { text: 'Tắt điều hòa hoàn toàn và mở cửa sổ', correct: false,
+              feedback: 'Không tối ưu trong giờ nắng gắt — đưa nhiệt và bụi vào phòng. Điều chỉnh nhiệt độ điều hòa là giải pháp phù hợp hơn.' },
+            { text: 'Đặt thêm máy sưởi nhỏ quanh bàn làm việc', correct: false,
+              feedback: 'Không hiệu quả — nhiệt độ tổng thể phòng vẫn thấp. Điều chỉnh trực tiếp nhiệt độ điều hòa là cách đúng đắn nhất.' }
+        ]
+    },
+    {
+        situation: 'Bạn muốn tập thể dục. Đồng hồ chỉ 12 giờ trưa, nhiệt độ ngoài trời 38°C. Bạn đã uống đủ nước từ sáng.',
+        context:   'Tập thể dục nắng gắt làm tăng sinh nhiệt nội tại lên ~1000 W — vượt xa khả năng thoát nhiệt qua mồ hôi trong điều kiện 38°C.',
+        options: [
+            { text: 'Tập bình thường vì đã uống đủ nước từ trước', correct: false,
+              feedback: 'Chưa đúng. Uống nước trước không đủ bù lượng mồ hôi khi tập ở 38°C; tốc độ mất nước và nhiệt cao hơn nhiều.' },
+            { text: 'Tập trong nhà hoặc dời sang sáng sớm (trước 8h) hay chiều mát (sau 17h)', correct: true,
+              feedback: 'Đúng! Tránh tập ngoài trời trong khung 10h–16h là biện pháp phòng ngừa say nắng hiệu quả nhất.' },
+            { text: 'Mặc quần áo che kín để tránh tia nắng trực tiếp', correct: false,
+              feedback: 'Chưa đúng. Quần áo kín cản trở bay hơi mồ hôi — cơ chế làm mát chính của cơ thể — làm tăng nguy cơ say nắng.' }
+        ]
+    }
+];
+
 // ─────────────────────────────────────────────────────────────────────
 //  SkinScene
 // ─────────────────────────────────────────────────────────────────────
@@ -211,9 +264,12 @@ class SkinScene extends Scene {
 
         this._fadeAlpha = 0;
 
-        // ── Step 2: diseases visualization ────────────────────────────
+        // ── Step 2: two-tab view (diseases | scenarios) ───────────────
         this._selectedDisease = null;
         this._viewedDiseases  = new Set();
+        this.step2Tab         = 'diseases';   // 'diseases' | 'scenarios'
+        this._scenarioIdx     = 0;
+        this._scenarioAnswers = new Array(SKIN_SCENARIOS.length).fill(undefined);
 
         // ── Shared UI ─────────────────────────────────────────────────
         this.narration = new Narration(980, 380);
@@ -265,6 +321,9 @@ class SkinScene extends Scene {
         this._fadeAlpha       = 255;
         this._selectedDisease = null;
         this._viewedDiseases  = new Set();
+        this.step2Tab         = 'diseases';
+        this._scenarioIdx     = 0;
+        this._scenarioAnswers = new Array(SKIN_SCENARIOS.length).fill(undefined);
 
         this.narrator.show();
         this.narrator.eventData = SkinNarration0;
@@ -304,6 +363,9 @@ class SkinScene extends Scene {
             this.narrator.eventData = SkinNarration2;
             this._selectedDisease = null;
             this._viewedDiseases  = new Set();
+            this.step2Tab         = 'diseases';
+            this._scenarioIdx     = 0;
+            this._scenarioAnswers = new Array(SKIN_SCENARIOS.length).fill(undefined);
             bus.emit('SHOW_NARRATION', SkinNarration2);
         } else if (this.step === 3) {
             this.narrator.eventData = SkinNarration3;
@@ -747,25 +809,36 @@ class SkinScene extends Scene {
         background(238, 245, 240);
 
         push();
-        fill(15, 85, 42); noStroke(); textSize(24); textStyle(BOLD); textAlign(CENTER);
-        text('Bệnh Da Phổ Biến & Cách Phòng Tránh', 390, 42);
+        fill(15, 85, 42); noStroke(); textSize(22); textStyle(BOLD); textAlign(CENTER);
+        text('Bệnh Da & Phòng Chống Nóng Lạnh', 390, 38);
         pop();
 
-        const cw = 230, ch = 630, gap = 10, startX = 30, startY = 62;
-        for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
-            this._drawDiseaseCard(i, startX + i * (cw + gap), startY, cw, ch);
+        if (this.step2Tab === 'diseases') {
+            const cw = 230, ch = 625, gap = 10, startX = 30, startY = 62;
+            for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
+                this._drawDiseaseCard(i, startX + i * (cw + gap), startY, cw, ch);
+            }
+            this._drawDiseaseDetail();
+        } else {
+            this._drawScenarios();
         }
-        this._drawDiseaseDetail();
 
-        const v = this._viewedDiseases.size, tot = SKIN_DISEASES_VIZ.length;
+        this._drawStep2Tabs();
+
+        const diseaseDone = this._viewedDiseases.size >= SKIN_DISEASES_VIZ.length;
+        const scenCorrect = this._scenarioAnswers.reduce((n, a, i) =>
+            n + (a !== undefined && SKIN_SCENARIOS[i].options[a].correct ? 1 : 0), 0);
         push();
         textAlign(CENTER); noStroke();
-        if (v < tot) {
-            fill(110, 80, 25); textSize(12);
-            text('Nhấn vào từng bệnh để xem chi tiết (' + v + '/' + tot + ' đã xem)', 390, 720);
-        } else {
+        if (diseaseDone && scenCorrect >= 2) {
             fill(20, 140, 60); textSize(13); textStyle(BOLD);
-            text('Đã xem tất cả! Nhấn "Tiếp theo →" bên dưới.', 390, 720);
+            text('Hoàn thành cả hai phần! Nhấn "Tiếp theo →" bên dưới.', 390, 745);
+        } else {
+            fill(110, 80, 25); textSize(11); textStyle(NORMAL);
+            const parts = [];
+            if (!diseaseDone) parts.push('xem đủ 3 bệnh da');
+            if (scenCorrect < 2) parts.push('đúng ≥2 tình huống phòng chống');
+            text('Cần: ' + parts.join(' và '), 390, 745);
         }
         pop();
     }
@@ -1013,18 +1086,232 @@ class SkinScene extends Scene {
         pop();
     }
 
+    _drawStep2Tabs() {
+        const tabY = 694, tabH = 34;
+        const tabs = [
+            { id: 'diseases',  label: 'Benh Da',                x: 30,  w: 200 },
+            { id: 'scenarios', label: 'Phong Chong Nong Lanh',  x: 238, w: 252 },
+        ];
+        push();
+        rectMode(CORNER);
+        for (const t of tabs) {
+            const active = this.step2Tab === t.id;
+            const done   = t.id === 'diseases'
+                ? this._viewedDiseases.size >= SKIN_DISEASES_VIZ.length
+                : this._scenarioAnswers.reduce((n, a, i) =>
+                    n + (a !== undefined && SKIN_SCENARIOS[i].options[a].correct ? 1 : 0), 0) >= 2;
+            fill(active ? color(20, 110, 45) : done ? color(210, 242, 215) : color(235, 245, 235));
+            stroke(active ? color(15, 88, 35) : color(155, 200, 162)); strokeWeight(1.5);
+            rect(t.x, tabY, t.w, tabH, 6);
+            fill(active ? 255 : done ? color(20, 100, 40) : color(75, 108, 82));
+            noStroke(); textSize(11); textStyle(active ? BOLD : NORMAL); textAlign(CENTER);
+            text(t.label + (done ? '  [v]' : ''), t.x + t.w / 2, tabY + 22);
+        }
+        pop();
+    }
+
+    _drawScenarios() {
+        const q        = SKIN_SCENARIOS[this._scenarioIdx];
+        const answered = this._scenarioAnswers[this._scenarioIdx];
+        const total    = SKIN_SCENARIOS.length;
+        const px = 30, py = 62, pw = 730;
+
+        push();
+        rectMode(CORNER);
+
+        // Header strip
+        fill(30, 95, 160); stroke(20, 75, 128); strokeWeight(1.5);
+        rect(px, py, pw, 40, 6);
+        fill(255); noStroke(); textSize(13); textStyle(BOLD); textAlign(LEFT);
+        text('Tinh huong ' + (this._scenarioIdx + 1) + '/' + total +
+             '  —  Phong chong nong lanh', px + 14, py + 26);
+
+        // Situation box
+        fill(245, 250, 255); stroke(175, 200, 228); strokeWeight(1);
+        rect(px, py + 48, pw, 110, 4);
+        fill(35, 35, 62); noStroke(); textSize(13); textStyle(NORMAL); textAlign(LEFT);
+        text(q.situation, px + 12, py + 64, pw - 24, 94);
+
+        // Context (physiology)
+        fill(82, 72, 32); noStroke(); textSize(11); textStyle(ITALIC);
+        text('Boi canh sinh ly: ' + q.context, px + 12, py + 170, pw - 24, 44);
+
+        // Prompt
+        fill(20, 55, 148); noStroke(); textSize(13); textStyle(BOLD); textAlign(LEFT);
+        text('-> Ban nen lam gi?', px + 12, py + 228);
+
+        // Options
+        const optY0 = py + 240, optH = 72, optGap = 8;
+        for (let i = 0; i < q.options.length; i++) {
+            const opt = q.options[i];
+            const oy  = optY0 + i * (optH + optGap);
+            const isSel    = answered === i;
+            const revealed = answered !== undefined;
+            const hov      = !revealed &&
+                             mouseX >= px && mouseX <= px + pw &&
+                             mouseY >= oy  && mouseY <= oy + optH;
+
+            let fg, sg;
+            if (revealed) {
+                if      (opt.correct) { fg = color(210, 245, 215); sg = color(25, 155, 65); }
+                else if (isSel)       { fg = color(248, 212, 212); sg = color(192, 45, 45); }
+                else                  { fg = color(245, 245, 245); sg = color(185, 185, 185); }
+            } else {
+                fg = hov ? color(218, 235, 255) : color(252, 252, 252);
+                sg = hov ? color(70, 130, 200)  : color(175, 200, 228);
+            }
+            fill(fg); stroke(sg); strokeWeight(1.5);
+            rect(px, oy, pw, optH, 5);
+            noStroke(); fill(35, 35, 35); textSize(12); textStyle(NORMAL); textAlign(LEFT);
+            text(String.fromCharCode(65 + i) + '.  ' + opt.text, px + 14, oy + 11, pw - 52, optH);
+            if (revealed) {
+                textSize(16); textStyle(BOLD); textAlign(RIGHT);
+                if      (opt.correct) { fill(25, 155, 65);  text('v', px + pw - 10, oy + optH / 2 + 5); }
+                else if (isSel)       { fill(192, 45, 45);  text('x', px + pw - 10, oy + optH / 2 + 5); }
+                textStyle(NORMAL);
+            }
+        }
+
+        // Feedback box (shown after answering)
+        if (answered !== undefined) {
+            const isOk  = q.options[answered].correct;
+            const fbY   = optY0 + q.options.length * (optH + optGap) - optGap + 10;
+            fill(isOk ? color(222, 248, 226) : color(248, 226, 222));
+            stroke(isOk ? color(25, 155, 65) : color(192, 45, 45)); strokeWeight(1);
+            rect(px, fbY, pw, 82, 5);
+            fill(isOk ? color(18, 120, 50) : color(152, 35, 35));
+            noStroke(); textSize(12); textStyle(NORMAL); textAlign(LEFT);
+            text(q.options[answered].feedback, px + 12, fbY + 12, pw - 24, 70);
+        }
+
+        // Nav buttons
+        const navY = py + 586;
+        if (this._scenarioIdx > 0) {
+            fill(220, 235, 220); stroke(130, 175, 135); strokeWeight(1);
+            rect(px, navY, 148, 34, 6);
+            fill(25, 78, 30); noStroke(); textSize(12); textStyle(NORMAL); textAlign(CENTER);
+            text('<- Tinh huong truoc', px + 74, navY + 22);
+        }
+        if (this._scenarioIdx < total - 1) {
+            fill(220, 235, 220); stroke(130, 175, 135); strokeWeight(1);
+            rect(px + pw - 148, navY, 148, 34, 6);
+            fill(25, 78, 30); noStroke(); textSize(12); textStyle(NORMAL); textAlign(CENTER);
+            text('Tinh huong sau ->', px + pw - 74, navY + 22);
+        }
+        pop();
+
+        this._drawScenarioDetail();
+    }
+
+    _drawScenarioDetail() {
+        const rx = 762, ry = 62, rw = 415, rh = 630;
+        const total   = SKIN_SCENARIOS.length;
+        const correct = this._scenarioAnswers.reduce((n, a, i) =>
+            n + (a !== undefined && SKIN_SCENARIOS[i].options[a].correct ? 1 : 0), 0);
+        const done    = this._scenarioAnswers.filter(a => a !== undefined).length;
+
+        push();
+        rectMode(CORNER);
+        fill(245, 250, 255); stroke(158, 195, 218); strokeWeight(1.5);
+        rect(rx, ry, rw, rh, 10);
+
+        fill(22, 78, 148); noStroke(); textSize(16); textStyle(BOLD); textAlign(CENTER);
+        text('Ket qua tinh huong', rx + rw / 2, ry + 36);
+
+        textSize(52); textStyle(BOLD);
+        fill(correct >= 2 ? color(20, 160, 70) : color(155, 45, 45));
+        text(correct + '/' + total, rx + rw / 2, ry + 108);
+        fill(75, 75, 75); textSize(13); textStyle(NORMAL);
+        text('cau tra loi dung', rx + rw / 2, ry + 130);
+        text('Da lam: ' + done + '/' + total + ' tinh huong', rx + rw / 2, ry + 152);
+
+        // Progress dots
+        const dotSpacing = (rw - 60) / (total - 1);
+        for (let i = 0; i < total; i++) {
+            const a      = this._scenarioAnswers[i];
+            const dx     = rx + 30 + i * dotSpacing;
+            const dy     = ry + 182;
+            const active = i === this._scenarioIdx;
+            if      (a === undefined)                        fill(active ? color(92, 158, 210) : color(200, 215, 228));
+            else if (SKIN_SCENARIOS[i].options[a].correct)  fill(20, 160, 70);
+            else                                             fill(192, 45, 45);
+            noStroke(); ellipse(dx, dy, active ? 30 : 22, active ? 30 : 22);
+            fill(255); textSize(11); textStyle(BOLD); textAlign(CENTER);
+            text(i + 1, dx, dy + 5);
+        }
+
+        // Status text
+        textSize(13); textAlign(CENTER);
+        if (correct >= 2) {
+            fill(20, 160, 70); textStyle(BOLD);
+            text('Gioi lam! Phan phong chong hoan thanh.', rx + rw / 2, ry + 225);
+        } else if (done >= total) {
+            fill(192, 45, 45); textStyle(NORMAL);
+            text('Can it nhat 2 cau dung.', rx + rw / 2, ry + 225);
+        } else {
+            fill(92, 70, 20); textStyle(NORMAL);
+            text('Can them ' + (2 - correct) + ' cau dung', rx + rw / 2, ry + 222);
+            text('de hoan thanh phan nay.', rx + rw / 2, ry + 244);
+        }
+        pop();
+    }
+
     _handleDiseaseClick() {
-        const cw = 230, ch = 630, gap = 10, startX = 30, startY = 62;
-        for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
-            const cx = startX + i * (cw + gap);
-            if (mouseX >= cx && mouseX <= cx + cw &&
-                mouseY >= startY && mouseY <= startY + ch) {
-                this._selectedDisease = i;
-                this._viewedDiseases.add(i);
-                if (this._viewedDiseases.size >= SKIN_DISEASES_VIZ.length) this.nextBtn.show();
+        // Tab button clicks (tabY=694, tabH=34)
+        if (mouseY >= 694 && mouseY <= 728) {
+            if (mouseX >= 30  && mouseX <= 230) { this.step2Tab = 'diseases';  return true; }
+            if (mouseX >= 238 && mouseX <= 490) { this.step2Tab = 'scenarios'; return true; }
+        }
+
+        if (this.step2Tab === 'diseases') {
+            const cw = 230, ch = 625, gap = 10, startX = 30, startY = 62;
+            for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
+                const cx = startX + i * (cw + gap);
+                if (mouseX >= cx && mouseX <= cx + cw &&
+                    mouseY >= startY && mouseY <= startY + ch) {
+                    this._selectedDisease = i;
+                    this._viewedDiseases.add(i);
+                    this._syncButtons();
+                    return true;
+                }
+            }
+
+        } else {
+            const q        = SKIN_SCENARIOS[this._scenarioIdx];
+            const answered = this._scenarioAnswers[this._scenarioIdx];
+            const total    = SKIN_SCENARIOS.length;
+            const px = 30, py = 62, pw = 730;
+            const optY0 = py + 240, optH = 72, optGap = 8;
+
+            // Option clicks (only when unanswered)
+            if (answered === undefined) {
+                for (let i = 0; i < q.options.length; i++) {
+                    const oy = optY0 + i * (optH + optGap);
+                    if (mouseX >= px && mouseX <= px + pw &&
+                        mouseY >= oy  && mouseY <= oy + optH) {
+                        this._scenarioAnswers[this._scenarioIdx] = i;
+                        this._syncButtons();
+                        return true;
+                    }
+                }
+            }
+
+            // Nav buttons (navY = py + 586 = 648)
+            const navY = py + 586;
+            if (this._scenarioIdx > 0 &&
+                mouseX >= px && mouseX <= px + 148 &&
+                mouseY >= navY && mouseY <= navY + 34) {
+                this._scenarioIdx--;
+                return true;
+            }
+            if (this._scenarioIdx < total - 1 &&
+                mouseX >= px + pw - 148 && mouseX <= px + pw &&
+                mouseY >= navY && mouseY <= navY + 34) {
+                this._scenarioIdx++;
                 return true;
             }
         }
+
         return false;
     }
 
@@ -1079,8 +1366,10 @@ class SkinScene extends Scene {
             this.nextBtn.eventTag  = 'SKIN_NEXT';
             this.nextBtn.eventData = null;
         } else if (this.step === 2) {
-            if (this._viewedDiseases.size >= SKIN_DISEASES_VIZ.length) this.nextBtn.show();
-            else this.nextBtn.hide();
+            const _d = this._viewedDiseases.size >= SKIN_DISEASES_VIZ.length;
+            const _s = this._scenarioAnswers.reduce((n, a, i) =>
+                n + (a !== undefined && SKIN_SCENARIOS[i].options[a].correct ? 1 : 0), 0) >= 2;
+            if (_d && _s) this.nextBtn.show(); else this.nextBtn.hide();
             this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
             this.view3DBtn.hide();
             this.nextBtn.label     = 'Tiếp theo →';
