@@ -2,6 +2,8 @@ let sceneManager;
 let thuyetMinh;
 let vFont;
 
+function applyVietFont() { if (vFont) textFont(vFont); }
+
 async function setup() {
     createCanvas(1200, 800);
     // Load Vietnamese-capable font in background; falls back to browser default if offline

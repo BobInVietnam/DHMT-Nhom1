@@ -295,7 +295,7 @@ class ReproductiveScene extends Scene {
 
         // Info box
         push();
-        if (vFont) textFont(vFont);
+        applyVietFont();
         fill(255, 242, 255); stroke(180, 80, 155); strokeWeight(1);
         rectMode(CORNER); rect(30, 620, 740, 118, 8);
         fill(70, 15, 55); noStroke(); textSize(12); textAlign(LEFT);
@@ -365,7 +365,7 @@ class ReproductiveScene extends Scene {
 
         // Info box
         push();
-        if (vFont) textFont(vFont);
+        applyVietFont();
         fill(240, 240, 255); stroke(100, 80, 200); strokeWeight(1);
         rectMode(CORNER); rect(30, 620, 740, 118, 8);
         fill(25, 18, 70); noStroke(); textSize(12); textAlign(LEFT);
@@ -428,6 +428,7 @@ class ReproductiveScene extends Scene {
 
         // Info panel
         push();
+        applyVietFont();
         fill(255, 245, 255); stroke(150, 100, 200); strokeWeight(1);
         rectMode(CORNER); rect(30, 168, 690, 140, 8);
         fill(60, 20, 80); noStroke(); textSize(13); textAlign(LEFT);
@@ -563,7 +564,7 @@ class ReproductiveScene extends Scene {
 
         // Info box
         push();
-        if (vFont) textFont(vFont);
+        applyVietFont();
         fill(255, 235, 245); stroke(180, 80, 130); strokeWeight(1);
         rectMode(CORNER); rect(30, 655, 740, 90, 8);
         fill(70, 15, 55); noStroke(); textSize(13); textAlign(CENTER);
@@ -582,85 +583,76 @@ class ReproductiveScene extends Scene {
         textStyle(NORMAL);
         pop();
 
-        // 2×2 card grid: x 30–770, y 68–638
         const cards = [
-            { cx: 210, cy: 210, bg: [220, 235, 255], border: [80, 120, 200] },
-            { cx: 580, cy: 210, bg: [255, 228, 244], border: [200, 80, 130] },
-            { cx: 210, cy: 490, bg: [220, 255, 232], border: [50, 160, 90]  },
-            { cx: 580, cy: 490, bg: [255, 246, 215], border: [200, 145, 40] },
+            { cx: 210, cy: 210, iconDY: -48, labelDY: 38, line1DY: 54, line2DY: 69,
+              bg: [220, 235, 255], border: [80, 120, 200],
+              label: "Bao cao su",                 labelColor: [45, 75, 160],
+              line1: "Ngăn tinh trùng tiếp xúc trứng",
+              line2: "Phòng bệnh lây qua đường tình dục", bodyColor: [35, 60, 130] },
+            { cx: 580, cy: 210, iconDY: -52, labelDY: 38, line1DY: 54, line2DY: 69,
+              bg: [255, 228, 244], border: [200, 80, 130],
+              label: "Thuốc tránh thai hằng ngày", labelColor: [160, 28, 78],
+              line1: "Hormone ngăn rụng trứng",
+              line2: "Uống đúng giờ mỗi ngày",         bodyColor: [130, 18, 62] },
+            { cx: 210, cy: 490, iconDY: -40, labelDY: 20, line1DY: 36, line2DY: 51,
+              bg: [220, 255, 232], border: [50, 160, 90],
+              label: "Đặt vòng tránh thai (IUD)",  labelColor: [28, 108, 58],
+              line1: "Dụng cụ trong tử cung ngăn thụ tinh",
+              line2: "Hiệu quả nhiều năm",             bodyColor: [18, 82, 44] },
+            { cx: 580, cy: 490, iconDY: -38, labelDY: 20, line1DY: 36, line2DY: 51,
+              bg: [255, 246, 215], border: [200, 145, 40],
+              label: "Thuốc tránh thai khẩn cấp",  labelColor: [158, 98, 10],
+              line1: "Dùng trong 72h sau quan hệ",
+              line2: "Ngăn rụng trứng hoặc thụ tinh",  bodyColor: [128, 78, 8] },
         ];
-        for (let c of cards) {
-            push();
-            fill(...c.bg); stroke(...c.border); strokeWeight(1.5); rectMode(CENTER);
-            rect(c.cx, c.cy, 356, 270, 10);
-            pop();
-        }
 
-        // ── Card 1: Bao cao su ────────────────────────────────────────────
-        push(); translate(210, 162);
+        // Card backgrounds (batched)
+        push();
+        rectMode(CENTER);
+        for (let c of cards) {
+            fill(...c.bg); stroke(...c.border); strokeWeight(1.5);
+            rect(c.cx, c.cy, 356, 270, 10);
+        }
+        pop();
+
+        // Icons (each needs its own coordinate space)
+        push(); translate(cards[0].cx, cards[0].cy + cards[0].iconDY);
         fill(100, 155, 230); stroke(60, 100, 185); strokeWeight(2);
         rectMode(CENTER); rect(0, 12, 38, 72, 18, 18, 6, 6);
         fill(145, 192, 255); noStroke(); ellipse(0, -26, 30, 18);
-        stroke(60, 100, 185); strokeWeight(1.5); noFill();
-        arc(0, 50, 38, 16, 0, PI);
-        pop();
-        push(); fill(45, 75, 160); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
-        text("Bao cao su", 210, 248);
-        textStyle(NORMAL); textSize(11); fill(35, 60, 130);
-        text("Ngăn tinh trùng tiếp xúc trứng", 210, 264);
-        text("Phòng bệnh lây qua đường tình dục", 210, 279);
+        stroke(60, 100, 185); strokeWeight(1.5); noFill(); arc(0, 50, 38, 16, 0, PI);
         pop();
 
-        // ── Card 2: Thuốc hằng ngày ──────────────────────────────────────
-        push(); translate(580, 158);
+        push(); translate(cards[1].cx, cards[1].cy + cards[1].iconDY);
         for (let r = 0; r < 4; r++)
-            for (let c = 0; c < 7; c++) {
-                fill(220, 70, 120); noStroke();
-                ellipse(-48 + c * 16, -24 + r * 16, 12, 12);
-            }
-        stroke(175, 48, 98); strokeWeight(1.5); noFill(); rectMode(CENTER);
-        rect(0, 0, 120, 68, 6);
-        pop();
-        push(); fill(160, 28, 78); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
-        text("Thuốc tránh thai hằng ngày", 580, 248);
-        textStyle(NORMAL); textSize(11); fill(130, 18, 62);
-        text("Hormone ngăn rụng trứng", 580, 264);
-        text("Uống đúng giờ mỗi ngày", 580, 279);
+            for (let c = 0; c < 7; c++) { fill(220, 70, 120); noStroke(); ellipse(-48 + c*16, -24 + r*16, 12, 12); }
+        stroke(175, 48, 98); strokeWeight(1.5); noFill(); rectMode(CENTER); rect(0, 0, 120, 68, 6);
         pop();
 
-        // ── Card 3: Vòng tránh thai (IUD) ────────────────────────────────
-        push(); translate(210, 450);
-        stroke(38, 138, 78); strokeWeight(2.5); noFill();
-        ellipse(0, -6, 66, 66);
-        strokeWeight(3);
-        line(-24, -6, 24, -6);
-        line(0, -6, 0, 30);
-        pop();
-        push(); fill(28, 108, 58); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
-        text("Đặt vòng tránh thai (IUD)", 210, 510);
-        textStyle(NORMAL); textSize(11); fill(18, 82, 44);
-        text("Dụng cụ trong tử cung ngăn thụ tinh", 210, 526);
-        text("Hiệu quả nhiều năm", 210, 541);
+        push(); translate(cards[2].cx, cards[2].cy + cards[2].iconDY);
+        stroke(38, 138, 78); strokeWeight(2.5); noFill(); ellipse(0, -6, 66, 66);
+        strokeWeight(3); line(-24, -6, 24, -6); line(0, -6, 0, 30);
         pop();
 
-        // ── Card 4: Thuốc khẩn cấp ───────────────────────────────────────
-        push(); translate(580, 452);
-        fill(255, 195, 55); stroke(195, 132, 18); strokeWeight(2);
-        ellipse(0, 0, 48, 74);
-        fill(200, 132, 18); noStroke();
-        rectMode(CENTER); rect(0, -10, 7, 24, 3);
-        ellipse(0, 20, 8, 8);
-        pop();
-        push(); fill(158, 98, 10); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
-        text("Thuốc tránh thai khẩn cấp", 580, 510);
-        textStyle(NORMAL); textSize(11); fill(128, 78, 8);
-        text("Dùng trong 72h sau quan hệ", 580, 526);
-        text("Ngăn rụng trứng hoặc thụ tinh", 580, 541);
+        push(); translate(cards[3].cx, cards[3].cy + cards[3].iconDY);
+        fill(255, 195, 55); stroke(195, 132, 18); strokeWeight(2); ellipse(0, 0, 48, 74);
+        fill(200, 132, 18); noStroke(); rectMode(CENTER); rect(0, -10, 7, 24, 3); ellipse(0, 20, 8, 8);
         pop();
 
-        // ── Bottom info bar ───────────────────────────────────────────────
+        // Card labels
+        for (let c of cards) {
+            push();
+            fill(...c.labelColor); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
+            text(c.label, c.cx, c.cy + c.labelDY);
+            textStyle(NORMAL); textSize(11); fill(...c.bodyColor);
+            text(c.line1, c.cx, c.cy + c.line1DY);
+            text(c.line2, c.cx, c.cy + c.line2DY);
+            pop();
+        }
+
+        // Bottom info bar
         push();
-        if (vFont) textFont(vFont);
+        applyVietFont();
         fill(255, 235, 248); stroke(180, 80, 130); strokeWeight(1);
         rectMode(CORNER); rect(30, 645, 740, 52, 8);
         fill(80, 20, 55); noStroke(); textSize(12); textAlign(CENTER);
