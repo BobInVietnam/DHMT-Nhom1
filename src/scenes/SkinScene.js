@@ -1244,14 +1244,14 @@ class SkinScene extends Scene {
         textSize(13); textAlign(CENTER);
         if (correct >= 2) {
             fill(20, 160, 70); textStyle(BOLD);
-            text('Gioi lam! Phan phong chong hoan thanh.', rx + rw / 2, ry + 225);
+            text('Giỏi lắm! Phần phòng chống hoàn thành.', rx + rw / 2, ry + 225);
         } else if (done >= total) {
             fill(192, 45, 45); textStyle(NORMAL);
-            text('Can it nhat 2 cau dung.', rx + rw / 2, ry + 225);
+            text('Cần ít nhất 2 câu đúng.', rx + rw / 2, ry + 225);
         } else {
             fill(92, 70, 20); textStyle(NORMAL);
-            text('Can them ' + (2 - correct) + ' cau dung', rx + rw / 2, ry + 222);
-            text('de hoan thanh phan nay.', rx + rw / 2, ry + 244);
+            text('Cần thêm ' + (2 - correct) + ' câu đúng', rx + rw / 2, ry + 222);
+            text('để hoàn thành phần này.', rx + rw / 2, ry + 244);
         }
         pop();
     }
@@ -1322,7 +1322,7 @@ class SkinScene extends Scene {
 
         push();
         fill(255); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
-        text('Mo hinh 3D cua Da', 400, 52);
+        text('Mô hình 3D của Da', 400, 52);
         fill(170); textSize(13); textStyle(NORMAL);
         text('Kéo chuột: xoay  |  Cuộn: zoom  |  Chuột phải / Ctrl+kéo: di chuyển', 400, 80);
         pop();
@@ -1336,13 +1336,13 @@ class SkinScene extends Scene {
         textSize(13); textAlign(CENTER); noStroke();
         if (!model3DViewer.isReady) {
             fill(255, 80, 80);
-            text('WebGL khong kha dung — khong the hien thi mo hinh 3D', 400, 700);
+            text('WebGL không khả dụng — không thể hiển thị mô hình 3D', 400, 700);
         } else if (model3DViewer.isLoading) {
             fill(120, 160, 255);
-            text('Dang tai mo hinh… (skin.glb ~27 MB)', 400, 700);
+            text('Đang tải mô hình… (skin.glb ~27 MB)', 400, 700);
         } else {
             fill(80, 180, 100);
-            text('Mo hinh da tai  ·  dung chuot de xoay / zoom', 400, 700);
+            text('Mô hình đã tải  ·  dùng chuột để xoay / zoom', 400, 700);
         }
         pop();
     }
@@ -1377,7 +1377,7 @@ class SkinScene extends Scene {
             this.nextBtn.eventData = null;
         } else {
             this.nextBtn.show();
-            this.nextBtn.label     = '<- Ve trang chu';
+            this.nextBtn.label     = '← Về trang chủ';
             this.nextBtn.eventTag  = 'SWITCH_SCENE';
             this.nextBtn.eventData = 'BodyMap';
             this.zoom3DPlusBtn.show(); this.zoom3DMinusBtn.show(); this.zoom3DResetBtn.show();
