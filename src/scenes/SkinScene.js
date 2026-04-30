@@ -248,7 +248,7 @@ class SkinScene extends Scene {
         // ── Step 0: tap-to-reveal ──────────────────────────────────────
         this.tappedIds     = new Set();
         this.activeHotspot = null;
-        this.GATE_COUNT    = 3;   // taps required to unlock "Tiếp theo"
+        this.GATE_COUNT    = 4;   // taps required to unlock "Tiếp theo"
 
         // ── Step 1: thermoregulation ───────────────────────────────────
         this.thermoTemp       = 37;
@@ -273,18 +273,22 @@ class SkinScene extends Scene {
 
         // ── Shared UI ─────────────────────────────────────────────────
         this.narration = new Narration(980, 380);
-        this.narrator  = new Narrator(1000, 660, SkinNarration0);
+        this.narrator  = new Narrator(1000, 550, SkinNarration0);
 
         this.backBtn = new Button( 80,  40, 130, 40, '← Quay lại', 'SWITCH_SCENE', 'BodyMap');
         this.skipBtn = new Button(1120, 40, 100, 35, 'SKIP >>>',   'SWITCH_SCENE', 'BodyMap');
-        this.nextBtn = new Button( 380, 768, 180, 46, 'Tiếp theo →','SKIN_NEXT',    null);
+        this.nextBtn = new Button( 600, 768, 180, 46, 'Tiếp theo →','SKIN_NEXT',    null);
 
-        this.zoom3DPlusBtn  = new Button(560, 760,  88, 34, 'Zoom +', 'SKIN_3D_ZOOM_IN',  null);
-        this.zoom3DMinusBtn = new Button(656, 760,  88, 34, 'Zoom −', 'SKIN_3D_ZOOM_OUT', null);
-        this.zoom3DResetBtn = new Button(752, 760,  88, 34, 'Reset',  'SKIN_3D_RESET',    null);
+        this.zoom3DPlusBtn   = new Button(440, 760,  88, 34, 'Zoom +',     'SKIN_3D_ZOOM_IN',  null);
+        this.zoom3DMinusBtn  = new Button(536, 760,  88, 34, 'Zoom −',     'SKIN_3D_ZOOM_OUT', null);
+        this.zoom3DResetBtn  = new Button(632, 760,  88, 34, 'Reset',      'SKIN_3D_RESET',    null);
+        this.cutLayerBtn     = new Button(728, 760, 108, 34, '✂ Cắt lớp', 'SKIN_3D_CUT',      null);
+        this.colorBtn        = new Button(844, 760, 108, 34, '🔆 Đổi màu','SKIN_3D_COLOR',    null);
         this.zoom3DPlusBtn.hide();
         this.zoom3DMinusBtn.hide();
         this.zoom3DResetBtn.hide();
+        this.cutLayerBtn.hide();
+        this.colorBtn.hide();
 
         this.view3DBtn = new Button(870, 616, 145, 36, 'Xem 3D', 'SKIN_TOGGLE_3D', null);
         this.view3DBtn.hide();
@@ -293,6 +297,7 @@ class SkinScene extends Scene {
             this.narration, this.narrator,
             this.backBtn, this.skipBtn, this.nextBtn,
             this.zoom3DPlusBtn, this.zoom3DMinusBtn, this.zoom3DResetBtn,
+            this.cutLayerBtn, this.colorBtn,
             this.view3DBtn
         );
 
@@ -373,7 +378,7 @@ class SkinScene extends Scene {
                 model3DViewer.load('./assets/skin.glb');
                 this._glbLoaded = true;
             }
-            model3DViewer.show(30, 108, 740, 570);
+            model3DViewer.show(30, 108, 780, 570);
             bus.emit('SKIN_THERMO_CHANGE', null);
             bus.emit('SKIN_3D_LOADED');
             bus.emit('SHOW_NARRATION', SkinNarration3);
@@ -385,6 +390,7 @@ class SkinScene extends Scene {
 
     draw() {
         this.animFrame++;
+        applyVietFont();
         if      (this.step === 0) this._drawOverview();
         else if (this.step === 1) this._drawThermoReg();
         else if (this.step === 2) this._drawDiseases();
@@ -398,6 +404,7 @@ class SkinScene extends Scene {
             this._fadeAlpha = max(0, this._fadeAlpha - 13);
         }
 
+        this._drawStepDots(4, this.step);
         super.draw();
     }
 
@@ -413,9 +420,22 @@ class SkinScene extends Scene {
                 return;
             }
         }
-        if (this.step === 1 && this._isInThermoArea(mouseX, mouseY)) {
-            this._updateThermoFromMouseY(mouseY);
-            return;
+        if (this.step === 1) {
+            // Preset button areas (mirror positions in _drawThermoPanel)
+            const presetTemps = [33, 37, 40];
+            const bpx = 810, bpy = 90, bpw = 360;
+            for (let i = 0; i < presetTemps.length; i++) {
+                const bby = bpy + 188 + i * 38;
+                if (mouseX >= bpx + 14 && mouseX <= bpx + bpw - 14 &&
+                    mouseY >= bby     && mouseY <= bby + 28) {
+                    this.thermoTemp = presetTemps[i];
+                    return;
+                }
+            }
+            if (this._isInThermoArea(mouseX, mouseY)) {
+                this._updateThermoFromMouseY(mouseY);
+                return;
+            }
         }
         if (this.step === 2 && this._handleDiseaseClick()) return;
         super.checkClick();
@@ -602,7 +622,7 @@ class SkinScene extends Scene {
             fill(55, 165, 80, 235); noStroke();
             rect(cx + cw - 126, cy + ch - 38, 112, 26, 13);
             fill(255); textSize(12); textStyle(BOLD); textAlign(CENTER);
-            text('Da khám phá', cx + cw - 70, cy + ch - 22);
+            text('Đã khám phá ✓', cx + cw - 70, cy + ch - 22);
         } else {
             fill(248, 245, 238, 215); stroke(195, 175, 140); strokeWeight(1);
             rect(cx, cy, cw, ch, 10);
@@ -637,7 +657,7 @@ class SkinScene extends Scene {
                  ' bộ phận để mở "Tiếp theo"', 967, 488);
         } else {
             fill(30, 140, 60); textStyle(BOLD);
-            text('San sang!  Nhan "Tiep theo ->" ben duoi', 967, 488);
+            text('Sẵn sàng! Nhấn "Tiếp theo →" bên dưới', 967, 488);
         }
         pop();
     }
@@ -666,8 +686,8 @@ class SkinScene extends Scene {
         fill(40, 40, 80); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
         text('Điều hòa thân nhiệt', 380, 48);
         textSize(17); textStyle(NORMAL);
-        if      (this.isHot)  { fill(200, 50, 20);  text('Môi trường NONG (>=38°C)', 380, 82); }
-        else if (this.isCold) { fill(30,  80, 200); text('Môi trường LANH (<=35°C)', 380, 82); }
+        if      (this.isHot)  { fill(200, 50, 20);  text('Môi trường NÓNG (≥38°C)', 380, 82); }
+        else if (this.isCold) { fill(30,  80, 200); text('Môi trường LẠNH (≤35°C)', 380, 82); }
         else                  { fill(30, 130,  60); text('Thân nhiệt bình thường (37°C)', 380, 82); }
         pop();
 
@@ -696,68 +716,101 @@ class SkinScene extends Scene {
             fill(50, 45, 5); noStroke(); textSize(12);
             text('Mô dưới da', sx + 8, sy + eH + dH + 22);
 
-            const T = this.effectorTimer;
-
             if (this.isHot) {
                 fill(210, 50, 50, 200); noStroke();
                 rect(sx + 218, sy + eH + 18, 28, dH - 36, 14);
                 rect(sx + 392, sy + eH + 18, 22, dH - 36, 11);
                 fill(40, 10, 10); textSize(12);
                 text('Mạch máu giãn → tản nhiệt', sx + 255, sy + eH + dH / 2);
-                if (T >= 24) {
-                    for (let i = 0; i < 6; i++) {
-                        const px = sx + 70 + i * 94;
-                        stroke(90, 140, 210); strokeWeight(2);
-                        line(px, sy, px, sy - 12);
-                        const dy = sy - 22 - ((this.animFrame * 2 + i * 55) % 88);
-                        fill(80, 140, 210, 200); noStroke();
-                        ellipse(px, dy, 9, 13);
-                    }
-                    fill(30, 80, 180); noStroke(); textSize(13);
-                    text('→ Tiết mồ hôi để làm mát cơ thể', sx + 10, sy - 30);
-                }
             } else if (this.isCold) {
                 fill(180, 50, 50, 180); noStroke();
                 rect(sx + 225, sy + eH + 18, 10, dH - 36, 5);
                 rect(sx + 398, sy + eH + 18,  8, dH - 36, 4);
                 fill(40, 10, 10); textSize(12);
                 text('Mạch máu co → giữ nhiệt', sx + 242, sy + eH + dH / 2);
-                if (T >= 24) {
-                    stroke(70, 45, 25); strokeWeight(2);
-                    for (let i = 0; i < 8; i++) {
-                        const hx = sx + 54 + i * 78;
-                        line(hx, sy + 5, hx + 13, sy - 25);
-                    }
-                    fill(30, 50, 160); noStroke(); textSize(13);
-                    text('→ Lông dựng lên để cách nhiệt', sx + 10, sy - 30);
-                }
-                if (T >= 48) {
-                    const sh = sin(this.animFrame * 0.45) * 5;
-                    stroke(100, 100, 200); strokeWeight(1.5); noFill();
-                    for (let i = 0; i < 3; i++) {
-                        beginShape();
-                        for (let x = sx + 120 + i * 158; x < sx + 268 + i * 158; x += 14)
-                            vertex(x + sh, sy + eH + 155 + sin(x * 0.3 + this.animFrame * 0.25) * 6);
-                        endShape();
-                    }
-                    fill(60, 60, 190); noStroke(); textSize(12);
-                    text('→ Cơ run rẩy để sinh nhiệt', sx + 10, sy + eH + 195);
-                }
             } else {
                 fill(180, 50, 50, 100); noStroke();
                 rect(sx + 218, sy + eH + 18, 16, dH - 36, 8);
                 fill(40, 10, 10); textSize(12);
                 text('Mạch máu bình thường', sx + 248, sy + eH + dH / 2);
-                fill(30, 130, 60); noStroke(); textSize(13);
-                text('→ Thân nhiệt ổn định tại 37°C', sx + 10, sy - 18);
             }
         }
 
+        this._drawThermoEffectors(sx, sy, eH, dH);
         this._drawTempBar();
+        this._drawThermoPanel();
+        this._drawThermoBubble();
+    }
 
+    _drawThermoPanel() {
+        const px = 810, py = 90, pw = 360, ph = 380;
+        const lx = px, ly = py + ph + 14, lw = pw, lh = 95;
         push();
-        fill(80, 60, 150); noStroke(); textSize(12); textAlign(CENTER);
-        text('<- Kéo thanh nhiệt kế để thay đổi nhiệt độ', 773, 102);
+        rectMode(CORNER); textAlign(LEFT);
+
+        // Main info panel
+        if (this.isHot) {
+            fill(255, 238, 225); stroke(200, 100, 50);
+        } else if (this.isCold) {
+            fill(225, 238, 255); stroke(50, 100, 200);
+        } else {
+            fill(230, 248, 230); stroke(50, 160, 80);
+        }
+        strokeWeight(1.5); rect(px, py, pw, ph, 10);
+
+        const titleColor = this.isHot ? color(180, 55, 20) : this.isCold ? color(30, 70, 185) : color(20, 130, 60);
+        fill(titleColor); noStroke(); textSize(15); textStyle(BOLD);
+        text(this.isHot ? '🌡️ Da khi NÓNG (≥38°C)' : this.isCold ? '❄️ Da khi LẠNH (≤35°C)' : '✅ Thân nhiệt bình thường', px + 14, py + 28);
+
+        const bullets = this.isHot
+            ? ['Mạch máu giãn → tăng lưu lượng máu', 'Tuyến mồ hôi hoạt động → bay hơi làm mát', 'Da ửng đỏ, cảm giác nóng bừng']
+            : this.isCold
+            ? ['Mạch máu co → giảm mất nhiệt', 'Lông dựng lên → tạo lớp không khí cách nhiệt', 'Cơ run rẩy → sinh nhiệt nội tại']
+            : ['Mạch máu ở trạng thái bình thường', 'Không có phản ứng điều hòa đặc biệt', 'Thân nhiệt duy trì ở 37°C'];
+
+        noStroke(); textSize(13); textStyle(NORMAL);
+        for (let i = 0; i < bullets.length; i++) {
+            fill(titleColor); ellipse(px + 20, py + 58 + i * 36, 6, 6);
+            fill(40, 30, 20); text(bullets[i], px + 32, py + 63 + i * 36, pw - 44, 30);
+        }
+
+        // Preset buttons (below bullets, above view3DBtn)
+        const presets = [
+            { label: '33°C  Trời rét',     temp: 33, r: 30,  g: 70,  b_: 185 },
+            { label: '37°C  Bình thường',  temp: 37, r: 20,  g: 130, b_: 60  },
+            { label: '40°C  Sốt cao',      temp: 40, r: 180, g: 55,  b_: 20  },
+        ];
+        noStroke(); textSize(11); textStyle(NORMAL); textAlign(CENTER);
+        for (let i = 0; i < presets.length; i++) {
+            const p = presets[i];
+            const bby = py + 188 + i * 38;
+            const selected = Math.abs(this.thermoTemp - p.temp) < 0.5;
+            if (selected) {
+                fill(p.r, p.g, p.b_); stroke(p.r, p.g, p.b_); strokeWeight(1.5);
+            } else {
+                fill(245, 242, 238); stroke(p.r, p.g, p.b_); strokeWeight(1.5);
+            }
+            rect(px + 14, bby, pw - 28, 28, 14);
+            fill(selected ? 255 : color(p.r, p.g, p.b_)); noStroke(); textStyle(selected ? BOLD : NORMAL);
+            text(p.label, px + pw / 2, bby + 19);
+        }
+        textStyle(NORMAL);
+
+        // Legend panel
+        fill(250, 250, 245); stroke(180, 175, 160); strokeWeight(1);
+        rect(lx, ly, lw, lh, 8);
+        fill(60, 50, 30); noStroke(); textSize(12); textStyle(BOLD);
+        text('Chú thích:', lx + 14, ly + 18);
+        textStyle(NORMAL);
+        const legend = [
+            { color: color(210, 80, 50), label: 'NÓNG (≥38°C) — da đỏ, đổ mồ hôi' },
+            { color: color(30, 160, 70),  label: 'Bình thường (36–37°C)' },
+            { color: color(50, 100, 210), label: 'LẠNH (≤35°C) — da tái, run rẩy' },
+        ];
+        for (let i = 0; i < legend.length; i++) {
+            fill(legend[i].color); noStroke(); rect(lx + 14, ly + 28 + i * 22, 12, 12, 2);
+            fill(50, 40, 20); text(legend[i].label, lx + 32, ly + 39 + i * 22);
+        }
         pop();
     }
 
@@ -767,31 +820,31 @@ class SkinScene extends Scene {
 
         fill(215); stroke(100); strokeWeight(1); rect(bx, by, bw, bh, 5);
 
-        const fillH = map(temp, 34, 41, 0, bh);
-        const r     = map(temp, 34, 41,   0, 255);
-        const b     = map(temp, 34, 41, 255,   0);
+        const fillH = map(temp, 32, 42, 0, bh);
+        const r     = map(temp, 32, 42,   0, 255);
+        const b     = map(temp, 32, 42, 255,   0);
         fill(r, 55, b); noStroke();
         rect(bx, by + bh - fillH, bw, fillH, 5);
 
-        for (let deg = 34; deg <= 41; deg++) {
-            const ty = by + map(deg, 34, 41, bh, 0);
+        for (let deg = 32; deg <= 42; deg++) {
+            const ty = by + map(deg, 32, 42, bh, 0);
             stroke(80); strokeWeight(1); line(bx - 5, ty, bx, ty);
             fill(30); noStroke(); textSize(11); textAlign(RIGHT);
             text(deg + '°C', bx - 8, ty + 4);
         }
 
-        const spY = by + map(37, 34, 41, bh, 0);
+        const spY = by + map(37, 32, 42, bh, 0);
         stroke(20, 155, 60); strokeWeight(2);
         line(bx - 8, spY, bx + bw + 5, spY);
         noStroke(); fill(15, 125, 50); textSize(10); textAlign(LEFT);
         text('37°C bình thường', bx + bw + 8, spY + 4);
 
         stroke(210, 55, 20, 185); strokeWeight(1);
-        line(bx - 4, by + map(38, 34, 41, bh, 0), bx + bw + 3, by + map(38, 34, 41, bh, 0));
+        line(bx - 4, by + map(38, 32, 42, bh, 0), bx + bw + 3, by + map(38, 32, 42, bh, 0));
         stroke(25, 75, 210, 185);
-        line(bx - 4, by + map(35, 34, 41, bh, 0), bx + bw + 3, by + map(35, 34, 41, bh, 0));
+        line(bx - 4, by + map(35, 32, 42, bh, 0), bx + bw + 3, by + map(35, 32, 42, bh, 0));
 
-        const handleY = by + map(temp, 34, 41, bh, 0);
+        const handleY = by + map(temp, 32, 42, bh, 0);
         fill(255); stroke(70); strokeWeight(2);
         ellipse(bx + bw / 2, handleY, bw + 12, 26);
         fill(30); noStroke(); textSize(12); textStyle(BOLD); textAlign(CENTER);
@@ -814,7 +867,7 @@ class SkinScene extends Scene {
         pop();
 
         if (this.step2Tab === 'diseases') {
-            const cw = 230, ch = 625, gap = 10, startX = 30, startY = 62;
+            const cw = 230, ch = 560, gap = 10, startX = 30, startY = 62;
             for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
                 this._drawDiseaseCard(i, startX + i * (cw + gap), startY, cw, ch);
             }
@@ -1089,8 +1142,8 @@ class SkinScene extends Scene {
     _drawStep2Tabs() {
         const tabY = 694, tabH = 34;
         const tabs = [
-            { id: 'diseases',  label: 'Benh Da',                x: 30,  w: 200 },
-            { id: 'scenarios', label: 'Phong Chong Nong Lanh',  x: 238, w: 252 },
+            { id: 'diseases',  label: '📋 Bệnh Da',            x: 30,  w: 200 },
+            { id: 'scenarios', label: '🧠 4 Tình huống',        x: 238, w: 252 },
         ];
         push();
         rectMode(CORNER);
@@ -1123,8 +1176,8 @@ class SkinScene extends Scene {
         fill(30, 95, 160); stroke(20, 75, 128); strokeWeight(1.5);
         rect(px, py, pw, 40, 6);
         fill(255); noStroke(); textSize(13); textStyle(BOLD); textAlign(LEFT);
-        text('Tinh huong ' + (this._scenarioIdx + 1) + '/' + total +
-             '  —  Phong chong nong lanh', px + 14, py + 26);
+        text('Tình huống ' + (this._scenarioIdx + 1) + '/' + total +
+             '  —  Phòng chống nóng lạnh', px + 14, py + 26);
 
         // Situation box
         fill(245, 250, 255); stroke(175, 200, 228); strokeWeight(1);
@@ -1134,11 +1187,11 @@ class SkinScene extends Scene {
 
         // Context (physiology)
         fill(82, 72, 32); noStroke(); textSize(11); textStyle(ITALIC);
-        text('Boi canh sinh ly: ' + q.context, px + 12, py + 170, pw - 24, 44);
+        text('Bối cảnh sinh lý: ' + q.context, px + 12, py + 170, pw - 24, 44);
 
         // Prompt
         fill(20, 55, 148); noStroke(); textSize(13); textStyle(BOLD); textAlign(LEFT);
-        text('-> Ban nen lam gi?', px + 12, py + 228);
+        text('→ Bạn nên làm gì?', px + 12, py + 228);
 
         // Options
         const optY0 = py + 240, optH = 72, optGap = 8;
@@ -1190,13 +1243,13 @@ class SkinScene extends Scene {
             fill(220, 235, 220); stroke(130, 175, 135); strokeWeight(1);
             rect(px, navY, 148, 34, 6);
             fill(25, 78, 30); noStroke(); textSize(12); textStyle(NORMAL); textAlign(CENTER);
-            text('<- Tinh huong truoc', px + 74, navY + 22);
+            text('← Tình huống trước', px + 74, navY + 22);
         }
         if (this._scenarioIdx < total - 1) {
             fill(220, 235, 220); stroke(130, 175, 135); strokeWeight(1);
             rect(px + pw - 148, navY, 148, 34, 6);
             fill(25, 78, 30); noStroke(); textSize(12); textStyle(NORMAL); textAlign(CENTER);
-            text('Tinh huong sau ->', px + pw - 74, navY + 22);
+            text('Tình huống sau →', px + pw - 74, navY + 22);
         }
         pop();
 
@@ -1216,14 +1269,14 @@ class SkinScene extends Scene {
         rect(rx, ry, rw, rh, 10);
 
         fill(22, 78, 148); noStroke(); textSize(16); textStyle(BOLD); textAlign(CENTER);
-        text('Ket qua tinh huong', rx + rw / 2, ry + 36);
+        text('Kết quả tình huống', rx + rw / 2, ry + 36);
 
         textSize(52); textStyle(BOLD);
         fill(correct >= 2 ? color(20, 160, 70) : color(155, 45, 45));
         text(correct + '/' + total, rx + rw / 2, ry + 108);
         fill(75, 75, 75); textSize(13); textStyle(NORMAL);
-        text('cau tra loi dung', rx + rw / 2, ry + 130);
-        text('Da lam: ' + done + '/' + total + ' tinh huong', rx + rw / 2, ry + 152);
+        text('câu trả lời đúng', rx + rw / 2, ry + 130);
+        text('Đã làm: ' + done + '/' + total + ' tình huống', rx + rw / 2, ry + 152);
 
         // Progress dots
         const dotSpacing = (rw - 60) / (total - 1);
@@ -1264,7 +1317,7 @@ class SkinScene extends Scene {
         }
 
         if (this.step2Tab === 'diseases') {
-            const cw = 230, ch = 625, gap = 10, startX = 30, startY = 62;
+            const cw = 230, ch = 560, gap = 10, startX = 30, startY = 62;
             for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
                 const cx = startX + i * (cw + gap);
                 if (mouseX >= cx && mouseX <= cx + cw &&
@@ -1322,28 +1375,72 @@ class SkinScene extends Scene {
 
         push();
         fill(255); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
-        text('Mô hình 3D của Da', 400, 52);
+        text('Mô hình 3D của Da', 440, 52);
         fill(170); textSize(13); textStyle(NORMAL);
-        text('Kéo chuột: xoay  |  Cuộn: zoom  |  Chuột phải / Ctrl+kéo: di chuyển', 400, 80);
+        text('Kéo chuột: xoay  |  Cuộn: zoom  |  Chuột phải: di chuyển', 440, 78);
         pop();
 
+        // 3D viewport border (now 780px wide per design)
         push();
         noFill(); stroke(70, 110, 220); strokeWeight(2);
-        rect(30, 108, 740, 570, 8);
+        rect(30, 108, 780, 570, 8);
         pop();
 
+        // Status text below viewport
         push();
         textSize(13); textAlign(CENTER); noStroke();
         if (!model3DViewer.isReady) {
             fill(255, 80, 80);
-            text('WebGL không khả dụng — không thể hiển thị mô hình 3D', 400, 700);
+            text('WebGL không khả dụng — không thể hiển thị mô hình 3D', 420, 700);
         } else if (model3DViewer.isLoading) {
             fill(120, 160, 255);
-            text('Đang tải mô hình… (skin.glb ~27 MB)', 400, 700);
+            text('Đang tải mô hình… (skin.glb ~27 MB)', 420, 700);
         } else {
             fill(80, 180, 100);
-            text('Mô hình đã tải  ·  dùng chuột để xoay / zoom', 400, 700);
+            text('Mô hình đã tải  ·  dùng chuột để xoay / zoom', 420, 700);
         }
+        pop();
+
+        // Right guide panel
+        push();
+        rectMode(CORNER); textAlign(LEFT);
+        fill(30, 38, 64); stroke(60, 90, 180); strokeWeight(1.5);
+        rect(820, 108, 350, 570, 8);
+
+        fill(180, 200, 255); noStroke(); textSize(14); textStyle(BOLD);
+        text('Hướng dẫn điều khiển', 838, 134);
+
+        fill(140, 165, 220); textSize(12); textStyle(NORMAL);
+        const controls = [
+            '🖱️ Kéo trái: xoay mô hình',
+            '🖱️ Cuộn: phóng to / thu nhỏ',
+            '🖱️ Kéo phải: di chuyển',
+        ];
+        for (let i = 0; i < controls.length; i++) {
+            text(controls[i], 838, 158 + i * 26);
+        }
+
+        // Layer toggles section
+        fill(200, 220, 255); textSize(13); textStyle(BOLD);
+        text('Các lớp da:', 838, 250);
+
+        const layers = [
+            { color: color(255, 200, 150), label: 'Biểu bì (Epidermis)' },
+            { color: color(255, 140, 110), label: 'Lớp bì (Dermis)' },
+            { color: color(255, 220, 100), label: 'Mô dưới da (Hypodermis)' },
+        ];
+        textStyle(NORMAL); textSize(12);
+        for (let i = 0; i < layers.length; i++) {
+            fill(layers[i].color); noStroke();
+            rect(838, 262 + i * 32, 14, 14, 3);
+            fill(160, 185, 228);
+            text(layers[i].label, 858, 274 + i * 32);
+        }
+
+        // Tip at bottom
+        fill(100, 130, 190); textSize(11); textStyle(ITALIC);
+        text('Nhấn Reset để trở về góc nhìn ban đầu.', 838, 480);
+        text('Dùng Zoom +/- để điều chỉnh tỉ lệ.', 838, 498);
         pop();
     }
 
@@ -1354,6 +1451,7 @@ class SkinScene extends Scene {
             if (this.tappedIds.size < this.GATE_COUNT) this.nextBtn.hide();
             else this.nextBtn.show();
             this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
+            this.cutLayerBtn.hide(); this.colorBtn.hide();
             this.view3DBtn.hide();
             this.nextBtn.label     = 'Tiếp theo →';
             this.nextBtn.eventTag  = 'SKIN_NEXT';
@@ -1361,7 +1459,9 @@ class SkinScene extends Scene {
         } else if (this.step === 1) {
             this.nextBtn.show();
             this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
+            this.cutLayerBtn.hide(); this.colorBtn.hide();
             this.view3DBtn.show();
+            this.view3DBtn.x = 990; this.view3DBtn.y = 434; this.view3DBtn.w = 300; this.view3DBtn.h = 38;
             this.nextBtn.label     = 'Tiếp theo →';
             this.nextBtn.eventTag  = 'SKIN_NEXT';
             this.nextBtn.eventData = null;
@@ -1371,6 +1471,7 @@ class SkinScene extends Scene {
                 n + (a !== undefined && SKIN_SCENARIOS[i].options[a].correct ? 1 : 0), 0) >= 2;
             if (_d && _s) this.nextBtn.show(); else this.nextBtn.hide();
             this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
+            this.cutLayerBtn.hide(); this.colorBtn.hide();
             this.view3DBtn.hide();
             this.nextBtn.label     = 'Tiếp theo →';
             this.nextBtn.eventTag  = 'SKIN_NEXT';
@@ -1381,6 +1482,7 @@ class SkinScene extends Scene {
             this.nextBtn.eventTag  = 'SWITCH_SCENE';
             this.nextBtn.eventData = 'BodyMap';
             this.zoom3DPlusBtn.show(); this.zoom3DMinusBtn.show(); this.zoom3DResetBtn.show();
+            this.cutLayerBtn.show(); this.colorBtn.show();
             this.view3DBtn.hide();
         }
     }
@@ -1392,7 +1494,7 @@ class SkinScene extends Scene {
 
     _updateThermoFromMouseY(my) {
         const { y, h } = this._THERMO;
-        this.thermoTemp = constrain(map(my, y, y + h, 41, 34), 34, 41);
+        this.thermoTemp = constrain(map(my, y, y + h, 42, 32), 32, 42);
     }
 
     _hitHotspot(mx, my) {
@@ -1409,29 +1511,98 @@ class SkinScene extends Scene {
 
     _drawThermoLabels() {
         const sx = 30, sy = 112, eH = 55, dH = 252;
-        const T = this.effectorTimer;
         push(); noStroke(); textAlign(LEFT);
         if (this.isHot) {
             fill(40, 10, 10); textSize(12);
             text('Mạch máu giãn → tản nhiệt', sx + 255, sy + eH + dH / 2);
-            if (T >= 24) {
-                fill(30, 80, 180); textSize(13);
-                text('→ Tiết mồ hôi để làm mát cơ thể', sx + 10, sy - 30);
-            }
         } else if (this.isCold) {
             fill(40, 10, 10); textSize(12);
             text('Mạch máu co → giữ nhiệt', sx + 242, sy + eH + dH / 2);
+        }
+        pop();
+    }
+
+    _drawThermoBubble() {
+        const bx = 200, by = 610, bw = 400, bh = 56;
+        push();
+        rectMode(CORNER);
+        fill(255, 252, 230, 230); stroke(160, 130, 60); strokeWeight(1.5);
+        rect(bx, by, bw, bh, 12);
+        // left-pointing tail
+        noStroke(); fill(255, 252, 230, 230);
+        triangle(bx, by + 20, bx - 18, by + 30, bx, by + 40);
+        stroke(160, 130, 60); strokeWeight(1.5);
+        line(bx, by + 20, bx - 18, by + 30);
+        line(bx - 18, by + 30, bx, by + 40);
+
+        fill(70, 50, 10); noStroke(); textSize(13); textAlign(CENTER);
+        applyVietFont();
+        text('Kéo thanh nhiệt kế để thấy da phản ứng theo nhiệt độ!', bx + bw / 2, by + 33);
+        pop();
+    }
+
+    _drawThermoEffectors(sx, sy, eH, dH) {
+        const T = this.effectorTimer;
+        push(); rectMode(CORNER);
+        if (this.isHot) {
             if (T >= 24) {
-                fill(30, 50, 160); textSize(13);
+                for (let i = 0; i < 6; i++) {
+                    const px = sx + 70 + i * 94;
+                    stroke(90, 140, 210); strokeWeight(2);
+                    line(px, sy, px, sy - 12);
+                    const dy = sy - 22 - ((this.animFrame * 2 + i * 55) % 88);
+                    fill(80, 140, 210, 200); noStroke();
+                    ellipse(px, dy, 9, 13);
+                }
+                fill(30, 80, 180); noStroke(); textSize(13); textAlign(LEFT);
+                text('→ Tiết mồ hôi để làm mát cơ thể', sx + 10, sy - 30);
+            }
+        } else if (this.isCold) {
+            if (T >= 24) {
+                stroke(70, 45, 25); strokeWeight(2);
+                for (let i = 0; i < 8; i++) {
+                    const hx = sx + 54 + i * 78;
+                    line(hx, sy + 5, hx + 13, sy - 25);
+                }
+                fill(30, 50, 160); noStroke(); textSize(13); textAlign(LEFT);
                 text('→ Lông dựng lên để cách nhiệt', sx + 10, sy - 30);
             }
             if (T >= 48) {
-                fill(60, 60, 190); textSize(12);
+                const sh = sin(this.animFrame * 0.45) * 5;
+                stroke(100, 100, 200); strokeWeight(1.5); noFill();
+                for (let i = 0; i < 3; i++) {
+                    beginShape();
+                    for (let x = sx + 120 + i * 158; x < sx + 268 + i * 158; x += 14)
+                        vertex(x + sh, sy + eH + 155 + sin(x * 0.3 + this.animFrame * 0.25) * 6);
+                    endShape();
+                }
+                fill(60, 60, 190); noStroke(); textSize(12); textAlign(LEFT);
                 text('→ Cơ run rẩy để sinh nhiệt', sx + 10, sy + eH + 195);
             }
         } else {
-            fill(30, 130, 60); textSize(13);
+            fill(30, 130, 60); noStroke(); textSize(13); textAlign(LEFT);
             text('→ Thân nhiệt ổn định tại 37°C', sx + 10, sy - 18);
+        }
+        pop();
+    }
+
+    _drawStepDots(total, current) {
+        const dotGap = 20, pillW = 26, pillH = 12, dotD = 12;
+        const totalW = (total - 1) * dotGap + pillW + (total - 1) * dotD;
+        let cx = (width - totalW) / 2;
+        push();
+        rectMode(CORNER); noStroke();
+        for (let i = 0; i < total; i++) {
+            if (i === current) {
+                fill(34, 34, 34);
+                rect(cx, 785 - pillH / 2, pillW, pillH, pillH / 2);
+                cx += pillW + dotGap;
+            } else {
+                fill(255); stroke(34, 34, 34); strokeWeight(1.5);
+                ellipse(cx + dotD / 2, 785, dotD, dotD);
+                noStroke();
+                cx += dotD + dotGap;
+            }
         }
         pop();
     }
@@ -1444,7 +1615,7 @@ class SkinScene extends Scene {
                 this._glbLoaded = true;
             }
             model3DViewer.show(800, 108, 375, 475);
-            this.view3DBtn.label = 'An 3D';
+            this.view3DBtn.label = 'Ẩn 3D';
             bus.emit('FINISH_NARRATION');
         } else {
             model3DViewer.hide();
