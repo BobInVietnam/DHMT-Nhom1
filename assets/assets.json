@@ -40,12 +40,15 @@
         {
             "name": "teach_point_explain",
             "path": "teach_point_explain.png"
-        }
-        ,       
+        },       
         {
             "name": "teach_point_talk",
             "path": "teach_point_talk.png"
-        }
+        },
+        {
+            "name": "endocrine_bg",
+            "path": "endocrine_bg.png"
+        }   
     ],
     "data3d": []
 }
