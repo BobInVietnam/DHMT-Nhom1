@@ -475,7 +475,8 @@ class SkinScene extends Scene {
         background(245, 235, 225);
 
         push();
-        fill(80, 40, 10); noStroke(); textSize(26); textStyle(BOLD); textAlign(CENTER);
+        applyVietFont();
+        fill(80, 40, 10); noStroke(); textSize(28); textStyle(BOLD); textAlign(CENTER);
         text('Cấu tạo của Da', 380, 50);
         pop();
 
@@ -596,6 +597,11 @@ class SkinScene extends Scene {
             const sel  = this.activeHotspot && this.activeHotspot.id === hs.id;
             const seen = this.tappedIds.has(hs.id);
             const c    = color(...hs.swatchColor);
+            // Drop shadow for selected pin
+            if (sel) {
+                noStroke(); fill(0, 0, 0, 40);
+                ellipse(hs.pinX + 2, hs.pinY + 2, hs.r * 2 + 6, hs.r * 2 + 6);
+            }
             // Pin circle at pinX/pinY
             fill(sel ? c : lerpColor(c, color(255), 0.35));
             stroke(sel ? color(60, 20, 10) : color(100, 60, 40));
@@ -603,18 +609,21 @@ class SkinScene extends Scene {
             ellipse(hs.pinX, hs.pinY, hs.r * 2, hs.r * 2);
             // Check mark when seen
             if (seen) {
-                fill(255); noStroke(); textSize(11); textStyle(BOLD); textAlign(CENTER);
+                fill(255); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
                 applyVietFont();
-                text('✓', hs.pinX, hs.pinY + 4);
+                text('✓', hs.pinX, hs.pinY + 5);
             }
-            // Label above pin
-            fill(sel ? color(40, 20, 5) : color(70, 40, 15));
-            noStroke(); textSize(10); textStyle(sel ? BOLD : NORMAL); textAlign(CENTER);
+            // Label above pin — white text outline for legibility
+            noStroke(); textSize(12); textStyle(sel ? BOLD : NORMAL); textAlign(CENTER);
             applyVietFont();
+            fill(255, 255, 255, 200);
+            for (const [dx, dy] of [[-1,0],[1,0],[0,-1],[0,1]])
+                text(hs.label, hs.pinX + dx, hs.pinY - hs.r - 6 + dy);
+            fill(sel ? color(40, 20, 5) : color(60, 30, 5));
             text(hs.label, hs.pinX, hs.pinY - hs.r - 6);
         }
-        // Bottom progress text (below anatomy image)
-        fill(80, 50, 20); noStroke(); textSize(11); textStyle(NORMAL); textAlign(LEFT);
+        // Bottom progress text
+        fill(80, 50, 20); noStroke(); textSize(13); textStyle(NORMAL); textAlign(LEFT);
         applyVietFont();
         text('Đã khám phá: ' + this.tappedIds.size + ' / ' + SKIN_HOTSPOTS.length +
              '  (cần ' + this.GATE_COUNT + ' để tiếp tục)', 34, 555);
@@ -631,79 +640,91 @@ class SkinScene extends Scene {
             const hs = this.activeHotspot;
             const [r, g, b] = hs.swatchColor;
 
-            fill(255, 250, 242); stroke(sc); strokeWeight(1.5);
+            // Panel shadow
+            noStroke(); fill(0, 0, 0, 20);
+            rect(px + 3, py + 3, pw, ph, 10);
+
+            fill(255, 251, 245); stroke(sc); strokeWeight(1.5);
             rect(px, py, pw, ph, 10);
 
+            // Colored header bar
+            fill(r, g, b, 40); noStroke();
+            rect(px, py, pw, 48, 10, 10, 0, 0);
+
             // Swatch + name
-            fill(r, g, b); noStroke(); rect(px + 14, py + 16, 18, 18, 4);
-            fill(sc); textSize(16); textStyle(BOLD); textAlign(LEFT); applyVietFont();
-            text(hs.label, px + 38, py + 30);
+            fill(r, g, b); noStroke(); rect(px + 14, py + 14, 22, 22, 5);
+            fill(sc); textSize(17); textStyle(BOLD); textAlign(LEFT); applyVietFont();
+            text(hs.label, px + 44, py + 31);
 
             // Divider
-            stroke(sc); strokeWeight(1); line(px + 14, py + 42, px + pw - 14, py + 42);
+            stroke(sc); strokeWeight(0.8); line(px + 14, py + 48, px + pw - 14, py + 48);
 
             // Description
-            noStroke(); fill(50, 30, 10); textSize(12); textStyle(NORMAL);
-            text(hs.desc, px + 14, py + 56, pw - 28, 110);
+            noStroke(); fill(45, 25, 8); textSize(13); textStyle(NORMAL);
+            text(hs.desc, px + 14, py + 60, pw - 28, 118);
 
             // SGK chip
-            fill(240, 230, 215); stroke(sc); strokeWeight(1);
-            rect(px + 14, py + 174, 120, 22, 11);
-            fill(sc); noStroke(); textSize(10); textStyle(NORMAL); textAlign(CENTER);
+            fill(240, 232, 215); stroke(sc); strokeWeight(1);
+            rect(px + 14, py + 186, 126, 24, 12);
+            fill(sc); noStroke(); textSize(11); textStyle(NORMAL); textAlign(CENTER);
             applyVietFont();
-            text('📖 ' + hs.sgk, px + 74, py + 189);
+            text('📖 ' + hs.sgk, px + 77, py + 203);
 
             // Pronunciation chip
             fill(255, 252, 230); stroke(color(180, 150, 50)); strokeWeight(1);
-            rect(px + 142, py + 174, pw - 156, 22, 11);
-            fill(color(100, 70, 10)); noStroke(); textSize(10); textAlign(LEFT);
-            text('🔊 ' + hs.pron, px + 154, py + 189);
+            rect(px + 148, py + 186, pw - 162, 24, 12);
+            fill(color(90, 60, 8)); noStroke(); textSize(11); textAlign(LEFT);
+            text('🔊 ' + hs.pron, px + 160, py + 203);
 
             // Diseases section
             const dis = hs.diseases || [];
-            const disH = 40 + dis.length * 22;
-            fill(255, 248, 242); stroke(sc); strokeWeight(1);
+            const disH = 42 + dis.length * 24;
+            fill(255, 248, 240); stroke(sc); strokeWeight(1);
             rect(px, py + ph - disH - 20, pw, disH + 20, 10);
-            fill(sc); noStroke(); textSize(12); textStyle(BOLD); textAlign(LEFT);
-            text('Bệnh lý liên quan:', px + 14, py + ph - disH - 4);
-            fill(50, 30, 10); textSize(11); textStyle(NORMAL);
+            fill(sc); noStroke(); textSize(13); textStyle(BOLD); textAlign(LEFT);
+            text('Bệnh lý liên quan:', px + 14, py + ph - disH - 3);
+            fill(50, 30, 10); textSize(12); textStyle(NORMAL);
             for (let i = 0; i < dis.length; i++)
-                text('• ' + dis[i], px + 14, py + ph - disH + 16 + i * 22, pw - 28, 20);
+                text('• ' + dis[i], px + 16, py + ph - disH + 18 + i * 24, pw - 30, 22);
 
             // "Đã khám phá" badge
-            fill(55, 165, 80, 235); noStroke();
-            rect(px + pw - 126, py + 18, 112, 26, 13);
+            fill(40, 160, 75, 230); noStroke();
+            rect(px + pw - 132, py + 14, 118, 28, 14);
             fill(255); textSize(12); textStyle(BOLD); textAlign(CENTER);
-            text('Đã khám phá ✓', px + pw - 70, py + 35);
+            text('Đã khám phá ✓', px + pw - 73, py + 33);
 
         } else {
-            fill(248, 245, 238, 215); stroke(color(195, 175, 140)); strokeWeight(1);
+            // Panel shadow
+            noStroke(); fill(0, 0, 0, 15);
+            rect(px + 3, py + 3, pw, ph, 10);
+
+            fill(250, 247, 240, 220); stroke(color(195, 175, 140)); strokeWeight(1.2);
             rect(px, py, pw, ph, 10);
-            fill(155, 125, 80); noStroke();
-            textSize(14); textStyle(NORMAL); textAlign(CENTER); applyVietFont();
-            text('Nhấn vào một bộ phận', px + pw / 2, py + ph / 2 - 50);
-            text('trên sơ đồ để xem chi tiết', px + pw / 2, py + ph / 2 - 26);
-            text('từng cấu trúc →', px + pw / 2, py + ph / 2 - 2);
+            fill(140, 105, 55); noStroke();
+            textSize(15); textStyle(NORMAL); textAlign(CENTER); applyVietFont();
+            text('Nhấn vào một bộ phận', px + pw / 2, py + ph / 2 - 52);
+            text('trên sơ đồ để xem chi tiết', px + pw / 2, py + ph / 2 - 28);
+            text('từng cấu trúc →', px + pw / 2, py + ph / 2 - 4);
 
             // Progress bar
             const total = SKIN_HOTSPOTS.length;
             const seen  = this.tappedIds.size;
-            fill(220, 210, 200); rect(px + 30, py + ph / 2 + 30, pw - 60, 12, 6);
+            fill(215, 205, 195); rect(px + 30, py + ph / 2 + 32, pw - 60, 14, 7);
             if (seen > 0) {
                 fill(160, 100, 40);
-                rect(px + 30, py + ph / 2 + 30, (pw - 60) * seen / total, 12, 6);
+                rect(px + 30, py + ph / 2 + 32, (pw - 60) * seen / total, 14, 7);
             }
-            fill(100, 70, 30); textSize(11); textAlign(CENTER);
+            fill(100, 70, 30); textSize(13); textAlign(CENTER);
             text(seen + ' / ' + total + ' bộ phận đã xem  (cần ' + this.GATE_COUNT + ')',
-                 px + pw / 2, py + ph / 2 + 58);
+                 px + pw / 2, py + ph / 2 + 62);
 
             if (seen < this.GATE_COUNT) {
-                fill(130, 85, 30); textSize(12);
+                fill(130, 85, 30); textSize(13);
                 text('Khám phá thêm ' + (this.GATE_COUNT - seen) + ' bộ phận để mở "Tiếp theo"',
-                     px + pw / 2, py + ph / 2 + 82);
+                     px + pw / 2, py + ph / 2 + 86);
             } else {
-                fill(30, 140, 60); textSize(12); textStyle(BOLD);
-                text('Sẵn sàng! Nhấn "Tiếp theo →" bên dưới', px + pw / 2, py + ph / 2 + 82);
+                fill(30, 140, 60); textSize(13); textStyle(BOLD);
+                text('Sẵn sàng! Nhấn "Tiếp theo →" bên dưới', px + pw / 2, py + ph / 2 + 86);
             }
         }
         pop();
@@ -806,7 +827,7 @@ class SkinScene extends Scene {
         strokeWeight(1.5); rect(px, py, pw, ph, 10);
 
         const titleColor = this.isHot ? color(180, 55, 20) : this.isCold ? color(30, 70, 185) : color(20, 130, 60);
-        fill(titleColor); noStroke(); textSize(15); textStyle(BOLD);
+        fill(titleColor); noStroke(); textSize(16); textStyle(BOLD);
         text(this.isHot ? '🌡️ Da khi NÓNG (≥38°C)' : this.isCold ? '❄️ Da khi LẠNH (≤35°C)' : '✅ Thân nhiệt bình thường', px + 14, py + 28);
 
         const bullets = this.isHot
@@ -815,19 +836,19 @@ class SkinScene extends Scene {
             ? ['Mạch máu co → giảm mất nhiệt', 'Lông dựng lên → tạo lớp không khí cách nhiệt', 'Cơ run rẩy → sinh nhiệt nội tại']
             : ['Mạch máu ở trạng thái bình thường', 'Không có phản ứng điều hòa đặc biệt', 'Thân nhiệt duy trì ở 37°C'];
 
-        noStroke(); textSize(13); textStyle(NORMAL);
+        noStroke(); textSize(14); textStyle(NORMAL);
         for (let i = 0; i < bullets.length; i++) {
-            fill(titleColor); ellipse(px + 20, py + 58 + i * 36, 6, 6);
+            fill(titleColor); ellipse(px + 20, py + 58 + i * 36, 7, 7);
             fill(40, 30, 20); text(bullets[i], px + 32, py + 63 + i * 36, pw - 44, 30);
         }
 
-        // Preset buttons (below bullets, above view3DBtn)
+        // Preset buttons
         const presets = [
-            { label: '33°C  Trời rét',     temp: 33, r: 30,  g: 70,  b_: 185 },
-            { label: '37°C  Bình thường',  temp: 37, r: 20,  g: 130, b_: 60  },
-            { label: '40°C  Sốt cao',      temp: 40, r: 180, g: 55,  b_: 20  },
+            { label: '❄️  33°C  —  Trời rét',    temp: 33, r: 30,  g: 70,  b_: 185 },
+            { label: '✅  37°C  —  Bình thường', temp: 37, r: 20,  g: 130, b_: 60  },
+            { label: '🌡️  40°C  —  Sốt cao',    temp: 40, r: 180, g: 55,  b_: 20  },
         ];
-        noStroke(); textSize(11); textStyle(NORMAL); textAlign(CENTER);
+        noStroke(); textSize(13); textStyle(NORMAL); textAlign(CENTER);
         for (let i = 0; i < presets.length; i++) {
             const p = presets[i];
             const bby = py + 188 + i * 38;
@@ -835,7 +856,7 @@ class SkinScene extends Scene {
             if (selected) {
                 fill(p.r, p.g, p.b_); stroke(p.r, p.g, p.b_); strokeWeight(1.5);
             } else {
-                fill(245, 242, 238); stroke(p.r, p.g, p.b_); strokeWeight(1.5);
+                fill(250, 248, 245); stroke(p.r, p.g, p.b_); strokeWeight(1.5);
             }
             rect(px + 14, bby, pw - 28, 28, 14);
             fill(selected ? 255 : color(p.r, p.g, p.b_)); noStroke(); textStyle(selected ? BOLD : NORMAL);
@@ -844,9 +865,9 @@ class SkinScene extends Scene {
         textStyle(NORMAL);
 
         // Legend panel
-        fill(250, 250, 245); stroke(180, 175, 160); strokeWeight(1);
+        fill(250, 250, 246); stroke(180, 175, 160); strokeWeight(1);
         rect(lx, ly, lw, lh, 8);
-        fill(60, 50, 30); noStroke(); textSize(12); textStyle(BOLD);
+        fill(55, 45, 25); noStroke(); textSize(13); textStyle(BOLD);
         text('Chú thích:', lx + 14, ly + 18);
         textStyle(NORMAL);
         const legend = [
@@ -855,8 +876,8 @@ class SkinScene extends Scene {
             { color: color(50, 100, 210), label: 'LẠNH (≤35°C) — da tái, run rẩy' },
         ];
         for (let i = 0; i < legend.length; i++) {
-            fill(legend[i].color); noStroke(); rect(lx + 14, ly + 28 + i * 22, 12, 12, 2);
-            fill(50, 40, 20); text(legend[i].label, lx + 32, ly + 39 + i * 22);
+            fill(legend[i].color); noStroke(); rect(lx + 14, ly + 28 + i * 22, 14, 14, 3);
+            fill(50, 40, 20); textSize(13); text(legend[i].label, lx + 34, ly + 40 + i * 22);
         }
         pop();
     }
@@ -876,14 +897,14 @@ class SkinScene extends Scene {
         for (let deg = 32; deg <= 42; deg++) {
             const ty = by + map(deg, 32, 42, bh, 0);
             stroke(80); strokeWeight(1); line(bx - 5, ty, bx, ty);
-            fill(30); noStroke(); textSize(11); textAlign(RIGHT);
+            fill(30); noStroke(); textSize(12); textAlign(RIGHT);
             text(deg + '°C', bx - 8, ty + 4);
         }
 
         const spY = by + map(37, 32, 42, bh, 0);
         stroke(20, 155, 60); strokeWeight(2);
         line(bx - 8, spY, bx + bw + 5, spY);
-        noStroke(); fill(15, 125, 50); textSize(10); textAlign(LEFT);
+        noStroke(); fill(15, 125, 50); textSize(12); textAlign(LEFT);
         text('37°C bình thường', bx + bw + 8, spY + 4);
 
         stroke(210, 55, 20, 185); strokeWeight(1);
@@ -894,11 +915,11 @@ class SkinScene extends Scene {
         const handleY = by + map(temp, 32, 42, bh, 0);
         fill(255); stroke(70); strokeWeight(2);
         ellipse(bx + bw / 2, handleY, bw + 12, 26);
-        fill(30); noStroke(); textSize(12); textStyle(BOLD); textAlign(CENTER);
+        fill(30); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
         text(nf(temp, 2, 1) + '°C', bx + bw / 2, handleY + 5);
         textStyle(NORMAL);
 
-        fill(30); noStroke(); textSize(13); textAlign(CENTER);
+        fill(30); noStroke(); textSize(14); textAlign(CENTER);
         text('Thân nhiệt', bx + bw / 2, by - 22);
         textAlign(LEFT);
     }
@@ -961,43 +982,43 @@ class SkinScene extends Scene {
         fill(isSel  ? color(20, 110, 45) :
              isView ? color(40, 130, 60) : color(65, 145, 80));
         noStroke();
-        rect(cx, cy, cw, 42, 8, 8, 0, 0);
-        fill(255); textSize(13); textStyle(BOLD); textAlign(CENTER);
-        text(d.name, cx + cw / 2, cy + 17);
-        fill(220, 255, 220); textSize(10); textStyle(ITALIC);
-        text(d.sub, cx + cw / 2, cy + 33);
+        rect(cx, cy, cw, 44, 8, 8, 0, 0);
+        fill(255); textSize(14); textStyle(BOLD); textAlign(CENTER);
+        text(d.name, cx + cw / 2, cy + 18);
+        fill(200, 248, 210); textSize(11); textStyle(ITALIC);
+        text(d.sub, cx + cw / 2, cy + 35);
 
         // Normal skin label
-        noStroke(); fill(65, 105, 70); textSize(9); textStyle(BOLD); textAlign(LEFT);
-        text('BÌNH THƯỜNG:', cx + 8, cy + 55);
-        this._drawSkinMiniNormal(cx + 8, cy + 59, cw - 16, 148);
+        noStroke(); fill(55, 95, 60); textSize(11); textStyle(BOLD); textAlign(LEFT);
+        text('BÌNH THƯỜNG:', cx + 8, cy + 58);
+        this._drawSkinMiniNormal(cx + 8, cy + 62, cw - 16, 148);
 
         // Diseased skin label
-        noStroke(); fill(160, 35, 35); textSize(9); textStyle(BOLD); textAlign(LEFT);
-        text('KHI BỊ BỆNH:', cx + 8, cy + 220);
-        this._drawSkinMiniDiseased(cx + 8, cy + 224, cw - 16, 148, idx);
+        noStroke(); fill(155, 30, 30); textSize(11); textStyle(BOLD); textAlign(LEFT);
+        text('KHI BỊ BỆNH:', cx + 8, cy + 223);
+        this._drawSkinMiniDiseased(cx + 8, cy + 227, cw - 16, 148, idx);
 
         // Prevention section
         stroke(180, 210, 185); strokeWeight(1);
-        line(cx + 8, cy + 381, cx + cw - 8, cy + 381);
-        noStroke(); fill(20, 80, 35); textSize(9); textStyle(BOLD); textAlign(LEFT);
-        text('PHÒNG TRÁNH:', cx + 8, cy + 394);
-        fill(40, 55, 42); textStyle(NORMAL); textSize(9);
+        line(cx + 8, cy + 384, cx + cw - 8, cy + 384);
+        noStroke(); fill(18, 75, 30); textSize(11); textStyle(BOLD); textAlign(LEFT);
+        text('PHÒNG TRÁNH:', cx + 8, cy + 397);
+        fill(38, 52, 40); textStyle(NORMAL); textSize(11);
         for (let j = 0; j < d.prevention.length; j++) {
-            const iy = cy + 406 + j * 44;
-            fill(20, 150, 55); noStroke(); ellipse(cx + 14, iy + 5, 6, 6);
-            fill(40, 55, 42); textAlign(LEFT);
-            text(d.prevention[j], cx + 22, iy, cw - 30, 42);
+            const iy = cy + 410 + j * 44;
+            fill(20, 150, 55); noStroke(); ellipse(cx + 14, iy + 6, 7, 7);
+            fill(38, 52, 40); textAlign(LEFT);
+            text(d.prevention[j], cx + 24, iy, cw - 32, 42);
         }
 
         // Bottom indicator
         if (!isView) {
             fill(20, 140, 60, 210); noStroke();
-            rect(cx + cw / 2 - 58, cy + ch - 28, 116, 22, 11);
-            fill(255); textSize(9); textStyle(BOLD); textAlign(CENTER);
+            rect(cx + cw / 2 - 62, cy + ch - 28, 124, 22, 11);
+            fill(255); textSize(11); textStyle(BOLD); textAlign(CENTER);
             text('Nhấn để xem chi tiết', cx + cw / 2, cy + ch - 13);
         } else {
-            fill(25, 155, 70); noStroke(); textSize(10); textStyle(BOLD); textAlign(CENTER);
+            fill(25, 155, 70); noStroke(); textSize(12); textStyle(BOLD); textAlign(CENTER);
             text('✓ Đã xem', cx + cw / 2, cy + ch - 13);
         }
         pop();
@@ -1148,40 +1169,41 @@ class SkinScene extends Scene {
         // Pathogen
         stroke(175, 210, 178); strokeWeight(1);
         line(rx + 16, ry + 68, rx + rw - 16, ry + 68);
-        noStroke(); fill(115, 52, 18); textSize(11); textStyle(BOLD); textAlign(LEFT);
-        text('Tác nhân gây bệnh:', rx + 16, ry + 85);
-        fill(62, 32, 10); textStyle(NORMAL);
-        text(d.pathogen, rx + 16, ry + 101);
+        noStroke(); fill(110, 48, 14); textSize(12); textStyle(BOLD); textAlign(LEFT);
+        applyVietFont();
+        text('Tác nhân gây bệnh:', rx + 16, ry + 86);
+        fill(58, 28, 8); textStyle(NORMAL); textSize(13);
+        text(d.pathogen, rx + 16, ry + 103);
 
         // Description
         stroke(175, 210, 178); strokeWeight(1);
-        line(rx + 16, ry + 112, rx + rw - 16, ry + 112);
-        noStroke(); fill(35, 55, 40); textSize(12); textStyle(NORMAL); textAlign(LEFT);
-        text(d.desc, rx + 16, ry + 127, rw - 32, 100);
+        line(rx + 16, ry + 115, rx + rw - 16, ry + 115);
+        noStroke(); fill(32, 52, 38); textSize(13); textStyle(NORMAL); textAlign(LEFT);
+        text(d.desc, rx + 16, ry + 130, rw - 32, 100);
 
         // Symptoms
         stroke(175, 210, 178); strokeWeight(1);
-        line(rx + 16, ry + 238, rx + rw - 16, ry + 238);
-        noStroke(); fill(25, 78, 175); textSize(12); textStyle(BOLD); textAlign(LEFT);
-        text('Triệu chứng:', rx + 16, ry + 255);
-        fill(40, 48, 80); textStyle(NORMAL); textSize(12);
+        line(rx + 16, ry + 240, rx + rw - 16, ry + 240);
+        noStroke(); fill(22, 72, 168); textSize(13); textStyle(BOLD); textAlign(LEFT);
+        text('Triệu chứng:', rx + 16, ry + 257);
+        fill(38, 45, 78); textStyle(NORMAL); textSize(13);
         for (let i = 0; i < d.symptoms.length; i++) {
-            fill(25, 78, 175); noStroke(); ellipse(rx + 24, ry + 271 + i * 27, 6, 6);
-            fill(40, 48, 80);
-            text(d.symptoms[i], rx + 34, ry + 275 + i * 27);
+            fill(22, 72, 168); noStroke(); ellipse(rx + 24, ry + 273 + i * 27, 7, 7);
+            fill(38, 45, 78);
+            text(d.symptoms[i], rx + 36, ry + 277 + i * 27);
         }
 
         // Prevention
-        const prevY = ry + 362;
+        const prevY = ry + 365;
         stroke(175, 210, 178); strokeWeight(1);
         line(rx + 16, prevY, rx + rw - 16, prevY);
-        noStroke(); fill(20, 132, 58); textSize(12); textStyle(BOLD); textAlign(LEFT);
-        text('Cách phòng tránh:', rx + 16, prevY + 17);
-        fill(32, 62, 38); textStyle(NORMAL); textSize(12);
+        noStroke(); fill(18, 128, 54); textSize(13); textStyle(BOLD); textAlign(LEFT);
+        text('Cách phòng tránh:', rx + 16, prevY + 18);
+        fill(30, 58, 36); textStyle(NORMAL); textSize(13);
         for (let i = 0; i < d.prevention.length; i++) {
-            fill(20, 148, 52); noStroke(); ellipse(rx + 24, prevY + 33 + i * 32, 6, 6);
-            fill(32, 62, 38);
-            text(d.prevention[i], rx + 34, prevY + 37 + i * 32, rw - 50, 30);
+            fill(18, 145, 50); noStroke(); ellipse(rx + 24, prevY + 35 + i * 32, 7, 7);
+            fill(30, 58, 36);
+            text(d.prevention[i], rx + 36, prevY + 39 + i * 32, rw - 52, 30);
         }
         pop();
     }
@@ -1204,8 +1226,9 @@ class SkinScene extends Scene {
             stroke(active ? color(15, 88, 35) : color(155, 200, 162)); strokeWeight(1.5);
             rect(t.x, tabY, t.w, tabH, 6);
             fill(active ? 255 : done ? color(20, 100, 40) : color(75, 108, 82));
-            noStroke(); textSize(11); textStyle(active ? BOLD : NORMAL); textAlign(CENTER);
-            text(t.label + (done ? '  [v]' : ''), t.x + t.w / 2, tabY + 22);
+            noStroke(); textSize(13); textStyle(active ? BOLD : NORMAL); textAlign(CENTER);
+            applyVietFont();
+            text(t.label + (done ? '  ✓' : ''), t.x + t.w / 2, tabY + 22);
         }
         pop();
     }
@@ -1233,7 +1256,8 @@ class SkinScene extends Scene {
         text(q.situation, px + 12, py + 64, pw - 24, 94);
 
         // Context (physiology)
-        fill(82, 72, 32); noStroke(); textSize(11); textStyle(ITALIC);
+        fill(78, 68, 28); noStroke(); textSize(12); textStyle(ITALIC);
+        applyVietFont();
         text('Bối cảnh sinh lý: ' + q.context, px + 12, py + 170, pw - 24, 44);
 
         // Prompt
@@ -1262,7 +1286,8 @@ class SkinScene extends Scene {
             }
             fill(fg); stroke(sg); strokeWeight(1.5);
             rect(px, oy, pw, optH, 5);
-            noStroke(); fill(35, 35, 35); textSize(12); textStyle(NORMAL); textAlign(LEFT);
+            noStroke(); fill(35, 35, 35); textSize(13); textStyle(NORMAL); textAlign(LEFT);
+            applyVietFont();
             text(String.fromCharCode(65 + i) + '.  ' + opt.text, px + 14, oy + 11, pw - 52, optH);
             if (revealed) {
                 textSize(16); textStyle(BOLD); textAlign(RIGHT);
@@ -1280,8 +1305,9 @@ class SkinScene extends Scene {
             stroke(isOk ? color(25, 155, 65) : color(192, 45, 45)); strokeWeight(1);
             rect(px, fbY, pw, 82, 5);
             fill(isOk ? color(18, 120, 50) : color(152, 35, 35));
-            noStroke(); textSize(12); textStyle(NORMAL); textAlign(LEFT);
-            text(q.options[answered].feedback, px + 12, fbY + 12, pw - 24, 70);
+            noStroke(); textSize(13); textStyle(NORMAL); textAlign(LEFT);
+            applyVietFont();
+            text(q.options[answered].feedback, px + 12, fbY + 14, pw - 24, 70);
         }
 
         // Nav buttons
@@ -1289,13 +1315,15 @@ class SkinScene extends Scene {
         if (this._scenarioIdx > 0) {
             fill(220, 235, 220); stroke(130, 175, 135); strokeWeight(1);
             rect(px, navY, 148, 34, 6);
-            fill(25, 78, 30); noStroke(); textSize(12); textStyle(NORMAL); textAlign(CENTER);
+            fill(25, 78, 30); noStroke(); textSize(13); textStyle(NORMAL); textAlign(CENTER);
+            applyVietFont();
             text('← Tình huống trước', px + 74, navY + 22);
         }
         if (this._scenarioIdx < total - 1) {
             fill(220, 235, 220); stroke(130, 175, 135); strokeWeight(1);
             rect(px + pw - 148, navY, 148, 34, 6);
-            fill(25, 78, 30); noStroke(); textSize(12); textStyle(NORMAL); textAlign(CENTER);
+            fill(25, 78, 30); noStroke(); textSize(13); textStyle(NORMAL); textAlign(CENTER);
+            applyVietFont();
             text('Tình huống sau →', px + pw - 74, navY + 22);
         }
         pop();

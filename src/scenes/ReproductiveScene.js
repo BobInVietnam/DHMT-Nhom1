@@ -481,6 +481,11 @@ class ReproductiveScene extends Scene {
             const sel  = this.selectedOrgan && this.selectedOrgan.id === o.id;
             const seen = this.seenOrgans.has(o.id);
             const c    = color(o.color);
+            // Drop shadow for selected pin
+            if (sel) {
+                noStroke(); fill(0, 0, 0, 40);
+                ellipse(o.x + 2, o.y + 2, o.r * 2 + 6, o.r * 2 + 6);
+            }
             // Pin circle
             fill(sel ? c : lerpColor(c, color(255), 0.35));
             stroke(sel ? color(60, 20, 80) : color(100, 60, 120));
@@ -488,20 +493,21 @@ class ReproductiveScene extends Scene {
             ellipse(o.x, o.y, o.r * 2, o.r * 2);
             // Check mark if seen
             if (seen) {
-                fill(255); noStroke(); textSize(11); textStyle(BOLD); textAlign(CENTER);
+                fill(255); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
                 applyVietFont();
-                text('✓', o.x, o.y + 4);
+                text('✓', o.x, o.y + 5);
             }
-            // Label badge
-            fill(sel ? color(60, 20, 80) : color(100, 60, 120));
-            noStroke(); textSize(10); textStyle(sel ? BOLD : NORMAL); textAlign(CENTER);
+            // Label with white outline for legibility
+            noStroke(); textSize(12); textStyle(sel ? BOLD : NORMAL); textAlign(CENTER);
             applyVietFont();
+            fill(255, 255, 255, 200);
+            for (const [dx, dy] of [[-1,0],[1,0],[0,-1],[0,1]])
+                text(o.label, o.x + dx, o.y - o.r - 6 + dy);
+            fill(sel ? color(60, 20, 80) : color(90, 40, 110));
             text(o.label, o.x, o.y - o.r - 6);
         }
         // Progress indicator
-        const all = this.gender === "female" ? REPRO_ORGANS_F : REPRO_ORGANS_M;
-        const seenCount = organs.filter(o => this.seenOrgans.has(o.id)).length;
-        fill(80, 30, 100); noStroke(); textSize(11); textStyle(NORMAL); textAlign(LEFT);
+        fill(80, 30, 100); noStroke(); textSize(13); textStyle(NORMAL); textAlign(LEFT);
         applyVietFont();
         text('Đã khám phá: ' + this.seenOrgans.size + ' / ' + (REPRO_ORGANS_F.length + REPRO_ORGANS_M.length) +
              '  (cần ' + REPRO_ORGAN_GATE + ' để tiếp tục)', 34, 748);
@@ -518,64 +524,80 @@ class ReproductiveScene extends Scene {
             const o = this.selectedOrgan;
             const bc = isFemale ? color(255, 235, 255) : color(235, 235, 255);
             const sc = isFemale ? color(180, 80, 155)  : color(100, 80, 200);
+            const oc = color(o.color);
+
+            // Panel shadow
+            noStroke(); fill(0, 0, 0, 20);
+            rect(px + 3, py + 3, pw, ph, 10);
+
             fill(bc); stroke(sc); strokeWeight(1.5);
             rect(px, py, pw, ph, 10);
 
+            // Colored header tint bar
+            const [or, og, ob] = [red(oc), green(oc), blue(oc)];
+            fill(or, og, ob, 45); noStroke();
+            rect(px, py, pw, 50, 10, 10, 0, 0);
+
             // Organ color swatch + name
-            const oc = color(o.color);
-            fill(oc); noStroke(); rect(px + 14, py + 16, 18, 18, 4);
-            fill(sc); textSize(16); textStyle(BOLD); textAlign(LEFT); applyVietFont();
-            text(o.label, px + 38, py + 30);
+            fill(oc); noStroke(); rect(px + 14, py + 14, 22, 22, 5);
+            fill(sc); textSize(17); textStyle(BOLD); textAlign(LEFT); applyVietFont();
+            text(o.label, px + 44, py + 31);
 
             // Divider
-            stroke(sc); strokeWeight(1); line(px + 14, py + 42, px + pw - 14, py + 42);
+            stroke(sc); strokeWeight(0.8); line(px + 14, py + 50, px + pw - 14, py + 50);
 
             // Description
-            noStroke(); fill(50, 20, 60); textSize(12); textStyle(NORMAL);
-            text(o.desc, px + 14, py + 56, pw - 28, 120);
+            noStroke(); fill(45, 15, 55); textSize(13); textStyle(NORMAL);
+            text(o.desc, px + 14, py + 62, pw - 28, 122);
 
             // SGK chip
             fill(isFemale ? color(240, 218, 248) : color(218, 218, 248));
-            stroke(sc); strokeWeight(1); rect(px + 14, py + 186, 120, 22, 11);
-            fill(sc); noStroke(); textSize(10); textStyle(NORMAL); textAlign(CENTER);
-            text('📖 ' + o.sgk, px + 74, py + 201);
+            stroke(sc); strokeWeight(1); rect(px + 14, py + 194, 126, 24, 12);
+            fill(sc); noStroke(); textSize(11); textStyle(NORMAL); textAlign(CENTER);
+            applyVietFont();
+            text('📖 ' + o.sgk, px + 77, py + 210);
 
             // Pronunciation chip
             fill(255, 252, 230); stroke(180, 150, 50); strokeWeight(1);
-            rect(px + 142, py + 186, 240, 22, 11);
-            fill(100, 70, 10); noStroke(); textSize(10); textAlign(LEFT);
-            text('🔊 ' + o.pron, px + 154, py + 201);
+            rect(px + 148, py + 194, pw - 162, 24, 12);
+            fill(100, 70, 10); noStroke(); textSize(11); textAlign(LEFT);
+            applyVietFont();
+            text('🔊 ' + o.pron, px + 160, py + 210);
 
             // Diseases note at bottom
-            fill(bc); stroke(sc); strokeWeight(1); rect(px, py + ph - 105, pw, 105, 10);
-            fill(sc); noStroke(); textSize(12); textStyle(BOLD);
-            text('Bệnh thường gặp:', px + 14, py + ph - 88);
-            fill(60, 30, 70); textSize(11); textStyle(NORMAL);
+            fill(bc); stroke(sc); strokeWeight(1); rect(px, py + ph - 108, pw, 108, 10);
+            fill(sc); noStroke(); textSize(13); textStyle(BOLD);
+            text('Bệnh thường gặp:', px + 14, py + ph - 90);
+            fill(55, 25, 65); textSize(12); textStyle(NORMAL);
             const diseases = isFemale
                 ? ['U nang buồng trứng, lạc nội mạc tử cung', 'Ung thư cổ tử cung (nguyên nhân: HPV)', 'Viêm nhiễm phụ khoa, vô sinh']
                 : ['Ung thư tinh hoàn (thường gặp nam 15–35t)', 'Phì đại tuyến tiền liệt (nam lớn tuổi)', 'Vô sinh nam, giãn tĩnh mạch tinh'];
             for (let i = 0; i < diseases.length; i++)
-                text('• ' + diseases[i], px + 14, py + ph - 68 + i * 20, pw - 28, 18);
+                text('• ' + diseases[i], px + 16, py + ph - 68 + i * 22, pw - 30, 20);
 
         } else {
             // Placeholder — prompt to click
-            fill(isFemale ? color(255, 245, 255) : color(245, 245, 255));
+            noStroke(); fill(0, 0, 0, 15);
+            rect(px + 3, py + 3, pw, ph, 10);
+
+            fill(isFemale ? color(255, 246, 255) : color(246, 246, 255));
             stroke(isFemale ? color(200, 140, 210) : color(140, 130, 220)); strokeWeight(1.2);
             rect(px, py, pw, ph, 10);
-            fill(isFemale ? color(180, 100, 190) : color(100, 90, 200));
-            noStroke(); textSize(14); textAlign(CENTER); applyVietFont();
-            text('Nhấn vào một cơ quan\ntrên sơ đồ để xem chi tiết →', px + pw / 2, py + ph / 2 - 10);
+            fill(isFemale ? color(170, 90, 185) : color(90, 80, 190));
+            noStroke(); textSize(15); textAlign(CENTER); applyVietFont();
+            text('Nhấn vào một cơ quan', px + pw / 2, py + ph / 2 - 18);
+            text('trên sơ đồ để xem chi tiết →', px + pw / 2, py + ph / 2 + 8);
 
             // Progress bar
             const total = REPRO_ORGANS_F.length + REPRO_ORGANS_M.length;
             const seen  = this.seenOrgans.size;
-            fill(220, 210, 230); rect(px + 30, py + ph / 2 + 40, pw - 60, 12, 6);
+            fill(215, 205, 228); rect(px + 30, py + ph / 2 + 42, pw - 60, 14, 7);
             if (seen > 0) {
                 fill(isFemale ? color(190, 90, 210) : color(100, 90, 210));
-                rect(px + 30, py + ph / 2 + 40, (pw - 60) * seen / total, 12, 6);
+                rect(px + 30, py + ph / 2 + 42, (pw - 60) * seen / total, 14, 7);
             }
-            fill(100, 70, 130); textSize(11); textAlign(CENTER);
-            text(seen + ' / ' + total + ' cơ quan đã xem  (cần ' + REPRO_ORGAN_GATE + ')', px + pw / 2, py + ph / 2 + 68);
+            fill(95, 65, 125); textSize(13); textAlign(CENTER);
+            text(seen + ' / ' + total + ' cơ quan đã xem  (cần ' + REPRO_ORGAN_GATE + ')', px + pw / 2, py + ph / 2 + 72);
         }
         pop();
     }
@@ -643,23 +665,23 @@ class ReproductiveScene extends Scene {
         applyVietFont();
         fill(255, 245, 255); stroke(150, 100, 200); strokeWeight(1);
         rectMode(CORNER); rect(250, 458, 700, 180, 8);
-        fill(60, 20, 80); noStroke(); textSize(12); textAlign(LEFT);
+        fill(55, 15, 75); noStroke(); textSize(13); textAlign(LEFT);
         const lines = [
             "Hành trình thụ tinh: tinh trùng bơi qua âm đạo → tử cung → ống dẫn trứng.",
             "Khi gặp trứng: enzyme phân hủy màng trứng → tinh trùng xuyên vào → thụ tinh.",
             "Hợp tử (zygote) hình thành → phân chia → phôi → di chuyển về tử cung làm tổ.",
         ];
-        for (let i = 0; i < lines.length; i++) text(lines[i], 264, 476 + i * 24);
+        for (let i = 0; i < lines.length; i++) text(lines[i], 264, 477 + i * 26);
         // "Bạn có biết?" highlighted fact box
         fill(255, 248, 200); stroke(200, 160, 40); strokeWeight(1);
-        rect(260, 548, 680, 78, 6);
-        fill(140, 80, 10); noStroke(); textSize(11); textStyle(BOLD);
-        text('💡 Bạn có biết?', 272, 564);
-        fill(60, 40, 8); textStyle(NORMAL);
+        rect(260, 550, 680, 78, 6);
+        fill(130, 72, 8); noStroke(); textSize(12); textStyle(BOLD);
+        text('💡 Bạn có biết?', 272, 566);
+        fill(55, 35, 6); textStyle(NORMAL); textSize(12);
         text(
             'Hợp tử mang đầy đủ 46 nhiễm sắc thể (23 từ mẹ + 23 từ cha) — đây là nền tảng ' +
             'di truyền của một con người mới.',
-            272, 580, 656, 40
+            272, 582, 656, 40
         );
         textStyle(NORMAL);
         pop();
@@ -700,10 +722,12 @@ class ReproductiveScene extends Scene {
             stroke(150, 100, 180); strokeWeight(2);
             ellipse(wp.x, y, r * 2, r * 2);
             if (i < active) {
-                fill(40, 140, 60); noStroke(); textSize(11); textStyle(BOLD); textAlign(CENTER);
-                text('✓', wp.x, y + 4);
+                fill(40, 140, 60); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
+                applyVietFont();
+                text('✓', wp.x, y + 5);
             }
-            fill(60, 20, 50); noStroke(); textSize(10); textStyle(NORMAL); textAlign(CENTER);
+            fill(55, 15, 45); noStroke(); textSize(12); textStyle(NORMAL); textAlign(CENTER);
+            applyVietFont();
             text(wp.label, wp.x, y + 36);
         }
         pop();
@@ -774,9 +798,10 @@ class ReproductiveScene extends Scene {
         push();
         const selAngle = -HALF_PI + (this.cycleDay - 1) * dayAngle;
         fill(255); stroke(40, 10, 60); strokeWeight(2.5);
-        ellipse(cx + cos(selAngle) * 155, cy + sin(selAngle) * 155, 18, 18);
-        fill(40, 10, 60); noStroke(); textSize(9); textStyle(BOLD); textAlign(CENTER);
-        text(this.cycleDay, cx + cos(selAngle) * 155, cy + sin(selAngle) * 155 + 3);
+        ellipse(cx + cos(selAngle) * 155, cy + sin(selAngle) * 155, 20, 20);
+        fill(40, 10, 60); noStroke(); textSize(11); textStyle(BOLD); textAlign(CENTER);
+        applyVietFont();
+        text(this.cycleDay, cx + cos(selAngle) * 155, cy + sin(selAngle) * 155 + 4);
         pop();
 
         // Day slider
@@ -791,16 +816,16 @@ class ReproductiveScene extends Scene {
         // Handle
         fill(255); stroke(120, 40, 120); strokeWeight(2);
         ellipse(progX, sy + sh / 2, 26, 26);
-        fill(80, 20, 80); noStroke(); textSize(11); textStyle(BOLD); textAlign(CENTER);
+        fill(80, 20, 80); noStroke(); textSize(12); textStyle(BOLD); textAlign(CENTER);
         applyVietFont();
         text(this.cycleDay, progX, sy + sh / 2 + 4);
         // Axis labels
-        fill(100, 50, 80); textSize(10); textStyle(NORMAL);
+        fill(95, 45, 75); textSize(12); textStyle(NORMAL);
         text('Ngày 1', sx, sy + 34);
         text('Ngày 14', sx + sw / 2, sy + 34);
         text('Ngày 28', sx + sw, sy + 34);
-        fill(80, 40, 100); textSize(11); textAlign(CENTER);
-        text('← Kéo để chọn ngày trong chu kỳ →', sx + sw / 2, sy + 48);
+        fill(75, 35, 95); textSize(12); textAlign(CENTER);
+        text('← Kéo để chọn ngày trong chu kỳ →', sx + sw / 2, sy + 50);
         pop();
 
         this._drawCyclePhasePanel(cx, cy);
@@ -831,37 +856,38 @@ class ReproductiveScene extends Scene {
         fill(r, g, b); noStroke(); rect(px, py, pw, 8, 10, 10, 0, 0);
 
         // Day + phase name
-        fill(color(r, g, b)); noStroke(); textSize(13); textStyle(NORMAL); textAlign(LEFT);
+        fill(color(r, g, b)); noStroke(); textSize(14); textStyle(BOLD); textAlign(LEFT);
         applyVietFont();
         text('Ngày ' + this.cycleDay, px + 14, py + 28);
-        fill(60, 20, 50); textSize(16); textStyle(BOLD);
-        text(phase.name, px + 14, py + 50);
+        fill(55, 15, 45); textSize(17);
+        text(phase.name, px + 14, py + 52);
 
         // Divider
-        stroke(200, 160, 190); strokeWeight(1); line(px + 14, py + 60, px + pw - 14, py + 60);
+        stroke(200, 160, 190); strokeWeight(1); line(px + 14, py + 62, px + pw - 14, py + 62);
 
         // Description
-        noStroke(); fill(50, 20, 40); textSize(12); textStyle(NORMAL);
-        text(phase.desc, px + 14, py + 76, pw - 28, 90);
+        noStroke(); fill(48, 18, 38); textSize(13); textStyle(NORMAL);
+        text(phase.desc, px + 14, py + 78, pw - 28, 92);
 
         // Phase legend swatches
-        fill(60, 20, 50); textSize(12); textStyle(BOLD); textAlign(LEFT);
-        text('Các giai đoạn:', px + 14, py + 188);
-        noStroke(); textStyle(NORMAL); textSize(11);
+        fill(55, 18, 45); textSize(13); textStyle(BOLD); textAlign(LEFT);
+        text('Các giai đoạn:', px + 14, py + 190);
+        noStroke(); textStyle(NORMAL); textSize(12);
         for (let i = 0; i < phases.length; i++) {
             const [pr, pg, pb] = phases[i].color;
-            fill(pr, pg, pb); rect(px + 14, py + 200 + i * 28, 14, 14, 3);
-            fill(50, 20, 40);
+            fill(pr, pg, pb); rect(px + 14, py + 202 + i * 28, 14, 14, 3);
+            fill(48, 18, 38);
             text('Ngày ' + phases[i].days[0] + '–' + (phases[i].days[1] - 1) + ': ' + phases[i].name,
-                 px + 34, py + 212 + i * 28);
+                 px + 34, py + 214 + i * 28);
         }
 
         // Key facts
         fill(255, 240, 250); stroke(180, 100, 150); strokeWeight(1);
         rect(px + 14, py + ph - 140, pw - 28, 128, 8);
-        fill(120, 40, 80); noStroke(); textSize(11); textStyle(BOLD); textAlign(LEFT);
+        fill(115, 35, 75); noStroke(); textSize(12); textStyle(BOLD); textAlign(LEFT);
+        applyVietFont();
         text('Lưu ý SGK:', px + 24, py + ph - 122);
-        fill(60, 20, 45); textStyle(NORMAL);
+        fill(55, 18, 42); textStyle(NORMAL); textSize(12);
         const facts = [
             '• Chu kỳ trung bình: 28 ngày (có thể 21–35 ngày)',
             '• Rụng trứng: ngày 14 (±2 ngày)',
@@ -869,7 +895,7 @@ class ReproductiveScene extends Scene {
             '• Thụ thai chỉ xảy ra trong vòng 24h sau rụng trứng',
         ];
         for (let i = 0; i < facts.length; i++)
-            text(facts[i], px + 24, py + ph - 104 + i * 20, pw - 50, 18);
+            text(facts[i], px + 24, py + ph - 104 + i * 22, pw - 50, 20);
         pop();
     }
 

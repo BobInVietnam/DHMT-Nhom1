@@ -27,25 +27,32 @@ class Narration extends Clickable {
 
     display() {
         if (!this.isVisible) return
-        
-        push();
-        fill(255, 255, 255, 240);
-        stroke(100, 150, 255);
-        strokeWeight(2);
-        rectMode(CENTER)
-        rect(this.x, this.y, this.w, this.h, 15); 
 
-        fill(0);
+        push();
+        // Drop-shadow layer
+        noStroke(); fill(0, 0, 0, 30);
+        rectMode(CENTER);
+        rect(this.x + 3, this.y + 3, this.w, this.h, 15);
+
+        fill(250, 252, 255, 248);
+        stroke(80, 130, 230);
+        strokeWeight(2);
+        rect(this.x, this.y, this.w, this.h, 15);
+
+        applyVietFont();
+        fill(25, 35, 70);
         noStroke();
-        textSize(16);
+        textSize(15);
         textAlign(LEFT, TOP);
-        let currentText = this.contents.text[this.currentIndex]; 
-        text(currentText, this.x + 20, this.y + 20, this.w - 40, this.h - 40); 
+        let currentText = this.contents.text[this.currentIndex];
+        // Correct left-edge position: center - halfWidth + padding
+        text(currentText, this.x - this.w / 2 + 18, this.y - this.h / 2 + 16, this.w - 36, this.h - 44);
 
         if (this.currentIndex < this.contents.text.length - 1) {
-            fill(100, 150, 255);
-            textSize(20);
-            text("▼", this.x + this.w/2 - 30, this.y + this.h/2 - 30);
+            fill(80, 130, 230);
+            textSize(18);
+            textAlign(RIGHT, BOTTOM);
+            text("▼", this.x + this.w / 2 - 14, this.y + this.h / 2 - 8);
         }
         pop();
     }

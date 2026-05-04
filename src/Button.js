@@ -6,30 +6,31 @@ class Button extends Clickable {
 
   display() {
     if (!this.isVisible) return
-    
+
     push();
     rectMode(CENTER);
     textAlign(CENTER, CENTER);
+    applyVietFont();
 
-    // Change color if hovering
     if (this.isHovered) {
-      fill(200);
+      fill(55, 120, 210);
+      stroke(35, 90, 175);
       cursor(HAND);
     } else {
-      fill(240);
+      fill(255, 255, 255);
+      stroke(160, 185, 220);
       cursor(ARROW);
     }
 
-    // Draw button shape
-    stroke(50);
-    strokeWeight(2);
+    strokeWeight(1.5);
     rect(this.x, this.y, this.w, this.h, 10);
 
-    // Draw label
-    fill(0);
+    fill(this.isHovered ? 255 : 40);
     noStroke();
-    textSize(16);
+    textSize(15);
+    textStyle(BOLD);
     text(this.label, this.x, this.y);
+    textStyle(NORMAL);
     pop();
   }
 }
