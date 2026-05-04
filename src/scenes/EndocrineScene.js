@@ -9,15 +9,19 @@ class EndocrineScene extends ZoomableScene {
         this.btnExit = new Button(80, 50, 100, 40, "X ĐÓNG", "SWITCH_SCENE", "BodyMap");
         this.btnNext = new Button(width - 150, height - 80, 160, 50, "NEXT >>>", "ENDOCRINE_NEXT", null);
         
-        this.objects.push(this.btnExit, this.btnNext);
-
         this.bg = new ImageEntity(width / 2, height / 2, 0, height, "endocrine_bg", true); 
         this.zoomableObjects.push(this.bg);
 
-        let uiBoxX = width - 440;    
-        let uiBoxY = 80;             
-        let uiCharX = width / 2 + 50;
-        let uiCharY = height / 2 + 150; 
+        let uiCharX = width / 2 + 100;    
+        let uiCharY = height / 2 + 150;   
+        let uiBoxX = uiCharX - 100;       
+        let uiBoxY = uiCharY - 380;       
+
+        this.narratorEntity = new Narrator(uiCharX, uiCharY, null);
+        this.narrationEntity = new Narration(uiBoxX, uiBoxY);
+
+        this.objects.push(this.btnExit, this.btnNext, this.narratorEntity, this.narrationEntity);
+
         this.tourSteps = [
             {
                 name: "Tổng quan",
@@ -91,9 +95,7 @@ class EndocrineScene extends ZoomableScene {
         });
 
         bus.on("FINISH_NARRATION", () => {
-            if (this.isActive) {
-                this.handleNextStep();
-            }
+            if (this.isActive) this.handleNextStep();
         });
     }
 
@@ -109,7 +111,8 @@ class EndocrineScene extends ZoomableScene {
 
     exit() {
         this.isActive = false;
-        bus.emit("HIDE_INFO"); 
+        this.narratorEntity.isVisible = false;
+        this.narrationEntity.isVisible = false;
     }
 
     playCurrentStep() {
@@ -119,14 +122,13 @@ class EndocrineScene extends ZoomableScene {
         this.targetCamera.x = (width / 2 - 250) - step.worldX * step.targetZoom;
         this.targetCamera.y = height / 2 - step.worldY * step.targetZoom;
 
-        bus.emit("UPDATE_UI_POSITION", {
-            boxX: step.boxX,
-            boxY: step.boxY,
-            charX: step.charX,
-            charY: step.charY
-        });
+        this.narrationEntity.x = step.boxX;
+        this.narrationEntity.y = step.boxY;
+        this.narratorEntity.x = step.charX;
+        this.narratorEntity.y = step.charY;
 
         bus.emit("SHOW_NARRATION", step.content);
+        this.narratorEntity.isVisible = true; 
     }
 
     handleNextStep() {
@@ -134,7 +136,6 @@ class EndocrineScene extends ZoomableScene {
             this.currentStep++;
             this.playCurrentStep();
         } else {
-            bus.emit("HIDE_INFO");
             bus.emit("SWITCH_SCENE", "BodyMap");
         }
     }
@@ -150,7 +151,13 @@ class EndocrineScene extends ZoomableScene {
     }
 
     checkClick() {
-        this.btnExit.checkClick(mouseX, mouseY);
-        this.btnNext.checkClick(mouseX, mouseY);
+        
+        if (this.narrationEntity.checkClick(mouseX, mouseY)) return;
+        if (this.btnExit.checkClick(mouseX, mouseY)) return;
+        if (this.btnNext.checkClick(mouseX, mouseY)) return;
+        
+        if (typeof this.narratorEntity.checkClick === 'function') {
+           if (this.narratorEntity.checkClick(mouseX, mouseY)) return;
+        }
     }
 }
