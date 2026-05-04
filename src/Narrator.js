@@ -19,7 +19,8 @@ class Narrator extends ImageButton {
     }
 
     changeSprite(sprite) {
-        this.image = assets.get(sprite)
+        this.image = assets.get(sprite);
+        this.w = Math.round(this.h * (this.image.width / this.image.height));
     }
 
     display() {

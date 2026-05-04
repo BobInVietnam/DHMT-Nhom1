@@ -323,6 +323,9 @@ class SkinScene extends Scene {
             if (this._modalOpen) {
                 this._modalOpen = false;
                 this.narrator.hide();
+                if (this.step === 3) {
+                    model3DViewer.show(30, 108, 780, 570);
+                }
                 this._syncButtons();
             }
         });
@@ -399,9 +402,9 @@ class SkinScene extends Scene {
                 model3DViewer.load('./assets/skin.glb');
                 this._glbLoaded = true;
             }
-            model3DViewer.show(30, 108, 780, 570);
+            // model3DViewer.show() is deferred to FINISH_NARRATION so the
+            // Three.js canvas does not intercept clicks on the narration box.
             bus.emit('SKIN_THERMO_CHANGE', null);
-            bus.emit('SKIN_3D_LOADED');
             bus.emit('SHOW_NARRATION', SkinNarration3);
             this._modalOpen = true;
         }

@@ -140,8 +140,10 @@ class ReproductiveScene extends Scene {
         this.cycleDay      = 1;
 
         // Shared UI
-        this.narration    = new Narration(980, 380);
-        this.narrator     = new Narrator(1000, 660, ReproNarrationFemale);
+        this.narration    = new Narration(530, 390);
+        this.narration.setSize(520, 200);
+        this.narrator     = new Narrator(980, 390, ReproNarrationFemale);
+        this._modalOpen   = false;
         this.backBtn      = new Button(80,   40, 130, 40, "← Quay lại",    "SWITCH_SCENE", "BodyMap");
         this.skipBtn      = new Button(1120, 40, 100, 35, "SKIP >>>",       "SWITCH_SCENE", "BodyMap");
         this.nextBtn      = new Button(520, 730, 160, 46, "Tiếp theo →",    "REPRO_NEXT",   null);
@@ -172,6 +174,13 @@ class ReproductiveScene extends Scene {
         bus.on("REPRO_NEXT",   () => this.nextStep());
         bus.on("REPRO_GENDER", (g) => this._setGender(g));
         bus.on("REPRO_PAUSE",  () => this._togglePause());
+        bus.on("FINISH_NARRATION", () => {
+            if (this._modalOpen) {
+                this._modalOpen = false;
+                this.narrator.hide();
+                this._syncButtons();
+            }
+        });
         bus.on("KEY_PRESSED",  (code) => {
             if (this.step === 5 && (code === 32 || code === 80)) this._togglePause();
         });
@@ -198,9 +207,11 @@ class ReproductiveScene extends Scene {
         this.selectedOrgan = null;
         this.seenOrgans    = new Set();
         this.cycleDay      = 1;
+        this._modalOpen    = false;
         this.narrator.show();
         this.narrator.eventData = ReproNarrationFemale;
         bus.emit("SHOW_NARRATION", ReproNarrationFemale);
+        this._modalOpen = true;
         this._syncButtons();
         this._initGame();
         soundManager.loop("repro_ambient");
@@ -212,23 +223,40 @@ class ReproductiveScene extends Scene {
 
     nextStep() {
         if (this.step < 5) this.step++;
-        this._syncButtons();
-        if (this.step === 1) bus.emit("SHOW_NARRATION", ReproNarrationSpermEgg);
-        else if (this.step === 2) bus.emit("SHOW_NARRATION", ReproNarrationMenstrual);
-        else if (this.step === 3) bus.emit("SHOW_NARRATION", ReproNarrationContraception);
-        else if (this.step === 4) bus.emit("SHOW_NARRATION", ReproNarrationGame);
-        else if (this.step === 5) {
+        if (this.step === 1) {
+            this.narrator.show();
+            bus.emit("SHOW_NARRATION", ReproNarrationSpermEgg);
+            this._modalOpen = true;
+        } else if (this.step === 2) {
+            this.narrator.show();
+            bus.emit("SHOW_NARRATION", ReproNarrationMenstrual);
+            this._modalOpen = true;
+        } else if (this.step === 3) {
+            this.narrator.show();
+            bus.emit("SHOW_NARRATION", ReproNarrationContraception);
+            this._modalOpen = true;
+        } else if (this.step === 4) {
+            this.narrator.show();
+            bus.emit("SHOW_NARRATION", ReproNarrationGame);
+            this._modalOpen = true;
+        } else if (this.step === 5) {
             this._initGame();
             this.gameState = "playing";
             this.narrator.hide();
             bus.emit("FINISH_NARRATION");
         }
+        this._syncButtons();
     }
 
     _setGender(g) {
+        if (this._modalOpen) return;
         this.gender = g;
-        this.narrator.eventData = g === "female" ? ReproNarrationFemale : ReproNarrationMale;
-        bus.emit("FINISH_NARRATION");
+        const content = g === "female" ? ReproNarrationFemale : ReproNarrationMale;
+        this.narrator.eventData = content;
+        this.narrator.show();
+        bus.emit("SHOW_NARRATION", content);
+        this._modalOpen = true;
+        this._syncButtons();
     }
 
     _togglePause() {
@@ -242,11 +270,16 @@ class ReproductiveScene extends Scene {
     }
 
     _syncButtons() {
+        if (this._modalOpen) {
+            this.nextBtn.hide();
+            this.femaleBtn.hide(); this.maleBtn.hide();
+            this.startGameBtn.hide(); this.pauseBtn.hide(); this.menuBtn.hide();
+            return;
+        }
         // Reset to defaults
         this.backBtn.show(); this.skipBtn.show(); this.nextBtn.show();
         this.femaleBtn.hide(); this.maleBtn.hide();
         this.startGameBtn.hide(); this.pauseBtn.hide(); this.menuBtn.hide();
-        this.narrator.show();
         this.nextBtn.x = 600;
 
         if (this.step === 0) {
@@ -266,6 +299,10 @@ class ReproductiveScene extends Scene {
     }
 
     checkClick() {
+        if (this._modalOpen) {
+            super.checkClick();
+            return;
+        }
         if (this.step === 0) {
             const organs = this.gender === "female" ? REPRO_ORGANS_F : REPRO_ORGANS_M;
             for (const o of organs) {
@@ -293,6 +330,7 @@ class ReproductiveScene extends Scene {
     }
 
     checkMouseDragged() {
+        if (this._modalOpen) return;
         if (this.step === 2 && mouseIsPressed && this._isInSliderArea(mouseX, mouseY)) {
             this._updateCycleDayFromX(mouseX);
         }
@@ -314,6 +352,12 @@ class ReproductiveScene extends Scene {
         else if (this.step === 3) this._drawContraception();
         else if (this.step === 4) this._drawGameInstructions();
         else                      this._drawGame();
+        if (this._modalOpen) {
+            push();
+            noStroke(); fill(0, 0, 0, 165);
+            rectMode(CORNER); rect(0, 0, width, height);
+            pop();
+        }
         if (this.step < 5) this._drawStepDots(6, this.step);
         super.draw();
     }
