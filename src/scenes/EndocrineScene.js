@@ -7,28 +7,28 @@ class EndocrineScene extends ZoomableScene {
         this.targetCamera = { x: 0, y: 0, zoom: 1.0 };
 
         this.btnExit = new Button(80, 50, 100, 40, "X ĐÓNG", "SWITCH_SCENE", "BodyMap");
-        this.btnNext = new Button(width - 150, height - 80, 160, 50, "SKIP >>>", "ENDOCRINE_NEXT", null);
+        this.btnNext = new Button(width - 150, height - 80, 160, 50, "NEXT >>>", "ENDOCRINE_NEXT", null);
         
         this.objects.push(this.btnExit, this.btnNext);
 
         this.bg = new ImageEntity(width / 2, height / 2, 0, height, "endocrine_bg", true); 
         this.zoomableObjects.push(this.bg);
 
-        let uiBoxX = width - 400;   
-        let uiBoxY = 200;            
-        let uiCharX = width - 150;   
-        let uiCharY = height - 300;  
-
+        let uiBoxX = width - 440;    
+        let uiBoxY = 80;             
+        let uiCharX = width / 2 + 50;
+        let uiCharY = height / 2 + 150; 
         this.tourSteps = [
             {
                 name: "Tổng quan",
                 worldX: width / 2, worldY: height / 2, targetZoom: 1.0, 
                 content: {
                     text: [
-                        "Hệ nội tiết bao gồm các tuyến sản xuất hormone.",
-                        "Chúng ta sẽ cùng tìm hiểu vị trí và chức năng của từng bộ phận nhé."
+                        "Hệ nội tiết là một mạng lưới các tuyến đặc biệt, làm nhiệm vụ sản xuất và giải phóng hormone trực tiếp vào máu.",
+                        "Hormone đóng vai trò như những 'người đưa thư' hóa học, truyền tín hiệu đi khắp cơ thể để điều khiển các cơ quan.",
+                        "Chúng kiểm soát hầu hết mọi chức năng quan trọng: từ sự phát triển, quá trình trao đổi chất, đến cảm xúc và giấc ngủ của chúng ta."
                     ],
-                    sprite: ["teach_normal", "teach_talk"]
+                    sprite: ["teach_normal", "teach_explain", "teach_talk"]
                 },
                 boxX: uiBoxX, boxY: uiBoxY, charX: uiCharX, charY: uiCharY
             },
@@ -37,10 +37,11 @@ class EndocrineScene extends ZoomableScene {
                 worldX: width / 2, worldY: height / 2 - 320, targetZoom: 2.8, 
                 content: {
                     text: [
-                        "Đầu tiên là Tuyến yên, nằm ở nền sọ.",
-                        "Được coi là 'tuyến chủ' vì nó điều khiển các tuyến nội tiết khác."
+                        "Đầu tiên là Tuyến yên, một tuyến chỉ nhỏ cỡ hạt đậu nằm ẩn sâu dưới nền sọ.",
+                        "Dù nhỏ bé, nó được mệnh danh là 'tuyến chủ' của toàn bộ hệ thống nội tiết.",
+                        "Lý do là vì Tuyến yên tiết ra hormone tăng trưởng, đồng thời phát tín hiệu chỉ huy hoạt động của hầu hết các tuyến nội tiết khác."
                     ],
-                    sprite: ["teach_point_normal", "teach_point_talk"]
+                    sprite: ["teach_point_normal", "teach_point_explain", "teach_point_talk"]
                 },
                 boxX: uiBoxX, boxY: uiBoxY, charX: uiCharX, charY: uiCharY
             },
@@ -49,10 +50,11 @@ class EndocrineScene extends ZoomableScene {
                 worldX: width / 2, worldY: height / 2 - 180, targetZoom: 2.5, 
                 content: {
                     text: [
-                        "Tiếp theo là Tuyến giáp nằm ở vùng cổ.",
-                        "Nó đóng vai trò điều hòa quá trình trao đổi chất của cơ thể."
+                        "Di chuyển xuống vùng cổ, chúng ta có Tuyến giáp với hình dáng giống như một con bướm.",
+                        "Tuyến này sản xuất hormone thyroxine, đóng vai trò then chốt trong việc điều hòa quá trình trao đổi chất.",
+                        "Nó quyết định việc cơ thể bạn đốt cháy calo nhanh hay chậm, ảnh hưởng trực tiếp đến mức năng lượng và nhiệt độ cơ thể."
                     ],
-                    sprite: ["teach_point_normal", "teach_point_talk"]
+                    sprite: ["teach_point_normal", "teach_talk", "teach_point_explain"]
                 },
                 boxX: uiBoxX, boxY: uiBoxY, charX: uiCharX, charY: uiCharY
             },
@@ -61,10 +63,11 @@ class EndocrineScene extends ZoomableScene {
                 worldX: width / 2, worldY: height / 2 - 20, targetZoom: 2.5, 
                 content: {
                     text: [
-                        "Đây là Tuyến thượng thận, nằm trên hai quả thận.",
-                        "Nó tiết ra adrenaline giúp cơ thể phản ứng nhanh trong các tình huống căng thẳng."
+                        "Nằm vắt ngang trên đỉnh của hai quả thận chính là Tuyến thượng thận.",
+                        "Đây là 'nhà máy' chuyên sản xuất adrenaline - hay còn gọi là hormone chiến đấu hoặc bỏ chạy.",
+                        "Khi bạn gặp nguy hiểm hay căng thẳng, adrenaline lập tức làm tăng nhịp tim và bơm máu đến cơ bắp để bạn phản ứng kịp thời."
                     ],
-                    sprite: ["teach_point_explain", "teach_talk"]
+                    sprite: ["teach_point_normal", "teach_point_talk", "teach_explain"]
                 },
                 boxX: uiBoxX, boxY: uiBoxY, charX: uiCharX, charY: uiCharY
             },
@@ -73,16 +76,21 @@ class EndocrineScene extends ZoomableScene {
                 worldX: width / 2, worldY: height / 2 + 60, targetZoom: 2.2, 
                 content: {
                     text: [
-                        "Cuối cùng là Tuyến tụy, nằm sau dạ dày.",
-                        "Tuyến này tiết ra insulin để điều hòa lượng đường huyết."
+                        "Cuối cùng là Tuyến tụy, một cơ quan đặc biệt nằm khuất lấp ngay phía sau dạ dày.",
+                        "Tuyến tụy đóng vai trò 'kép': vừa tiết dịch tiêu hóa thức ăn, vừa sản xuất hormone nội tiết vào máu.",
+                        "Nhiệm vụ sống còn của nó là tiết ra Insulin và Glucagon để giữ cho lượng đường trong máu luôn ở mức ổn định, ngăn ngừa bệnh tiểu đường."
                     ],
-                    sprite: ["teach_point_normal", "teach_talk"]
+                    sprite: ["teach_point_normal", "teach_explain", "teach_talk"]
                 },
                 boxX: uiBoxX, boxY: uiBoxY, charX: uiCharX, charY: uiCharY
             }
         ];
 
         bus.on("ENDOCRINE_NEXT", () => {
+            if (this.isActive) this.handleNextStep();
+        });
+
+        bus.on("FINISH_NARRATION", () => {
             if (this.isActive) {
                 this.handleNextStep();
             }
@@ -108,7 +116,6 @@ class EndocrineScene extends ZoomableScene {
         let step = this.tourSteps[this.currentStep];
 
         this.targetCamera.zoom = step.targetZoom;
-        
         this.targetCamera.x = (width / 2 - 250) - step.worldX * step.targetZoom;
         this.targetCamera.y = height / 2 - step.worldY * step.targetZoom;
 
@@ -137,7 +144,7 @@ class EndocrineScene extends ZoomableScene {
         this.camera.y = lerp(this.camera.y, this.targetCamera.y, 0.05);
         this.camera.zoom = lerp(this.camera.zoom, this.targetCamera.zoom, 0.05);
 
-        background(30, 35, 40); 
+        background(200); 
         
         super.draw(); 
     }
