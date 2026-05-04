@@ -280,7 +280,6 @@ class SkinScene extends Scene {
 
         this._THERMO = { x: 710, y: 112, w: 74, h: 475 };
 
-        this._show3DInStep1 = false;
         this._glbLoaded     = false;
 
         this._fadeAlpha = 0;
@@ -293,33 +292,26 @@ class SkinScene extends Scene {
         this._scenarioAnswers = new Array(SKIN_SCENARIOS.length).fill(undefined);
 
         // ── Shared UI ─────────────────────────────────────────────────
-        this.narration = new Narration(980, 380);
-        this.narrator  = new Narrator(1000, 640, SkinNarration0);
+        this.narration = new Narration(530, 390);
+        this.narration.setSize(520, 200);
+        this.narrator  = new Narrator(980, 390, SkinNarration0);
+        this._modalOpen = false;
 
         this.backBtn = new Button( 80,  40, 130, 40, '← Quay lại', 'SWITCH_SCENE', 'BodyMap');
         this.skipBtn = new Button(1120, 40, 100, 35, 'SKIP >>>',   'SWITCH_SCENE', 'BodyMap');
         this.nextBtn = new Button( 600, 730, 180, 46, 'Tiếp theo →','SKIN_NEXT',    null);
 
-        this.zoom3DPlusBtn   = new Button(440, 730,  88, 34, 'Zoom +',     'SKIN_3D_ZOOM_IN',  null);
-        this.zoom3DMinusBtn  = new Button(536, 730,  88, 34, 'Zoom −',     'SKIN_3D_ZOOM_OUT', null);
-        this.zoom3DResetBtn  = new Button(632, 730,  88, 34, 'Reset',      'SKIN_3D_RESET',    null);
-        this.cutLayerBtn     = new Button(728, 730, 108, 34, '✂ Cắt lớp', 'SKIN_3D_CUT',      null);
-        this.colorBtn        = new Button(844, 730, 108, 34, '🔆 Đổi màu','SKIN_3D_COLOR',    null);
+        this.zoom3DPlusBtn   = new Button(440, 730,  88, 34, 'Zoom +', 'SKIN_3D_ZOOM_IN',  null);
+        this.zoom3DMinusBtn  = new Button(536, 730,  88, 34, 'Zoom −', 'SKIN_3D_ZOOM_OUT', null);
+        this.zoom3DResetBtn  = new Button(632, 730,  88, 34, 'Reset',  'SKIN_3D_RESET',    null);
         this.zoom3DPlusBtn.hide();
         this.zoom3DMinusBtn.hide();
         this.zoom3DResetBtn.hide();
-        this.cutLayerBtn.hide();
-        this.colorBtn.hide();
-
-        this.view3DBtn = new Button(870, 616, 145, 36, 'Xem 3D', 'SKIN_TOGGLE_3D', null);
-        this.view3DBtn.hide();
 
         this.objects.push(
             this.narrator, this.narration,
             this.backBtn, this.skipBtn, this.nextBtn,
-            this.zoom3DPlusBtn, this.zoom3DMinusBtn, this.zoom3DResetBtn,
-            this.cutLayerBtn, this.colorBtn,
-            this.view3DBtn
+            this.zoom3DPlusBtn, this.zoom3DMinusBtn, this.zoom3DResetBtn
         );
 
         // ── Event listeners ───────────────────────────────────────────
@@ -327,7 +319,13 @@ class SkinScene extends Scene {
         bus.on('SKIN_3D_ZOOM_IN',  () => model3DViewer.zoomIn());
         bus.on('SKIN_3D_ZOOM_OUT', () => model3DViewer.zoomOut());
         bus.on('SKIN_3D_RESET',    () => model3DViewer.resetCamera());
-        bus.on('SKIN_TOGGLE_3D',   () => this._toggle3DInStep1());
+        bus.on('FINISH_NARRATION', () => {
+            if (this._modalOpen) {
+                this._modalOpen = false;
+                this.narrator.hide();
+                this._syncButtons();
+            }
+        });
     }
 
     // ── LIFECYCLE ─────────────────────────────────────────────────────
@@ -342,7 +340,6 @@ class SkinScene extends Scene {
         this.isCold           = false;
         this._lastThermoState = 'normal';
         this.effectorTimer    = 0;
-        this._show3DInStep1   = false;
         this._glbLoaded       = false;
         this._fadeAlpha       = 255;
         this._selectedDisease = null;
@@ -350,11 +347,13 @@ class SkinScene extends Scene {
         this.step2Tab         = 'diseases';
         this._scenarioIdx     = 0;
         this._scenarioAnswers = new Array(SKIN_SCENARIOS.length).fill(undefined);
+        this._modalOpen       = false;
 
         this.narrator.show();
         this.narrator.eventData = SkinNarration0;
         bus.emit('FINISH_NARRATION');
         bus.emit('SHOW_NARRATION', SkinNarration0);
+        this._modalOpen = true;
         bus.emit('SKIN_ENTER');
         model3DViewer.hide();
         this._syncButtons();
@@ -366,8 +365,6 @@ class SkinScene extends Scene {
     }
 
     nextStep() {
-        if (this._show3DInStep1) { model3DViewer.hide(); this._show3DInStep1 = false; }
-
         if (this.step < 3) this.step++;
         this.animFrame        = 0;
         this.thermoTemp       = 37;
@@ -377,6 +374,7 @@ class SkinScene extends Scene {
         this.effectorTimer    = 0;
         this._fadeAlpha       = 255;
         bus.emit('FINISH_NARRATION');
+        this.narrator.show();
 
         if (this.step === 1) {
             this.narrator.eventData = SkinNarration1;
@@ -385,6 +383,7 @@ class SkinScene extends Scene {
             this._lastThermoState = 'hot';
             bus.emit('SKIN_THERMO_CHANGE', true);
             bus.emit('SHOW_NARRATION', SkinNarration1);
+            this._modalOpen = true;
         } else if (this.step === 2) {
             this.narrator.eventData = SkinNarration2;
             this._selectedDisease = null;
@@ -393,6 +392,7 @@ class SkinScene extends Scene {
             this._scenarioIdx     = 0;
             this._scenarioAnswers = new Array(SKIN_SCENARIOS.length).fill(undefined);
             bus.emit('SHOW_NARRATION', SkinNarration2);
+            this._modalOpen = true;
         } else if (this.step === 3) {
             this.narrator.eventData = SkinNarration3;
             if (!this._glbLoaded) {
@@ -403,6 +403,7 @@ class SkinScene extends Scene {
             bus.emit('SKIN_THERMO_CHANGE', null);
             bus.emit('SKIN_3D_LOADED');
             bus.emit('SHOW_NARRATION', SkinNarration3);
+            this._modalOpen = true;
         }
         this._syncButtons();
     }
@@ -425,6 +426,12 @@ class SkinScene extends Scene {
             this._fadeAlpha = max(0, this._fadeAlpha - 13);
         }
 
+        if (this._modalOpen) {
+            push();
+            noStroke(); fill(0, 0, 0, 165);
+            rectMode(CORNER); rect(0, 0, width, height);
+            pop();
+        }
         this._drawStepDots(4, this.step);
         super.draw();
     }
@@ -432,6 +439,7 @@ class SkinScene extends Scene {
     // ── INPUT OVERRIDES ───────────────────────────────────────────────
 
     checkClick() {
+        if (this._modalOpen) { super.checkClick(); return; }
         if (this.step === 0) {
             for (const hs of SKIN_HOTSPOTS) {
                 if (dist(mouseX, mouseY, hs.pinX, hs.pinY) <= hs.r + 8) {
@@ -464,6 +472,7 @@ class SkinScene extends Scene {
     }
 
     checkMouseDragged() {
+        if (this._modalOpen) return;
         if (this.step === 1 && mouseIsPressed && this._isInThermoArea(mouseX, mouseY)) {
             this._updateThermoFromMouseY(mouseY);
         }
@@ -1522,12 +1531,15 @@ class SkinScene extends Scene {
     // ── HELPERS ───────────────────────────────────────────────────────
 
     _syncButtons() {
+        if (this._modalOpen) {
+            this.nextBtn.hide();
+            this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
+            return;
+        }
         if (this.step === 0) {
             if (this.tappedIds.size < this.GATE_COUNT) this.nextBtn.hide();
             else this.nextBtn.show();
             this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
-            this.cutLayerBtn.hide(); this.colorBtn.hide();
-            this.view3DBtn.hide();
             this.nextBtn.x = 600;
             this.nextBtn.label     = 'Tiếp theo →';
             this.nextBtn.eventTag  = 'SKIN_NEXT';
@@ -1535,9 +1547,6 @@ class SkinScene extends Scene {
         } else if (this.step === 1) {
             this.nextBtn.show();
             this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
-            this.cutLayerBtn.hide(); this.colorBtn.hide();
-            this.view3DBtn.show();
-            this.view3DBtn.x = 990; this.view3DBtn.y = 434; this.view3DBtn.w = 300; this.view3DBtn.h = 38;
             this.nextBtn.x = 600;
             this.nextBtn.label     = 'Tiếp theo →';
             this.nextBtn.eventTag  = 'SKIN_NEXT';
@@ -1548,8 +1557,6 @@ class SkinScene extends Scene {
                 n + (a !== undefined && SKIN_SCENARIOS[i].options[a].correct ? 1 : 0), 0) >= 2;
             if (_d && _s) this.nextBtn.show(); else this.nextBtn.hide();
             this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
-            this.cutLayerBtn.hide(); this.colorBtn.hide();
-            this.view3DBtn.hide();
             this.nextBtn.x = 600;
             this.nextBtn.label     = 'Tiếp theo →';
             this.nextBtn.eventTag  = 'SKIN_NEXT';
@@ -1561,8 +1568,6 @@ class SkinScene extends Scene {
             this.nextBtn.eventTag  = 'SWITCH_SCENE';
             this.nextBtn.eventData = 'BodyMap';
             this.zoom3DPlusBtn.show(); this.zoom3DMinusBtn.show(); this.zoom3DResetBtn.show();
-            this.cutLayerBtn.show(); this.colorBtn.show();
-            this.view3DBtn.hide();
         }
     }
 
@@ -1674,19 +1679,4 @@ class SkinScene extends Scene {
         pop();
     }
 
-    _toggle3DInStep1() {
-        this._show3DInStep1 = !this._show3DInStep1;
-        if (this._show3DInStep1) {
-            if (!this._glbLoaded) {
-                model3DViewer.load('./assets/skin.glb');
-                this._glbLoaded = true;
-            }
-            model3DViewer.show(800, 108, 375, 475);
-            this.view3DBtn.label = 'Ẩn 3D';
-            bus.emit('FINISH_NARRATION');
-        } else {
-            model3DViewer.hide();
-            this.view3DBtn.label = 'Xem 3D';
-        }
-    }
 }
