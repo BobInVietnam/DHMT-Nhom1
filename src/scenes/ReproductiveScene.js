@@ -8,9 +8,10 @@ class ReproductiveScene extends Scene {
 
     draw() {
         background(150);
+        push()
         textAlign(CENTER);
         text("Reproductive System", width / 2, 100);
-
+        pop()
         super.draw();
     }
 }

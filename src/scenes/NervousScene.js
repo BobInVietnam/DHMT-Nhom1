@@ -7,9 +7,10 @@ class NervousScene extends Scene {
 
     draw() {
         background(180);
+        push()
         textAlign(CENTER);
-        text("Nervous System", width / 2, 100);
-
+        text("Reproductive System", width / 2, 100);
+        pop()
         super.draw();
     }
 }

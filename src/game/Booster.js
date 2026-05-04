@@ -7,8 +7,7 @@ class Booster extends GameEntity {
 
     display() {
         push()
-        fill(255, 255, 0);
-        rect(this.x, this.y, this.w, this.h);
+        image(assets.get("game_boost") ,this.x, this.y, this.w, this.h);
         pop()
     }
 }

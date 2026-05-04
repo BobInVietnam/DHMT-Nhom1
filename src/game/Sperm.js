@@ -4,7 +4,7 @@ const SPEED = 200
 
 class Sperm extends GameEntity {
     constructor(x, y, movingSpeed) {
-        super(x, y, 40, 40);
+        super(x, y, 30, 30);
         this.movingSpeed = movingSpeed;
         this.health = 100;
         this.energy = 100;
@@ -40,9 +40,17 @@ class Sperm extends GameEntity {
     }
 
     display() {
-        push()
-        fill(0, 255, 0);
-        rect(this.x, this.y, this.w, this.h);
-        pop()
+        push(); 
+        translate(this.x + 20, this.y + 15);
+        stroke(60, 100, 200); strokeWeight(2.1); noFill();
+        beginShape();
+        for (let i = 0; i <= 40; i++)
+            vertex(-i*2.5, sin(i*0.4 + frameCount*0.12)*5*(i/40.0));
+        endShape();
+        fill(80, 130, 220); noStroke();
+        ellipse(0, 0, 28, 18);
+        fill(120, 170, 255);
+        ellipse(11, 0, 12, 10);
+        pop();
     }
 }

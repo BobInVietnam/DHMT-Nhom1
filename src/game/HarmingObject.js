@@ -5,8 +5,8 @@ class HarmingObject extends GameEntity {
 
     display() {
         push()
-        fill(255, 0, 0, 150); // Semi-transparent red for "lava" or hazard
-        rect(this.x, this.y, this.w, this.h);
+        noStroke();
+        image(assets.get("game_wbc") ,this.x, this.y, this.w, this.h);
         
         // Add a pulsing glow using sin() for a "dangerous" look
         let glow = sin(frameCount * 0.1) * 50;

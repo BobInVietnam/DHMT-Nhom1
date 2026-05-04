@@ -7,9 +7,10 @@ class EndocrineScene extends Scene {
 
     draw() {
         background(170);
+        push()
         textAlign(CENTER);
-        text("Endocrine System", width / 2, 100);
-
+        text("Reproductive System", width / 2, 100);
+        pop()
         super.draw();
     }
 }

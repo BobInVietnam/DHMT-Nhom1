@@ -7,9 +7,10 @@ class SkinScene extends Scene {
 
     draw() {
         background(160);
+        push()
         textAlign(CENTER);
-        text("Skin & Temperature", width / 2, 100);
-
+        text("Reproductive System", width / 2, 100);
+        pop()
         super.draw();
     }
 }

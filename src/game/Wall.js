@@ -5,8 +5,7 @@ class Wall extends GameEntity {
 
     display() {
         push()
-        fill(100, 100, 255);
-        rect(this.x, this.y, this.w, this.h);
+        image(assets.get("game_wall") ,this.x, this.y, this.w, this.h);
         pop()
     }
 }
