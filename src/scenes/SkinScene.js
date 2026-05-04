@@ -72,77 +72,98 @@ const SkinNarration3 = {
 //  (nang lông, tuyến mồ hôi …) win over their parent layers.
 // ──────────────────────────────────────────────────────────────────────
 
+// Hotspot coordinates are calibrated to skin_normal.webp (1077×719 px)
+// rendered at canvas (30, 72) width=700 height=467.
+// Conversion: canvas_x = 30 + orig_x*(700/1077),  canvas_y = 72 + orig_y*(467/719)
 const SKIN_HOTSPOTS = [
     {
         id: 'bieu_bi', label: 'Lớp biểu bì',
-        x: 30, y: 72, w: 700, h: 88,
+        x: 72, y: 108, w: 618, h: 94,
+        pinX: 215, pinY: 233, r: 16,
         desc: 'Lớp ngoài cùng gồm tầng sừng (tế bào chết, không thấm nước) và tầng tế bào sống có melanin tạo màu da. Vai trò: hàng rào vật lý chống vi khuẩn, tia UV và mất nước.',
+        sgk: 'Bài 39, tr.152', pron: 'biểu bì — Epidermis',
+        diseases: ['Viêm da tiếp xúc, bỏng nắng (sunburn)', 'Ung thư da (melanoma, carcinoma)', 'Vảy nến (psoriasis)'],
         swatchColor: [255, 215, 175]
     },
     {
-        id: 'lop_bi', label: 'Lớp bì (Dermis)',
-        x: 30, y: 160, w: 700, h: 295,
-        desc: 'Lớp giữa giàu collagen và sợi đàn hồi. Chứa mạch máu, dây thần kinh, nang lông và tuyến mồ hôi. Đây là lớp quan trọng nhất trong điều hòa thân nhiệt.',
-        swatchColor: [255, 180, 155]
-    },
-    {
-        id: 'mo_duoi_da', label: 'Lớp mô dưới da',
-        x: 30, y: 455, w: 700, h: 270,
-        desc: 'Lớp sâu nhất chứa tế bào mỡ (adipocyte) tích trữ lipid. Dự trữ năng lượng dài hạn, cách nhiệt nhờ mỡ dẫn nhiệt kém, đệm chống va đập cơ học.',
-        swatchColor: [255, 235, 125]
-    },
-    {
         id: 'nang_long', label: 'Nang lông & Cơ chân lông',
-        x: 90, y: 140, w: 70, h: 290,
+        x: 316, y: 202, w: 130, h: 218,
+        pinX: 425, pinY: 362, r: 16,
         desc: 'Nang lông là túi biểu bì bao quanh gốc lông. Cơ chân lông khi co (do lạnh) làm lông dựng đứng, tạo lớp không khí cách nhiệt → gây "nổi da gà".',
+        sgk: 'Bài 39, tr.154', pron: 'nang lông — Hair follicle',
+        diseases: ['Viêm nang lông (folliculitis)', 'Rụng tóc (alopecia areata)', 'Mụn trứng cá do bít nang lông'],
         swatchColor: [70, 45, 22]
     },
     {
         id: 'tuyen_nhon', label: 'Tuyến nhờn',
-        x: 152, y: 178, w: 62, h: 48,
+        x: 436, y: 244, w: 69, h: 59,
+        pinX: 473, pinY: 291, r: 14,
         desc: 'Tuyến nhờn gắn vào nang lông, tiết bã nhờn (sebum) giữ ẩm và tạo lớp màng bảo vệ da khỏi vi khuẩn, nấm. Hoạt động quá mức gây bít lỗ chân lông, dẫn đến mụn trứng cá.',
+        sgk: 'Bài 39, tr.154', pron: 'tuyến nhờn — Sebaceous gland',
+        diseases: ['Mụn trứng cá do tuyến nhờn quá mức', 'Lang ben (Malassezia overgrowth)', 'Da nhờn (seborrhoea)'],
         swatchColor: [210, 190, 80]
     },
     {
         id: 'tuyen_mo_hoi', label: 'Tuyến mồ hôi',
-        x: 310, y: 350, w: 90, h: 105,
+        x: 105, y: 286, w: 110, h: 117,
+        pinX: 222, pinY: 345, r: 16,
         desc: 'Tuyến ống hình cuộn trong lớp bì. Tiết mồ hôi qua ống dẫn ra lỗ tuyến trên bề mặt da. Khi mồ hôi bay hơi (thu nhiệt hóa hơi), thân nhiệt hạ xuống hiệu quả.',
+        sgk: 'Bài 39, tr.154', pron: 'tuyến mồ hôi — Eccrine sweat gland',
+        diseases: ['Rôm sảy (miliaria / heat rash)', 'Viêm tuyến mồ hôi (hidradenitis)', 'Hôi nách (bromhidrosis)'],
         swatchColor: [60, 120, 220]
     },
     {
         id: 'lo_tuyen_mo_hoi', label: 'Lỗ tuyến mồ hôi',
-        x: 348, y: 72, w: 52, h: 26,
+        x: 145, y: 108, w: 35, h: 35,
+        pinX: 452, pinY: 229, r: 12,
         desc: 'Lỗ nhỏ trên bề mặt da là nơi mồ hôi thoát ra từ ống tuyến mồ hôi. Khi cơ thể nóng, mồ hôi tiết qua lỗ này, bay hơi và lấy đi nhiệt lượng, giúp hạ thân nhiệt hiệu quả.',
+        sgk: 'Bài 39, tr.154', pron: 'lỗ tuyến mồ hôi — Sweat pore',
+        diseases: ['Bít lỗ mồ hôi → rôm sảy', 'Mất nước, mất điện giải khi sốt cao'],
         swatchColor: [100, 160, 220]
     },
     {
         id: 'mach_mau', label: 'Mạch máu',
-        x: 462, y: 258, w: 110, h: 40,
+        x: 72, y: 384, w: 618, h: 42,
+        pinX: 345, pinY: 410, r: 16,
         desc: 'Động mạch (đỏ) và tĩnh mạch (xanh) tạo lưới mao mạch dày đặc trong lớp bì. Khi nóng: giãn mạch → tăng lưu lượng → thoát nhiệt. Khi lạnh: co mạch → giữ nhiệt lõi.',
+        sgk: 'Bài 39, tr.155', pron: 'mạch máu — Blood vessel',
+        diseases: ['Giãn mao mạch (telangiectasia)', 'Da đỏ khi sốt cao hoặc nóng nực'],
         swatchColor: [210, 45, 45]
     },
     {
         id: 'thu_quan', label: 'Thụ quan cảm giác',
-        x: 472, y: 295, w: 78, h: 38,
+        x: 479, y: 280, w: 175, h: 104,
+        pinX: 542, pinY: 343, r: 16,
         desc: 'Các đầu thần kinh chuyên biệt phát hiện kích thích từ môi trường: thụ quan Meissner (xúc giác nhẹ), Pacinian (áp lực), Ruffini (nhiệt), và đầu thần kinh tự do (đau, ngứa). Tín hiệu truyền lên não qua tủy sống.',
+        sgk: 'Bài 39, tr.155', pron: 'thụ quan cảm giác — Sensory receptor',
+        diseases: ['Mất cảm giác (neuropathy) do tiểu đường', 'Herpes zoster gây đau dây thần kinh'],
         swatchColor: [220, 185, 30]
     },
     {
         id: 'day_than_kinh', label: 'Dây thần kinh',
-        x: 200, y: 337, w: 260, h: 38,
+        x: 232, y: 257, w: 149, h: 104,
+        pinX: 280, pinY: 365, r: 14,
         desc: 'Sợi thần kinh cảm giác mang tín hiệu từ thụ quan lên não qua tủy sống. Là cơ sở của phản xạ bảo vệ cơ thể: rút tay khỏi vật nóng, cảm nhận đau để tránh tổn thương.',
+        sgk: 'Bài 39, tr.155', pron: 'dây thần kinh — Nerve fiber',
+        diseases: ['Đau dây thần kinh (neuralgia)', 'Tê bì tay chân (peripheral neuropathy)'],
         swatchColor: [220, 185, 30]
     },
     {
         id: 'collagen', label: 'Collagen & Sợi đàn hồi',
-        x: 178, y: 198, w: 290, h: 145,
+        x: 72, y: 202, w: 238, h: 169,
+        pinX: 265, pinY: 305, r: 14,
         desc: 'Collagen type I là protein cấu trúc chính (~70% khối lượng lớp bì khô). Sợi elastin cho phép da kéo giãn rồi trở về hình dạng ban đầu. Sản xuất giảm theo tuổi → da nhăn.',
+        sgk: 'Bài 39, tr.153', pron: 'collagen & sợi đàn hồi — Elastic fiber',
+        diseases: ['Nhăn da, chảy xệ (lão hóa mất collagen)', 'Sẹo lồi (keloid)', 'Hội chứng Ehlers-Danlos'],
         swatchColor: [255, 155, 125]
     },
     {
         id: 'te_bao_mo', label: 'Tế bào mỡ (Adipocyte)',
-        x: 30, y: 510, w: 680, h: 205,
+        x: 100, y: 424, w: 560, h: 69,
+        pinX: 282, pinY: 463, r: 14,
         desc: 'Tế bào hình cầu lớn chứa một giọt lipid chiếm gần hết thể tích tế bào. Nguồn năng lượng dự trữ dài hạn; hệ số dẫn nhiệt thấp (~0.2 W/m·K) giúp cách nhiệt hiệu quả.',
+        sgk: 'Bài 39, tr.153', pron: 'tế bào mỡ — Adipocyte',
+        diseases: ['Béo phì (tích mỡ quá mức)', 'Mỡ máu cao (dyslipidaemia)', 'Viêm mô tế bào (cellulitis)'],
         swatchColor: [255, 248, 170]
     }
 ];
@@ -412,12 +433,13 @@ class SkinScene extends Scene {
 
     checkClick() {
         if (this.step === 0) {
-            const hs = this._hitHotspot(mouseX, mouseY);
-            if (hs) {
-                this.activeHotspot = hs;
-                this.tappedIds.add(hs.id);
-                if (this.tappedIds.size >= this.GATE_COUNT) this.nextBtn.show();
-                return;
+            for (const hs of SKIN_HOTSPOTS) {
+                if (dist(mouseX, mouseY, hs.pinX, hs.pinY) <= hs.r + 8) {
+                    this.activeHotspot = hs;
+                    this.tappedIds.add(hs.id);
+                    if (this.tappedIds.size >= this.GATE_COUNT) this.nextBtn.show();
+                    return;
+                }
             }
         }
         if (this.step === 1) {
@@ -563,101 +585,126 @@ class SkinScene extends Scene {
                 }
         }
 
-        this._drawHotspotOverlays();
-        this._drawComponentCard();
-        this._drawGateHint();
+        this._drawSkinAnnotations();
+        this._drawSkinInfoPanel();
+
     }
 
-    _drawHotspotOverlays() {
-        const mx = mouseX, my = mouseY;
+    _drawSkinAnnotations() {
         push();
-        rectMode(CORNER);
         for (const hs of SKIN_HOTSPOTS) {
-            const tapped  = this.tappedIds.has(hs.id);
-            const active  = this.activeHotspot && this.activeHotspot.id === hs.id;
-            const hovered = mx >= hs.x && mx <= hs.x + hs.w &&
-                            my >= hs.y && my <= hs.y + hs.h;
-
-            if (!tapped && !hovered) continue;
-
-            noStroke();
-            if (active)      fill(255, 220, 50,  95);
-            else if (tapped) fill( 80, 200, 100,  55);
-            else             fill(255, 255, 255,  65);
-
-            rect(hs.x, hs.y, hs.w, hs.h);
-
-            if (hovered && !tapped) {
-                fill(50, 30, 10, 225); noStroke();
-                textSize(13); textStyle(BOLD); textAlign(CENTER);
-                text('Nhấn: ' + hs.label, hs.x + hs.w / 2, hs.y + hs.h / 2);
+            const sel  = this.activeHotspot && this.activeHotspot.id === hs.id;
+            const seen = this.tappedIds.has(hs.id);
+            const c    = color(...hs.swatchColor);
+            // Pin circle at pinX/pinY
+            fill(sel ? c : lerpColor(c, color(255), 0.35));
+            stroke(sel ? color(60, 20, 10) : color(100, 60, 40));
+            strokeWeight(sel ? 2.5 : 1.5);
+            ellipse(hs.pinX, hs.pinY, hs.r * 2, hs.r * 2);
+            // Check mark when seen
+            if (seen) {
+                fill(255); noStroke(); textSize(11); textStyle(BOLD); textAlign(CENTER);
+                applyVietFont();
+                text('✓', hs.pinX, hs.pinY + 4);
             }
+            // Label above pin
+            fill(sel ? color(40, 20, 5) : color(70, 40, 15));
+            noStroke(); textSize(10); textStyle(sel ? BOLD : NORMAL); textAlign(CENTER);
+            applyVietFont();
+            text(hs.label, hs.pinX, hs.pinY - hs.r - 6);
         }
+        // Bottom progress text (below anatomy image)
+        fill(80, 50, 20); noStroke(); textSize(11); textStyle(NORMAL); textAlign(LEFT);
+        applyVietFont();
+        text('Đã khám phá: ' + this.tappedIds.size + ' / ' + SKIN_HOTSPOTS.length +
+             '  (cần ' + this.GATE_COUNT + ' để tiếp tục)', 34, 555);
         pop();
     }
 
-    _drawComponentCard() {
-        const cx = 762, cy = 72, cw = 410, ch = 348;
+    _drawSkinInfoPanel() {
+        const px = 762, py = 72, pw = 410, ph = 430;
+        const sc = color(140, 80, 30);
         push();
         rectMode(CORNER);
 
         if (this.activeHotspot) {
             const hs = this.activeHotspot;
-            fill(255, 252, 245, 245); stroke(160, 120, 80); strokeWeight(1.5);
-            rect(cx, cy, cw, ch, 10);
-
             const [r, g, b] = hs.swatchColor;
-            fill(r, g, b); noStroke();
-            rect(cx + 14, cy + 14, 22, 22, 4);
 
-            fill(40, 20, 5); noStroke(); textSize(16); textStyle(BOLD); textAlign(LEFT);
-            text(hs.label, cx + 44, cy + 30);
+            fill(255, 250, 242); stroke(sc); strokeWeight(1.5);
+            rect(px, py, pw, ph, 10);
 
-            stroke(200, 160, 110); strokeWeight(1);
-            line(cx + 14, cy + 48, cx + cw - 14, cy + 48);
+            // Swatch + name
+            fill(r, g, b); noStroke(); rect(px + 14, py + 16, 18, 18, 4);
+            fill(sc); textSize(16); textStyle(BOLD); textAlign(LEFT); applyVietFont();
+            text(hs.label, px + 38, py + 30);
 
-            noStroke(); fill(50, 30, 10); textSize(13); textStyle(NORMAL);
-            text(hs.desc, cx + 14, cy + 60, cw - 28, ch - 85);
+            // Divider
+            stroke(sc); strokeWeight(1); line(px + 14, py + 42, px + pw - 14, py + 42);
 
+            // Description
+            noStroke(); fill(50, 30, 10); textSize(12); textStyle(NORMAL);
+            text(hs.desc, px + 14, py + 56, pw - 28, 110);
+
+            // SGK chip
+            fill(240, 230, 215); stroke(sc); strokeWeight(1);
+            rect(px + 14, py + 174, 120, 22, 11);
+            fill(sc); noStroke(); textSize(10); textStyle(NORMAL); textAlign(CENTER);
+            applyVietFont();
+            text('📖 ' + hs.sgk, px + 74, py + 189);
+
+            // Pronunciation chip
+            fill(255, 252, 230); stroke(color(180, 150, 50)); strokeWeight(1);
+            rect(px + 142, py + 174, pw - 156, 22, 11);
+            fill(color(100, 70, 10)); noStroke(); textSize(10); textAlign(LEFT);
+            text('🔊 ' + hs.pron, px + 154, py + 189);
+
+            // Diseases section
+            const dis = hs.diseases || [];
+            const disH = 40 + dis.length * 22;
+            fill(255, 248, 242); stroke(sc); strokeWeight(1);
+            rect(px, py + ph - disH - 20, pw, disH + 20, 10);
+            fill(sc); noStroke(); textSize(12); textStyle(BOLD); textAlign(LEFT);
+            text('Bệnh lý liên quan:', px + 14, py + ph - disH - 4);
+            fill(50, 30, 10); textSize(11); textStyle(NORMAL);
+            for (let i = 0; i < dis.length; i++)
+                text('• ' + dis[i], px + 14, py + ph - disH + 16 + i * 22, pw - 28, 20);
+
+            // "Đã khám phá" badge
             fill(55, 165, 80, 235); noStroke();
-            rect(cx + cw - 126, cy + ch - 38, 112, 26, 13);
+            rect(px + pw - 126, py + 18, 112, 26, 13);
             fill(255); textSize(12); textStyle(BOLD); textAlign(CENTER);
-            text('Đã khám phá ✓', cx + cw - 70, cy + ch - 22);
+            text('Đã khám phá ✓', px + pw - 70, py + 35);
+
         } else {
-            fill(248, 245, 238, 215); stroke(195, 175, 140); strokeWeight(1);
-            rect(cx, cy, cw, ch, 10);
+            fill(248, 245, 238, 215); stroke(color(195, 175, 140)); strokeWeight(1);
+            rect(px, py, pw, ph, 10);
             fill(155, 125, 80); noStroke();
-            textSize(14); textStyle(NORMAL); textAlign(CENTER);
-            text('Nhấn vào bất kỳ vùng nào', cx + cw / 2, cy + ch / 2 - 24);
-            text('trên sơ đồ để xem chi tiết', cx + cw / 2, cy + ch / 2 +  2);
-            text('từng bộ phận →',             cx + cw / 2, cy + ch / 2 + 28);
-        }
-        pop();
-    }
+            textSize(14); textStyle(NORMAL); textAlign(CENTER); applyVietFont();
+            text('Nhấn vào một bộ phận', px + pw / 2, py + ph / 2 - 50);
+            text('trên sơ đồ để xem chi tiết', px + pw / 2, py + ph / 2 - 26);
+            text('từng cấu trúc →', px + pw / 2, py + ph / 2 - 2);
 
-    _drawGateHint() {
-        const count = this.tappedIds.size;
-        const total = SKIN_HOTSPOTS.length;
-        push();
-        rectMode(CORNER); textAlign(LEFT); noStroke();
+            // Progress bar
+            const total = SKIN_HOTSPOTS.length;
+            const seen  = this.tappedIds.size;
+            fill(220, 210, 200); rect(px + 30, py + ph / 2 + 30, pw - 60, 12, 6);
+            if (seen > 0) {
+                fill(160, 100, 40);
+                rect(px + 30, py + ph / 2 + 30, (pw - 60) * seen / total, 12, 6);
+            }
+            fill(100, 70, 30); textSize(11); textAlign(CENTER);
+            text(seen + ' / ' + total + ' bộ phận đã xem  (cần ' + this.GATE_COUNT + ')',
+                 px + pw / 2, py + ph / 2 + 58);
 
-        fill(80, 50, 20); textSize(13);
-        text('Đã khám phá: ' + count + ' / ' + total + ' bộ phận', 762, 442);
-
-        for (let i = 0; i < total; i++) {
-            fill(this.tappedIds.has(SKIN_HOTSPOTS[i].id)
-                 ? color(55, 165, 80) : color(195, 180, 155));
-            ellipse(772 + i * 18, 462, 12, 12);
-        }
-
-        textSize(12); textAlign(CENTER);
-        if (count < this.GATE_COUNT) {
-            fill(130, 85, 30);
-            text('Khám phá thêm ' + (this.GATE_COUNT - count) +
-                 ' bộ phận để mở "Tiếp theo"', 967, 488);
-        } else {
-            fill(30, 140, 60); textStyle(BOLD);
-            text('Sẵn sàng! Nhấn "Tiếp theo →" bên dưới', 967, 488);
+            if (seen < this.GATE_COUNT) {
+                fill(130, 85, 30); textSize(12);
+                text('Khám phá thêm ' + (this.GATE_COUNT - seen) + ' bộ phận để mở "Tiếp theo"',
+                     px + pw / 2, py + ph / 2 + 82);
+            } else {
+                fill(30, 140, 60); textSize(12); textStyle(BOLD);
+                text('Sẵn sàng! Nhấn "Tiếp theo →" bên dưới', px + pw / 2, py + ph / 2 + 82);
+            }
         }
         pop();
     }
@@ -1495,18 +1542,6 @@ class SkinScene extends Scene {
     _updateThermoFromMouseY(my) {
         const { y, h } = this._THERMO;
         this.thermoTemp = constrain(map(my, y, y + h, 42, 32), 32, 42);
-    }
-
-    _hitHotspot(mx, my) {
-        let best = null, bestArea = Infinity;
-        for (const hs of SKIN_HOTSPOTS) {
-            if (mx >= hs.x && mx <= hs.x + hs.w &&
-                my >= hs.y && my <= hs.y + hs.h) {
-                const area = hs.w * hs.h;
-                if (area < bestArea) { best = hs; bestArea = area; }
-            }
-        }
-        return best;
     }
 
     _drawThermoLabels() {
