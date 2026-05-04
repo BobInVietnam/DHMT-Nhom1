@@ -1,6 +1,6 @@
 class Narration extends Clickable {
     constructor(x, y) {
-        super(x, y, 400, 160, "RUN_NARRATION", null); 
+        super(x, y, 400, 175, "RUN_NARRATION", null);
         this.hide();
         this.contents = {text: [], sprite: []};        
         this.currentIndex = 0;
@@ -42,11 +42,13 @@ class Narration extends Clickable {
         applyVietFont();
         fill(25, 35, 70);
         noStroke();
-        textSize(15);
+        textSize(16);
         textAlign(LEFT, TOP);
+        rectMode(CORNER);
         let currentText = this.contents.text[this.currentIndex];
-        // Correct left-edge position: center - halfWidth + padding
-        text(currentText, this.x - this.w / 2 + 18, this.y - this.h / 2 + 16, this.w - 36, this.h - 44);
+        let tx = this.x - this.w / 2 + 18;
+        let ty = this.y - this.h / 2 + 16;
+        text(currentText, tx, ty, this.w - 36, this.h - 44);
 
         if (this.currentIndex < this.contents.text.length - 1) {
             fill(80, 130, 230);

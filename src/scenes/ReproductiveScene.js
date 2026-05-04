@@ -144,14 +144,14 @@ class ReproductiveScene extends Scene {
         this.narrator     = new Narrator(1000, 660, ReproNarrationFemale);
         this.backBtn      = new Button(80,   40, 130, 40, "← Quay lại",    "SWITCH_SCENE", "BodyMap");
         this.skipBtn      = new Button(1120, 40, 100, 35, "SKIP >>>",       "SWITCH_SCENE", "BodyMap");
-        this.nextBtn      = new Button(520, 768, 160, 46, "Tiếp theo →",    "REPRO_NEXT",   null);
+        this.nextBtn      = new Button(520, 730, 160, 46, "Tiếp theo →",    "REPRO_NEXT",   null);
 
         // Step 0 gender toggle (left-edge of group at x=230 per design; Button uses rectMode CENTER)
-        this.femaleBtn    = new Button(290, 768, 120, 46, "♀ Nữ",         "REPRO_GENDER", "female");
-        this.maleBtn      = new Button(410, 768, 120, 46, "♂ Nam",        "REPRO_GENDER", "male");
+        this.femaleBtn    = new Button(290, 730, 120, 46, "♀ Nữ",         "REPRO_GENDER", "female");
+        this.maleBtn      = new Button(410, 730, 120, 46, "♂ Nam",        "REPRO_GENDER", "male");
 
         // Step 4: start game replaces next
-        this.startGameBtn = new Button(380, 768, 210, 46, "Bắt đầu chơi", "REPRO_NEXT",   null);
+        this.startGameBtn = new Button(380, 730, 210, 46, "Bắt đầu chơi", "REPRO_NEXT",   null);
         this.startGameBtn.hide();
 
         // Step 5 game HUD buttons
@@ -161,7 +161,7 @@ class ReproductiveScene extends Scene {
         this.menuBtn.hide();
 
         this.objects.push(
-            this.narration, this.narrator,
+            this.narrator, this.narration,
             this.backBtn, this.skipBtn, this.nextBtn,
             this.femaleBtn, this.maleBtn,
             this.startGameBtn, this.pauseBtn, this.menuBtn
@@ -498,7 +498,7 @@ class ReproductiveScene extends Scene {
                 text('✓', o.x, o.y + 5);
             }
             // Label with white outline for legibility
-            noStroke(); textSize(12); textStyle(sel ? BOLD : NORMAL); textAlign(CENTER);
+            noStroke(); textSize(13); textStyle(sel ? BOLD : NORMAL); textAlign(CENTER);
             applyVietFont();
             fill(255, 255, 255, 200);
             for (const [dx, dy] of [[-1,0],[1,0],[0,-1],[0,1]])
@@ -510,7 +510,7 @@ class ReproductiveScene extends Scene {
         fill(80, 30, 100); noStroke(); textSize(13); textStyle(NORMAL); textAlign(LEFT);
         applyVietFont();
         text('Đã khám phá: ' + this.seenOrgans.size + ' / ' + (REPRO_ORGANS_F.length + REPRO_ORGANS_M.length) +
-             '  (cần ' + REPRO_ORGAN_GATE + ' để tiếp tục)', 34, 748);
+             '  (cần ' + REPRO_ORGAN_GATE + ' để tiếp tục)', 34, 675);
         pop();
     }
 
@@ -547,7 +547,7 @@ class ReproductiveScene extends Scene {
             stroke(sc); strokeWeight(0.8); line(px + 14, py + 50, px + pw - 14, py + 50);
 
             // Description
-            noStroke(); fill(45, 15, 55); textSize(13); textStyle(NORMAL);
+            noStroke(); fill(45, 15, 55); textSize(14); textStyle(NORMAL);
             text(o.desc, px + 14, py + 62, pw - 28, 122);
 
             // SGK chip
@@ -1020,12 +1020,7 @@ class ReproductiveScene extends Scene {
         text("Hướng dẫn trò chơi", 380, 50);
         pop();
 
-        // Animated sperm
-        push(); translate(620, 380);
-        this._drawSpermCell(0, 0, 0, this.animFrame, 3.0);
-        pop();
-
-        // Rules box
+        // Rules box first so sperm renders on top
         push();
         fill(255, 245, 252); stroke(180, 60, 120); strokeWeight(2);
         rectMode(CORNER); rect(30, 82, 560, 500, 12);
@@ -1049,6 +1044,12 @@ class ReproductiveScene extends Scene {
             fill(50, 10, 32); textStyle(NORMAL);
             text(rules[i][1], 52, y + 20);
         }
+        pop();
+
+        // Animated sperm drawn after rules box so it's visible on top
+        // Head at x=740 keeps tail (150px at scale 1.5) ending at x=590 — clear of rules box
+        push(); translate(740, 430);
+        this._drawSpermCell(0, 0, 0, this.animFrame, 1.5);
         pop();
     }
 

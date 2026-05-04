@@ -294,17 +294,17 @@ class SkinScene extends Scene {
 
         // ── Shared UI ─────────────────────────────────────────────────
         this.narration = new Narration(980, 380);
-        this.narrator  = new Narrator(1000, 550, SkinNarration0);
+        this.narrator  = new Narrator(1000, 640, SkinNarration0);
 
         this.backBtn = new Button( 80,  40, 130, 40, '← Quay lại', 'SWITCH_SCENE', 'BodyMap');
         this.skipBtn = new Button(1120, 40, 100, 35, 'SKIP >>>',   'SWITCH_SCENE', 'BodyMap');
-        this.nextBtn = new Button( 600, 768, 180, 46, 'Tiếp theo →','SKIN_NEXT',    null);
+        this.nextBtn = new Button( 600, 730, 180, 46, 'Tiếp theo →','SKIN_NEXT',    null);
 
-        this.zoom3DPlusBtn   = new Button(440, 760,  88, 34, 'Zoom +',     'SKIN_3D_ZOOM_IN',  null);
-        this.zoom3DMinusBtn  = new Button(536, 760,  88, 34, 'Zoom −',     'SKIN_3D_ZOOM_OUT', null);
-        this.zoom3DResetBtn  = new Button(632, 760,  88, 34, 'Reset',      'SKIN_3D_RESET',    null);
-        this.cutLayerBtn     = new Button(728, 760, 108, 34, '✂ Cắt lớp', 'SKIN_3D_CUT',      null);
-        this.colorBtn        = new Button(844, 760, 108, 34, '🔆 Đổi màu','SKIN_3D_COLOR',    null);
+        this.zoom3DPlusBtn   = new Button(440, 730,  88, 34, 'Zoom +',     'SKIN_3D_ZOOM_IN',  null);
+        this.zoom3DMinusBtn  = new Button(536, 730,  88, 34, 'Zoom −',     'SKIN_3D_ZOOM_OUT', null);
+        this.zoom3DResetBtn  = new Button(632, 730,  88, 34, 'Reset',      'SKIN_3D_RESET',    null);
+        this.cutLayerBtn     = new Button(728, 730, 108, 34, '✂ Cắt lớp', 'SKIN_3D_CUT',      null);
+        this.colorBtn        = new Button(844, 730, 108, 34, '🔆 Đổi màu','SKIN_3D_COLOR',    null);
         this.zoom3DPlusBtn.hide();
         this.zoom3DMinusBtn.hide();
         this.zoom3DResetBtn.hide();
@@ -315,7 +315,7 @@ class SkinScene extends Scene {
         this.view3DBtn.hide();
 
         this.objects.push(
-            this.narration, this.narrator,
+            this.narrator, this.narration,
             this.backBtn, this.skipBtn, this.nextBtn,
             this.zoom3DPlusBtn, this.zoom3DMinusBtn, this.zoom3DResetBtn,
             this.cutLayerBtn, this.colorBtn,
@@ -614,7 +614,7 @@ class SkinScene extends Scene {
                 text('✓', hs.pinX, hs.pinY + 5);
             }
             // Label above pin — white text outline for legibility
-            noStroke(); textSize(12); textStyle(sel ? BOLD : NORMAL); textAlign(CENTER);
+            noStroke(); textSize(13); textStyle(sel ? BOLD : NORMAL); textAlign(CENTER);
             applyVietFont();
             fill(255, 255, 255, 200);
             for (const [dx, dy] of [[-1,0],[1,0],[0,-1],[0,1]])
@@ -660,7 +660,7 @@ class SkinScene extends Scene {
             stroke(sc); strokeWeight(0.8); line(px + 14, py + 48, px + pw - 14, py + 48);
 
             // Description
-            noStroke(); fill(45, 25, 8); textSize(13); textStyle(NORMAL);
+            noStroke(); fill(45, 25, 8); textSize(14); textStyle(NORMAL);
             text(hs.desc, px + 14, py + 60, pw - 28, 118);
 
             // SGK chip
@@ -1528,6 +1528,7 @@ class SkinScene extends Scene {
             this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
             this.cutLayerBtn.hide(); this.colorBtn.hide();
             this.view3DBtn.hide();
+            this.nextBtn.x = 600;
             this.nextBtn.label     = 'Tiếp theo →';
             this.nextBtn.eventTag  = 'SKIN_NEXT';
             this.nextBtn.eventData = null;
@@ -1537,6 +1538,7 @@ class SkinScene extends Scene {
             this.cutLayerBtn.hide(); this.colorBtn.hide();
             this.view3DBtn.show();
             this.view3DBtn.x = 990; this.view3DBtn.y = 434; this.view3DBtn.w = 300; this.view3DBtn.h = 38;
+            this.nextBtn.x = 600;
             this.nextBtn.label     = 'Tiếp theo →';
             this.nextBtn.eventTag  = 'SKIN_NEXT';
             this.nextBtn.eventData = null;
@@ -1548,11 +1550,13 @@ class SkinScene extends Scene {
             this.zoom3DPlusBtn.hide(); this.zoom3DMinusBtn.hide(); this.zoom3DResetBtn.hide();
             this.cutLayerBtn.hide(); this.colorBtn.hide();
             this.view3DBtn.hide();
+            this.nextBtn.x = 600;
             this.nextBtn.label     = 'Tiếp theo →';
             this.nextBtn.eventTag  = 'SKIN_NEXT';
             this.nextBtn.eventData = null;
         } else {
             this.nextBtn.show();
+            this.nextBtn.x = 1050; // shift right so it clears the 3D control buttons
             this.nextBtn.label     = '← Về trang chủ';
             this.nextBtn.eventTag  = 'SWITCH_SCENE';
             this.nextBtn.eventData = 'BodyMap';
