@@ -27,14 +27,14 @@ async function setup() {
     sceneManager.addScene("Reproductive", new ReproductiveScene());
     sceneManager.addScene("Game", new GameScene());
 
-    sceneManager.switchScene("Main"); 
+    sceneManager.switchScene("Main");
 
     bus.on("SWITCH_SCENE", (name) => { sceneManager.switchScene(name); });
 }
 
 function draw() {
-    background(255); 
-    sceneManager.draw(); 
+    background(255);
+    sceneManager.draw();
 }
 
 function mousePressed() {

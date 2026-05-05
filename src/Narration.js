@@ -4,25 +4,43 @@ class Narration extends Clickable {
         this.hide();
         this.contents = {text: [], sprite: []};        
         this.currentIndex = 0;
-        bus.on("SHOW_NARRATION", (content) => {this.showContent(content)})
+        
+        bus.on("SHOW_NARRATION", (content) => {this.showContent(content)});
         bus.on("RUN_NARRATION", () => {
             this.currentIndex++;
-            if (this.currentIndex == this.contents.text.length) {
+            if (this.currentIndex >= this.contents.text.length) {
                 bus.emit("FINISH_NARRATION"); 
-                return
+                return;
             }
-            bus.emit("CHANGE_NARRATOR_SPRITE", this.contents.sprite[this.currentIndex])
-        })
+            if (this.contents.sprite && this.contents.sprite[this.currentIndex]) {
+                bus.emit("CHANGE_NARRATOR_SPRITE", this.contents.sprite[this.currentIndex]);
+            }
+        });
         bus.on("FINISH_NARRATION", () => {
-            this.hide()
-        })
+            this.hide(); 
+        });
     }
 
     showContent(content) {
         this.contents = content; 
         this.currentIndex = 0;  
-        bus.emit("CHANGE_NARRATOR_SPRITE", this.contents.sprite[this.currentIndex])
-        this.show()
+        if (this.contents.sprite && this.contents.sprite[this.currentIndex]) {
+            bus.emit("CHANGE_NARRATOR_SPRITE", this.contents.sprite[this.currentIndex]);
+        }
+        this.show();
+    }
+
+    checkHovered(mx = mouseX, my = mouseY) {
+        this.isHovered = (mx >= this.x && mx <= this.x + this.w && my >= this.y && my <= this.y + this.h);
+    }
+
+    checkClick(mx, my) {
+        if (!this.isVisible) return false;
+        if (mx >= this.x && mx <= this.x + this.w && my >= this.y && my <= this.y + this.h) {
+            bus.emit("RUN_NARRATION");
+            return true; 
+        }
+        return false;
     }
 
     display() {
