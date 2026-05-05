@@ -52,6 +52,7 @@ const Sense3DContent = {
 class NervousScene extends Scene {
     constructor() {
         super();
+        this.isActive = false
         this.step = 0; // 0: Main, 1: Ear 2D, 2: Ear 3D, 3: Eye 2D, 4: Eye 3D
         this._glbLoaded = ""; // Theo dõi model nào đã load
 
@@ -95,7 +96,7 @@ class NervousScene extends Scene {
         });
 
         bus.on("FINISH_NARRATION", () => {
-            if (this.step === 2 || this.step === 4) {
+            if ((this.step === 2 || this.step === 4) && this.isActive) {
                 // Hiển thị 3D sau khi thoại xong để không bị đè click
                 const modelPath = this.step === 2 ? './assets/ear.glb' : './assets/eye.glb';
                 model3DViewer.load(modelPath);
@@ -141,12 +142,14 @@ class NervousScene extends Scene {
 
     enter() {
         this.step = 0;
+        this.isActive = true
         this._syncState();
         this.narrator.show();
         bus.emit('SCENE_ENTER');
     }
 
     exit() {
+        this.isActive = false
         bus.emit('SCENE_EXIT');
         model3DViewer.hide();
     }
