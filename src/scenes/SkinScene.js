@@ -1585,18 +1585,7 @@ class SkinScene extends Scene {
         this.thermoTemp = constrain(map(my, y, y + h, 42, 32), 32, 42);
     }
 
-    _drawThermoLabels() {
-        const sx = 30, sy = 112, eH = 55, dH = 252;
-        push(); noStroke(); textAlign(LEFT);
-        if (this.isHot) {
-            fill(40, 10, 10); textSize(12);
-            text('Mạch máu giãn → tản nhiệt', sx + 255, sy + eH + dH / 2);
-        } else if (this.isCold) {
-            fill(40, 10, 10); textSize(12);
-            text('Mạch máu co → giữ nhiệt', sx + 242, sy + eH + dH / 2);
-        }
-        pop();
-    }
+    _drawThermoLabels() {}
 
     _drawThermoBubble() {
         const bx = 200, by = 610, bw = 400, bh = 56;
@@ -1617,50 +1606,7 @@ class SkinScene extends Scene {
         pop();
     }
 
-    _drawThermoEffectors(sx, sy, eH, dH) {
-        const T = this.effectorTimer;
-        push(); rectMode(CORNER);
-        if (this.isHot) {
-            if (T >= 24) {
-                for (let i = 0; i < 6; i++) {
-                    const px = sx + 70 + i * 94;
-                    stroke(90, 140, 210); strokeWeight(2);
-                    line(px, sy, px, sy - 12);
-                    const dy = sy - 22 - ((this.animFrame * 2 + i * 55) % 88);
-                    fill(80, 140, 210, 200); noStroke();
-                    ellipse(px, dy, 9, 13);
-                }
-                fill(30, 80, 180); noStroke(); textSize(13); textAlign(LEFT);
-                text('→ Tiết mồ hôi để làm mát cơ thể', sx + 10, sy - 30);
-            }
-        } else if (this.isCold) {
-            if (T >= 24) {
-                stroke(70, 45, 25); strokeWeight(2);
-                for (let i = 0; i < 8; i++) {
-                    const hx = sx + 54 + i * 78;
-                    line(hx, sy + 5, hx + 13, sy - 25);
-                }
-                fill(30, 50, 160); noStroke(); textSize(13); textAlign(LEFT);
-                text('→ Lông dựng lên để cách nhiệt', sx + 10, sy - 30);
-            }
-            if (T >= 48) {
-                const sh = sin(this.animFrame * 0.45) * 5;
-                stroke(100, 100, 200); strokeWeight(1.5); noFill();
-                for (let i = 0; i < 3; i++) {
-                    beginShape();
-                    for (let x = sx + 120 + i * 158; x < sx + 268 + i * 158; x += 14)
-                        vertex(x + sh, sy + eH + 155 + sin(x * 0.3 + this.animFrame * 0.25) * 6);
-                    endShape();
-                }
-                fill(60, 60, 190); noStroke(); textSize(12); textAlign(LEFT);
-                text('→ Cơ run rẩy để sinh nhiệt', sx + 10, sy + eH + 195);
-            }
-        } else {
-            fill(30, 130, 60); noStroke(); textSize(13); textAlign(LEFT);
-            text('→ Thân nhiệt ổn định tại 37°C', sx + 10, sy - 18);
-        }
-        pop();
-    }
+    _drawThermoEffectors(sx, sy, eH, dH) {}
 
     _drawStepDots(total, current) {
         const dotGap = 20, pillW = 26, pillH = 12, dotD = 12;
