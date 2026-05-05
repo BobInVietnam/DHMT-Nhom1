@@ -30,19 +30,6 @@ class Narration extends Clickable {
         this.show();
     }
 
-    checkHovered(mx = mouseX, my = mouseY) {
-        this.isHovered = (mx >= this.x && mx <= this.x + this.w && my >= this.y && my <= this.y + this.h);
-    }
-
-    checkClick(mx, my) {
-        if (!this.isVisible) return false;
-        if (mx >= this.x && mx <= this.x + this.w && my >= this.y && my <= this.y + this.h) {
-            bus.emit("RUN_NARRATION");
-            return true; 
-        }
-        return false;
-    }
-
     display() {
         if (!this.isVisible) return
 

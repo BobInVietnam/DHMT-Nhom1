@@ -18,9 +18,6 @@ class BodyMapScene extends ZoomableScene {
         this.camera.zoom = 1.0;
     }
 
-    // Body map uses fixed camera — no accidental panning
-    checkMouseDragged() {}
-
     draw() {
         background(200)
         super.draw()

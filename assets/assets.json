@@ -41,6 +41,10 @@
         {
             "name": "game_wall",
             "path": "game_wall.png"
+        },
+        {
+            "name": "endocrine_bg",
+            "path": "endocrine_bg.png"
         }
     ],
     "data3d": [],
