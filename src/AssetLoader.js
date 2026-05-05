@@ -20,7 +20,7 @@ class AssetLoader {
         const fullPath = `./assets/${item.path}`;
         this.images[item.name] = await loadImage(fullPath);
       }
-      
+
       console.log("All assets loaded successfully.");
     } catch (err) {
       console.error("Asset loading failed:", err);
@@ -30,9 +30,7 @@ class AssetLoader {
   /**
    * Helper to retrieve a loaded image by name.
    */
-  get(name) {
-    return this.images[name];
-  }
+  get(name) { return this.images[name]; }
 }
 
 const assets = new AssetLoader();

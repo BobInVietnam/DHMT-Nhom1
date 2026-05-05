@@ -22,6 +22,6 @@ class Clickable extends Entity {
     checkClick(mx, my) {
         if (this.isVisible && this.isHovered) {
             bus.emit(this.eventTag, this.eventData)
-        }   
+        }
     }
 }

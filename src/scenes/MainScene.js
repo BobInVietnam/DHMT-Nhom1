@@ -21,7 +21,7 @@ class MainScene extends Scene {
         this.narration = new Narration(950, 350)
         this.narrator = new Narrator(800, 600, MainSceneContent)
 
-        this.objects.push(this.startBtn, this.narration, this.narrator);
+        this.objects.push(this.startBtn, this.narrator, this.narration);
     }
 
     draw() {
