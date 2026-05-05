@@ -850,7 +850,7 @@ class SkinScene extends Scene {
 
         noStroke(); textSize(14); textStyle(NORMAL);
         for (let i = 0; i < bullets.length; i++) {
-            fill(titleColor); ellipse(px + 20, py + 58 + i * 36, 7, 7);
+            fill(titleColor); ellipse(px + 20, py + 73 + i * 36, 7, 7);
             fill(40, 30, 20); text(bullets[i], px + 32, py + 63 + i * 36, pw - 44, 30);
         }
 
@@ -1214,7 +1214,7 @@ class SkinScene extends Scene {
         text('Cách phòng tránh:', rx + 16, prevY + 18);
         fill(30, 58, 36); textStyle(NORMAL); textSize(13);
         for (let i = 0; i < d.prevention.length; i++) {
-            fill(18, 145, 50); noStroke(); ellipse(rx + 24, prevY + 35 + i * 32, 7, 7);
+            fill(18, 145, 50); noStroke(); ellipse(rx + 24, prevY + 49 + i * 32, 7, 7);
             fill(30, 58, 36);
             text(d.prevention[i], rx + 36, prevY + 39 + i * 32, rw - 52, 30);
         }
