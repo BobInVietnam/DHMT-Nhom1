@@ -21,7 +21,27 @@
         { "name": "skin_cold_1",         "path": "skin_cold_1.webp"          },
         { "name": "skin_cold_2",         "path": "skin_cold_2.webp"          },
         { "name": "skin_cold_3",         "path": "skin_cold_3.webp"          },
-        { "name": "skin_cold_4",         "path": "skin_cold_4.webp"          }
+        { "name": "skin_cold_4",         "path": "skin_cold_4.webp"          },
+        {
+            "name": "game_bg",
+            "path": "game_bg.png"
+        },
+        {
+            "name": "game_wbc",
+            "path": "game_wbc.png"
+        },
+        {
+            "name": "game_egg",
+            "path": "game_egg.png"
+        },
+        {
+            "name": "game_boost",
+            "path": "game_boost.png"
+        },
+        {
+            "name": "game_wall",
+            "path": "game_wall.png"
+        }
     ],
     "data3d": [],
     "data_audio": [

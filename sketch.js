@@ -25,7 +25,7 @@ async function setup() {
     sceneManager.addScene("Endocrine", new EndocrineScene());
     sceneManager.addScene("Skin", new SkinScene());
     sceneManager.addScene("Reproductive", new ReproductiveScene());
-    sceneManager.addScene("Sub", new SubScene());
+    sceneManager.addScene("Game", new GameScene());
 
     sceneManager.switchScene("Main"); 
 
