@@ -14,7 +14,7 @@ const SkinNarration0 = {
         "Lớp bì chứa collagen, mạch máu, dây thần kinh, nang lông và tuyến mồ hôi.",
         "Lớp mô dưới da chứa mô mỡ giúp cách nhiệt và dự trữ năng lượng cho cơ thể.",
         "Da có chức năng: bảo vệ, điều hòa thân nhiệt, cảm nhận xúc giác và tổng hợp vitamin D.",
-        "Ghép da là kỹ thuật y tế thay thế vùng da tổn thương nặng bằng da lành từ chỗ khác trên cơ thể hoặc từ người hiến tặng."
+        "Ghép da là kỹ thuật y tế lấy da lành từ một vùng trên cơ thể để cấy ghép vào vùng da bị tổn thương nặng do bỏng hoặc nhiễm trùng."
     ],
     sprite: [
         CharacterSprite.TALK, CharacterSprite.EXPL, CharacterSprite.EXPL,
@@ -81,7 +81,7 @@ const SKIN_HOTSPOTS = [
         x: 72, y: 108, w: 618, h: 94,
         pinX: 215, pinY: 233, r: 16,
         desc: 'Lớp ngoài cùng gồm tầng sừng (tế bào chết, không thấm nước) và tầng tế bào sống có melanin tạo màu da. Vai trò: hàng rào vật lý chống vi khuẩn, tia UV và mất nước.',
-        sgk: 'Bài 39, tr.152', pron: 'biểu bì — Epidermis',
+        sgk: 'Bài 39, tr.160', pron: 'biểu bì — Epidermis',
         diseases: ['Viêm da tiếp xúc, bỏng nắng (sunburn)', 'Ung thư da (melanoma, carcinoma)', 'Vảy nến (psoriasis)'],
         swatchColor: [255, 215, 175]
     },
@@ -90,7 +90,7 @@ const SKIN_HOTSPOTS = [
         x: 316, y: 202, w: 130, h: 218,
         pinX: 425, pinY: 362, r: 16,
         desc: 'Nang lông là túi biểu bì bao quanh gốc lông. Cơ chân lông khi co (do lạnh) làm lông dựng đứng, tạo lớp không khí cách nhiệt → gây "nổi da gà".',
-        sgk: 'Bài 39, tr.154', pron: 'nang lông — Hair follicle',
+        sgk: 'Bài 39, tr.160', pron: 'nang lông — Hair follicle',
         diseases: ['Viêm nang lông (folliculitis)', 'Rụng tóc (alopecia areata)', 'Mụn trứng cá do bít nang lông'],
         swatchColor: [70, 45, 22]
     },
@@ -99,7 +99,7 @@ const SKIN_HOTSPOTS = [
         x: 436, y: 244, w: 69, h: 59,
         pinX: 473, pinY: 291, r: 14,
         desc: 'Tuyến nhờn gắn vào nang lông, tiết bã nhờn (sebum) giữ ẩm và tạo lớp màng bảo vệ da khỏi vi khuẩn, nấm. Hoạt động quá mức gây bít lỗ chân lông, dẫn đến mụn trứng cá.',
-        sgk: 'Bài 39, tr.154', pron: 'tuyến nhờn — Sebaceous gland',
+        sgk: 'Bài 39, tr.160', pron: 'tuyến nhờn — Sebaceous gland',
         diseases: ['Mụn trứng cá do tuyến nhờn quá mức', 'Lang ben (Malassezia overgrowth)', 'Da nhờn (seborrhoea)'],
         swatchColor: [210, 190, 80]
     },
@@ -108,16 +108,16 @@ const SKIN_HOTSPOTS = [
         x: 105, y: 286, w: 110, h: 117,
         pinX: 222, pinY: 345, r: 16,
         desc: 'Tuyến ống hình cuộn trong lớp bì. Tiết mồ hôi qua ống dẫn ra lỗ tuyến trên bề mặt da. Khi mồ hôi bay hơi (thu nhiệt hóa hơi), thân nhiệt hạ xuống hiệu quả.',
-        sgk: 'Bài 39, tr.154', pron: 'tuyến mồ hôi — Eccrine sweat gland',
+        sgk: 'Bài 39, tr.160', pron: 'tuyến mồ hôi — Eccrine sweat gland',
         diseases: ['Rôm sảy (miliaria / heat rash)', 'Viêm tuyến mồ hôi (hidradenitis)', 'Hôi nách (bromhidrosis)'],
         swatchColor: [60, 120, 220]
     },
     {
         id: 'lo_tuyen_mo_hoi', label: 'Lỗ tuyến mồ hôi',
         x: 145, y: 108, w: 35, h: 35,
-        pinX: 452, pinY: 229, r: 12,
+        pinX: 452, pinY: 229, r: 15,
         desc: 'Lỗ nhỏ trên bề mặt da là nơi mồ hôi thoát ra từ ống tuyến mồ hôi. Khi cơ thể nóng, mồ hôi tiết qua lỗ này, bay hơi và lấy đi nhiệt lượng, giúp hạ thân nhiệt hiệu quả.',
-        sgk: 'Bài 39, tr.154', pron: 'lỗ tuyến mồ hôi — Sweat pore',
+        sgk: 'Bài 39, tr.160', pron: 'lỗ tuyến mồ hôi — Sweat pore',
         diseases: ['Bít lỗ mồ hôi → rôm sảy', 'Mất nước, mất điện giải khi sốt cao'],
         swatchColor: [100, 160, 220]
     },
@@ -126,7 +126,7 @@ const SKIN_HOTSPOTS = [
         x: 72, y: 384, w: 618, h: 42,
         pinX: 345, pinY: 410, r: 16,
         desc: 'Động mạch (đỏ) và tĩnh mạch (xanh) tạo lưới mao mạch dày đặc trong lớp bì. Khi nóng: giãn mạch → tăng lưu lượng → thoát nhiệt. Khi lạnh: co mạch → giữ nhiệt lõi.',
-        sgk: 'Bài 39, tr.155', pron: 'mạch máu — Blood vessel',
+        sgk: 'Bài 39, tr.160', pron: 'mạch máu — Blood vessel',
         diseases: ['Giãn mao mạch (telangiectasia)', 'Da đỏ khi sốt cao hoặc nóng nực'],
         swatchColor: [210, 45, 45]
     },
@@ -135,7 +135,7 @@ const SKIN_HOTSPOTS = [
         x: 479, y: 280, w: 175, h: 104,
         pinX: 542, pinY: 343, r: 16,
         desc: 'Các đầu thần kinh chuyên biệt phát hiện kích thích từ môi trường: thụ quan Meissner (xúc giác nhẹ), Pacinian (áp lực), Ruffini (nhiệt), và đầu thần kinh tự do (đau, ngứa). Tín hiệu truyền lên não qua tủy sống.',
-        sgk: 'Bài 39, tr.155', pron: 'thụ quan cảm giác — Sensory receptor',
+        sgk: 'Bài 39, tr.160', pron: 'thụ quan cảm giác — Sensory receptor',
         diseases: ['Mất cảm giác (neuropathy) do tiểu đường', 'Herpes zoster gây đau dây thần kinh'],
         swatchColor: [220, 185, 30]
     },
@@ -144,7 +144,7 @@ const SKIN_HOTSPOTS = [
         x: 232, y: 257, w: 149, h: 104,
         pinX: 280, pinY: 365, r: 14,
         desc: 'Sợi thần kinh cảm giác mang tín hiệu từ thụ quan lên não qua tủy sống. Là cơ sở của phản xạ bảo vệ cơ thể: rút tay khỏi vật nóng, cảm nhận đau để tránh tổn thương.',
-        sgk: 'Bài 39, tr.155', pron: 'dây thần kinh — Nerve fiber',
+        sgk: 'Bài 39, tr.160', pron: 'dây thần kinh — Nerve fiber',
         diseases: ['Đau dây thần kinh (neuralgia)', 'Tê bì tay chân (peripheral neuropathy)'],
         swatchColor: [220, 185, 30]
     },
@@ -153,7 +153,7 @@ const SKIN_HOTSPOTS = [
         x: 72, y: 202, w: 238, h: 169,
         pinX: 265, pinY: 305, r: 14,
         desc: 'Collagen type I là protein cấu trúc chính (~70% khối lượng lớp bì khô). Sợi elastin cho phép da kéo giãn rồi trở về hình dạng ban đầu. Sản xuất giảm theo tuổi → da nhăn.',
-        sgk: 'Bài 39, tr.153', pron: 'collagen & sợi đàn hồi — Elastic fiber',
+        sgk: 'Bài 39, tr.160', pron: 'collagen & sợi đàn hồi — Elastic fiber',
         diseases: ['Nhăn da, chảy xệ (lão hóa mất collagen)', 'Sẹo lồi (keloid)', 'Hội chứng Ehlers-Danlos'],
         swatchColor: [255, 155, 125]
     },
@@ -162,7 +162,7 @@ const SKIN_HOTSPOTS = [
         x: 100, y: 424, w: 560, h: 69,
         pinX: 282, pinY: 463, r: 14,
         desc: 'Tế bào hình cầu lớn chứa một giọt lipid chiếm gần hết thể tích tế bào. Nguồn năng lượng dự trữ dài hạn; hệ số dẫn nhiệt thấp (~0.2 W/m·K) giúp cách nhiệt hiệu quả.',
-        sgk: 'Bài 39, tr.153', pron: 'tế bào mỡ — Adipocyte',
+        sgk: 'Bài 39, tr.160', pron: 'tế bào mỡ — Adipocyte',
         diseases: ['Béo phì (tích mỡ quá mức)', 'Mỡ máu cao (dyslipidaemia)', 'Viêm mô tế bào (cellulitis)'],
         swatchColor: [255, 248, 170]
     }
@@ -185,7 +185,7 @@ const SKIN_DISEASES_VIZ = [
         name: 'Lang ben',
         sub: 'Tinea versicolor',
         pathogen: 'Nấm Malassezia furfur',
-        desc: 'Nấm da thường trú bùng phát gây mảng đổi màu (nhạt hoặc đậm hơn da) ở ngực, lưng, cổ. Thường xuất hiện hơn khi đổ mồ hôi nhiều, khí hậu nóng ẩm.',
+        desc: 'Nấm da thường trú bùng phát gây mảng da nhạt màu (trắng hơn da xung quanh) ở ngực, lưng, cổ. Thường xuất hiện hơn khi đổ mồ hôi nhiều, khí hậu nóng ẩm.',
         symptoms: ['Mảng da đổi màu không đều', 'Ít ngứa hoặc không ngứa', 'Nặng hơn khi nóng ẩm, mồ hôi nhiều'],
         prevention: ['Tắm sau khi vận động ra mồ hôi', 'Mặc quần áo thoáng khí', 'Dùng dầu gội ketoconazole định kỳ']
     },
@@ -301,9 +301,9 @@ class SkinScene extends Scene {
         this.skipBtn = new Button(1120, 40, 100, 35, 'SKIP >>>',   'SWITCH_SCENE', 'BodyMap');
         this.nextBtn = new Button( 600, 730, 180, 46, 'Tiếp theo →','SKIN_NEXT',    null);
 
-        this.zoom3DPlusBtn   = new Button(440, 730,  88, 34, 'Zoom +', 'SKIN_3D_ZOOM_IN',  null);
-        this.zoom3DMinusBtn  = new Button(536, 730,  88, 34, 'Zoom −', 'SKIN_3D_ZOOM_OUT', null);
-        this.zoom3DResetBtn  = new Button(632, 730,  88, 34, 'Reset',  'SKIN_3D_RESET',    null);
+        this.zoom3DPlusBtn   = new Button(120, 730,  88, 34, 'Zoom +', 'SKIN_3D_ZOOM_IN',  null);
+        this.zoom3DMinusBtn  = new Button(220, 730,  88, 34, 'Zoom −', 'SKIN_3D_ZOOM_OUT', null);
+        this.zoom3DResetBtn  = new Button(320, 730,  88, 34, 'Reset',  'SKIN_3D_RESET',    null);
         this.zoom3DPlusBtn.hide();
         this.zoom3DMinusBtn.hide();
         this.zoom3DResetBtn.hide();
@@ -850,7 +850,7 @@ class SkinScene extends Scene {
 
         noStroke(); textSize(14); textStyle(NORMAL);
         for (let i = 0; i < bullets.length; i++) {
-            fill(titleColor); ellipse(px + 20, py + 58 + i * 36, 7, 7);
+            fill(titleColor); ellipse(px + 20, py + 73 + i * 36, 7, 7);
             fill(40, 30, 20); text(bullets[i], px + 32, py + 63 + i * 36, pw - 44, 30);
         }
 
@@ -877,6 +877,7 @@ class SkinScene extends Scene {
         textStyle(NORMAL);
 
         // Legend panel
+        textAlign(LEFT);
         fill(250, 250, 246); stroke(180, 175, 160); strokeWeight(1);
         rect(lx, ly, lw, lh, 8);
         fill(55, 45, 25); noStroke(); textSize(13); textStyle(BOLD);
@@ -947,7 +948,7 @@ class SkinScene extends Scene {
         pop();
 
         if (this.step2Tab === 'diseases') {
-            const cw = 230, ch = 560, gap = 10, startX = 30, startY = 62;
+            const cw = 240, ch = 560, gap = 10, startX = 15, startY = 62;
             for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
                 this._drawDiseaseCard(i, startX + i * (cw + gap), startY, cw, ch);
             }
@@ -1156,7 +1157,7 @@ class SkinScene extends Scene {
     }
 
     _drawDiseaseDetail() {
-        const rx = 762, ry = 62, rw = 415, rh = 630;
+        const rx = 768, ry = 62, rw = 409, rh = 630;
         push();
         rectMode(CORNER);
         fill(248, 252, 248); stroke(160, 200, 165); strokeWeight(1.5);
@@ -1213,7 +1214,7 @@ class SkinScene extends Scene {
         text('Cách phòng tránh:', rx + 16, prevY + 18);
         fill(30, 58, 36); textStyle(NORMAL); textSize(13);
         for (let i = 0; i < d.prevention.length; i++) {
-            fill(18, 145, 50); noStroke(); ellipse(rx + 24, prevY + 35 + i * 32, 7, 7);
+            fill(18, 145, 50); noStroke(); ellipse(rx + 24, prevY + 49 + i * 32, 7, 7);
             fill(30, 58, 36);
             text(d.prevention[i], rx + 36, prevY + 39 + i * 32, rw - 52, 30);
         }
@@ -1404,7 +1405,7 @@ class SkinScene extends Scene {
         }
 
         if (this.step2Tab === 'diseases') {
-            const cw = 230, ch = 560, gap = 10, startX = 30, startY = 62;
+            const cw = 240, ch = 560, gap = 10, startX = 15, startY = 62;
             for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
                 const cx = startX + i * (cw + gap);
                 if (mouseX >= cx && mouseX <= cx + cw &&
@@ -1566,7 +1567,7 @@ class SkinScene extends Scene {
             this.nextBtn.eventData = null;
         } else {
             this.nextBtn.show();
-            this.nextBtn.x = 1050; // shift right so it clears the 3D control buttons
+            this.nextBtn.x = 600;
             this.nextBtn.label     = '← Về trang chủ';
             this.nextBtn.eventTag  = 'SWITCH_SCENE';
             this.nextBtn.eventData = 'BodyMap';
@@ -1584,18 +1585,7 @@ class SkinScene extends Scene {
         this.thermoTemp = constrain(map(my, y, y + h, 42, 32), 32, 42);
     }
 
-    _drawThermoLabels() {
-        const sx = 30, sy = 112, eH = 55, dH = 252;
-        push(); noStroke(); textAlign(LEFT);
-        if (this.isHot) {
-            fill(40, 10, 10); textSize(12);
-            text('Mạch máu giãn → tản nhiệt', sx + 255, sy + eH + dH / 2);
-        } else if (this.isCold) {
-            fill(40, 10, 10); textSize(12);
-            text('Mạch máu co → giữ nhiệt', sx + 242, sy + eH + dH / 2);
-        }
-        pop();
-    }
+    _drawThermoLabels() {}
 
     _drawThermoBubble() {
         const bx = 200, by = 610, bw = 400, bh = 56;
@@ -1616,50 +1606,7 @@ class SkinScene extends Scene {
         pop();
     }
 
-    _drawThermoEffectors(sx, sy, eH, dH) {
-        const T = this.effectorTimer;
-        push(); rectMode(CORNER);
-        if (this.isHot) {
-            if (T >= 24) {
-                for (let i = 0; i < 6; i++) {
-                    const px = sx + 70 + i * 94;
-                    stroke(90, 140, 210); strokeWeight(2);
-                    line(px, sy, px, sy - 12);
-                    const dy = sy - 22 - ((this.animFrame * 2 + i * 55) % 88);
-                    fill(80, 140, 210, 200); noStroke();
-                    ellipse(px, dy, 9, 13);
-                }
-                fill(30, 80, 180); noStroke(); textSize(13); textAlign(LEFT);
-                text('→ Tiết mồ hôi để làm mát cơ thể', sx + 10, sy - 30);
-            }
-        } else if (this.isCold) {
-            if (T >= 24) {
-                stroke(70, 45, 25); strokeWeight(2);
-                for (let i = 0; i < 8; i++) {
-                    const hx = sx + 54 + i * 78;
-                    line(hx, sy + 5, hx + 13, sy - 25);
-                }
-                fill(30, 50, 160); noStroke(); textSize(13); textAlign(LEFT);
-                text('→ Lông dựng lên để cách nhiệt', sx + 10, sy - 30);
-            }
-            if (T >= 48) {
-                const sh = sin(this.animFrame * 0.45) * 5;
-                stroke(100, 100, 200); strokeWeight(1.5); noFill();
-                for (let i = 0; i < 3; i++) {
-                    beginShape();
-                    for (let x = sx + 120 + i * 158; x < sx + 268 + i * 158; x += 14)
-                        vertex(x + sh, sy + eH + 155 + sin(x * 0.3 + this.animFrame * 0.25) * 6);
-                    endShape();
-                }
-                fill(60, 60, 190); noStroke(); textSize(12); textAlign(LEFT);
-                text('→ Cơ run rẩy để sinh nhiệt', sx + 10, sy + eH + 195);
-            }
-        } else {
-            fill(30, 130, 60); noStroke(); textSize(13); textAlign(LEFT);
-            text('→ Thân nhiệt ổn định tại 37°C', sx + 10, sy - 18);
-        }
-        pop();
-    }
+    _drawThermoEffectors(sx, sy, eH, dH) {}
 
     _drawStepDots(total, current) {
         const dotGap = 20, pillW = 26, pillH = 12, dotD = 12;

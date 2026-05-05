@@ -86,46 +86,46 @@ const REPRO_ORGANS_F = [
     { id:'f_buong_trung', label:'Buồng trứng', x:112, y:312, r:28,
       color:'#ffd264',
       desc:'Sản xuất trứng (noãn) và tiết hormone estrogen, progesterone. Mỗi tháng phóng thích 1 trứng chín.',
-      sgk:'Bài 39, tr.163', pron:'buồng trứng [buo̩ŋ tʂúŋ]' },
+      sgk:'Bài 40, tr.166', pron:'buồng trứng [buo̩ŋ tʂúŋ]' },
     { id:'f_ong_dan_trung', label:'Ống dẫn trứng', x:200, y:255, r:22,
       color:'#f7b8d6',
       desc:'Dẫn trứng từ buồng trứng về tử cung. Thụ tinh thường xảy ra tại đây.',
-      sgk:'Bài 39, tr.163', pron:'ống dẫn trứng' },
+      sgk:'Bài 40, tr.166', pron:'ống dẫn trứng' },
     { id:'f_tu_cung', label:'Tử cung', x:360, y:358, r:30,
       color:'#ffafc8',
       desc:'Cơ quan cơ rỗng, nơi phôi thai làm tổ và phát triển suốt 9 tháng. Lót bên trong là niêm mạc tử cung.',
-      sgk:'Bài 39, tr.163', pron:'tử cung [tɨ̌ kuŋ]' },
+      sgk:'Bài 40, tr.166', pron:'tử cung [tɨ̌ kuŋ]' },
     { id:'f_co_tu_cung', label:'Cổ tử cung', x:360, y:442, r:20,
       color:'#e88faa',
       desc:'Phần cổ của tử cung nối với âm đạo. Đây là vị trí sàng lọc HPV phòng ngừa ung thư cổ tử cung.',
-      sgk:'Bài 39, tr.163', pron:'cổ tử cung' },
+      sgk:'Bài 40, tr.166', pron:'cổ tử cung' },
     { id:'f_am_dao', label:'Âm đạo', x:360, y:520, r:20,
       color:'#ffc8dc',
       desc:'Kênh dẫn từ tử cung ra ngoài, là đường ra của kinh nguyệt và đường sinh của thai nhi.',
-      sgk:'Bài 39, tr.164', pron:'âm đạo' },
+      sgk:'Bài 40, tr.166', pron:'âm đạo' },
 ];
 
 const REPRO_ORGANS_M = [
     { id:'m_tinh_hoan', label:'Tinh hoàn', x:360, y:498, r:30,
       color:'#ffd7a8',
       desc:'Sản xuất tinh trùng và tiết hormone testosterone. Nhiệt độ thấp hơn thân nhiệt ~2°C giúp tinh trùng phát triển tốt.',
-      sgk:'Bài 39, tr.165', pron:'tinh hoàn [tiŋ hwa̰n]' },
+      sgk:'Bài 40, tr.165', pron:'tinh hoàn [tiŋ hwa̰n]' },
     { id:'m_mao_tinh', label:'Mào tinh', x:252, y:460, r:22,
       color:'#e8c078',
       desc:'Nơi tinh trùng trưởng thành và được lưu trữ trong 2–3 tuần trước khi xuất tinh.',
-      sgk:'Bài 39, tr.165', pron:'mào tinh' },
+      sgk:'Bài 40, tr.165', pron:'mào tinh' },
     { id:'m_ong_dan_tinh', label:'Ống dẫn tinh', x:478, y:348, r:22,
       color:'#c8b4f0',
       desc:'Dẫn tinh trùng từ mào tinh lên túi tinh và ra ngoài cùng dịch tiết.',
-      sgk:'Bài 39, tr.165', pron:'ống dẫn tinh' },
+      sgk:'Bài 40, tr.165', pron:'ống dẫn tinh' },
     { id:'m_tui_tinh', label:'Túi tinh', x:268, y:248, r:22,
       color:'#c8b4f0',
       desc:'Tiết dịch kiềm giàu fructose để nuôi dưỡng và bảo vệ tinh trùng trong đường sinh dục nữ.',
-      sgk:'Bài 39, tr.165', pron:'túi tinh' },
+      sgk:'Bài 40, tr.165', pron:'túi tinh' },
     { id:'m_tuyen_tien_liet', label:'Tuyến tiền liệt', x:360, y:298, r:26,
       color:'#dcb4e0',
       desc:'Tiết dịch kiềm giúp trung hòa môi trường acid trong niệu đạo, bảo vệ và tăng khả năng sống của tinh trùng.',
-      sgk:'Bài 39, tr.165', pron:'tuyến tiền liệt' },
+      sgk:'Bài 40, tr.165', pron:'tuyến tiền liệt' },
 ];
 
 const REPRO_ORGAN_GATE = 4;
@@ -284,8 +284,12 @@ class ReproductiveScene extends Scene {
 
         if (this.step === 0) {
             this.femaleBtn.show(); this.maleBtn.show();
-            if (this.seenOrgans.size >= REPRO_ORGAN_GATE) this.nextBtn.show();
-            else this.nextBtn.hide();
+            if (this.seenOrgans.size >= REPRO_ORGAN_GATE) {
+                this.nextBtn.show();
+                this.nextBtn.x = 700;
+            } else {
+                this.nextBtn.hide();
+            }
         }
         if (this.step === 4) {
             this.nextBtn.hide();
@@ -337,7 +341,7 @@ class ReproductiveScene extends Scene {
     }
 
     _isInSliderArea(mx, my) {
-        return mx >= 30 && mx <= 730 && my >= 625 && my <= 675;
+        return mx >= 30 && mx <= 730 && my >= 603 && my <= 653;
     }
 
     _updateCycleDayFromX(mx) {
@@ -614,8 +618,8 @@ class ReproductiveScene extends Scene {
             text('Bệnh thường gặp:', px + 14, py + ph - 90);
             fill(55, 25, 65); textSize(12); textStyle(NORMAL);
             const diseases = isFemale
-                ? ['U nang buồng trứng, lạc nội mạc tử cung', 'Ung thư cổ tử cung (nguyên nhân: HPV)', 'Viêm nhiễm phụ khoa, vô sinh']
-                : ['Ung thư tinh hoàn (thường gặp nam 15–35t)', 'Phì đại tuyến tiền liệt (nam lớn tuổi)', 'Vô sinh nam, giãn tĩnh mạch tinh'];
+                ? ['Bệnh giang mai (Treponema pallidum)', 'Bệnh lậu (Neisseria gonorrhoeae)', 'HIV/AIDS — lây qua đường tình dục']
+                : ['Bệnh giang mai (Treponema pallidum)', 'Bệnh lậu (Neisseria gonorrhoeae)', 'HIV/AIDS — lây qua đường tình dục'];
             for (let i = 0; i < diseases.length; i++)
                 text('• ' + diseases[i], px + 16, py + ph - 68 + i * 22, pw - 30, 20);
 
@@ -742,16 +746,13 @@ class ReproductiveScene extends Scene {
             { x: 848, label: "Phôi vào\ntử cung" },
             { x:1040, label: "Làm tổ\nở tử cung" },
         ];
-        const y = 670;   // shifted down to clear extended info panel
+        const y = 648;
 
         const idx    = this.narration ? Math.min(this.narration.currentIndex || 0, waypoints.length - 1) : 0;
         const active = constrain(idx, 0, waypoints.length - 1);
 
         push();
         applyVietFont();
-        fill(100, 20, 60); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
-        text("Hành trình thụ tinh", 600, 650);
-        textStyle(NORMAL);
 
         // Connecting line
         stroke(180, 140, 210); strokeWeight(2);
@@ -851,7 +852,7 @@ class ReproductiveScene extends Scene {
         // Day slider
         push();
         rectMode(CORNER);
-        const sx = 50, sy = 640, sw = 660, sh = 16;
+        const sx = 50, sy = 618, sw = 660, sh = 16;
         fill(220, 200, 230); stroke(160, 100, 180); strokeWeight(1);
         rect(sx, sy, sw, sh, 8);
         const progX = map(this.cycleDay, 1, 28, sx, sx + sw);
@@ -935,7 +936,7 @@ class ReproductiveScene extends Scene {
         const facts = [
             '• Chu kỳ trung bình: 28 ngày (có thể 21–35 ngày)',
             '• Rụng trứng: ngày 14 (±2 ngày)',
-            '• Kinh nguyệt: ngày 1–5, mất ~30–80 mL máu',
+            '• Kinh nguyệt: kéo dài 3–7 ngày (ngày đầu chu kỳ)',
             '• Thụ thai chỉ xảy ra trong vòng 24h sau rụng trứng',
         ];
         for (let i = 0; i < facts.length; i++)
@@ -1048,9 +1049,9 @@ class ReproductiveScene extends Scene {
         push();
         applyVietFont();
         fill(255, 235, 248); stroke(180, 80, 130); strokeWeight(1);
-        rectMode(CORNER); rect(30, 645, 740, 52, 8);
+        rectMode(CORNER); rect(30, 633, 740, 52, 8);
         fill(80, 20, 55); noStroke(); textSize(12); textAlign(CENTER);
-        text("Mọi biện pháp đều nhằm ngăn tinh trùng gặp trứng — chỉ khác về cơ chế và thời điểm tác dụng.", 400, 675);
+        text("Mọi biện pháp đều nhằm ngăn tinh trùng gặp trứng — chỉ khác về cơ chế và thời điểm tác dụng.", 400, 663);
         pop();
     }
 
