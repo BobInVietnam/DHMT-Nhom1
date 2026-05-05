@@ -341,7 +341,7 @@ class ReproductiveScene extends Scene {
     }
 
     _isInSliderArea(mx, my) {
-        return mx >= 30 && mx <= 730 && my >= 625 && my <= 675;
+        return mx >= 30 && mx <= 730 && my >= 603 && my <= 653;
     }
 
     _updateCycleDayFromX(mx) {
@@ -746,16 +746,13 @@ class ReproductiveScene extends Scene {
             { x: 848, label: "Phôi vào\ntử cung" },
             { x:1040, label: "Làm tổ\nở tử cung" },
         ];
-        const y = 670;   // shifted down to clear extended info panel
+        const y = 648;
 
         const idx    = this.narration ? Math.min(this.narration.currentIndex || 0, waypoints.length - 1) : 0;
         const active = constrain(idx, 0, waypoints.length - 1);
 
         push();
         applyVietFont();
-        fill(100, 20, 60); noStroke(); textSize(13); textStyle(BOLD); textAlign(CENTER);
-        text("Hành trình thụ tinh", 600, 650);
-        textStyle(NORMAL);
 
         // Connecting line
         stroke(180, 140, 210); strokeWeight(2);
@@ -855,7 +852,7 @@ class ReproductiveScene extends Scene {
         // Day slider
         push();
         rectMode(CORNER);
-        const sx = 50, sy = 640, sw = 660, sh = 16;
+        const sx = 50, sy = 618, sw = 660, sh = 16;
         fill(220, 200, 230); stroke(160, 100, 180); strokeWeight(1);
         rect(sx, sy, sw, sh, 8);
         const progX = map(this.cycleDay, 1, 28, sx, sx + sw);
@@ -1052,9 +1049,9 @@ class ReproductiveScene extends Scene {
         push();
         applyVietFont();
         fill(255, 235, 248); stroke(180, 80, 130); strokeWeight(1);
-        rectMode(CORNER); rect(30, 645, 740, 52, 8);
+        rectMode(CORNER); rect(30, 633, 740, 52, 8);
         fill(80, 20, 55); noStroke(); textSize(12); textAlign(CENTER);
-        text("Mọi biện pháp đều nhằm ngăn tinh trùng gặp trứng — chỉ khác về cơ chế và thời điểm tác dụng.", 400, 675);
+        text("Mọi biện pháp đều nhằm ngăn tinh trùng gặp trứng — chỉ khác về cơ chế và thời điểm tác dụng.", 400, 663);
         pop();
     }
 
