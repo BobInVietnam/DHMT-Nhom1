@@ -284,8 +284,12 @@ class ReproductiveScene extends Scene {
 
         if (this.step === 0) {
             this.femaleBtn.show(); this.maleBtn.show();
-            if (this.seenOrgans.size >= REPRO_ORGAN_GATE) this.nextBtn.show();
-            else this.nextBtn.hide();
+            if (this.seenOrgans.size >= REPRO_ORGAN_GATE) {
+                this.nextBtn.show();
+                this.nextBtn.x = 700;
+            } else {
+                this.nextBtn.hide();
+            }
         }
         if (this.step === 4) {
             this.nextBtn.hide();

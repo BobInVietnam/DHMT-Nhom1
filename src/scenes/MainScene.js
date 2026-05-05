@@ -16,7 +16,7 @@ class MainScene extends Scene {
         super();
 
         let btnX = width / 2;
-        let btnY = height / 2;
+        let btnY = height / 2 + 40;
         this.startBtn = new Button(btnX, btnY, 250, 60, "START", "SWITCH_SCENE", "BodyMap");
         this.narration = new Narration(950, 350)
         this.narrator = new Narrator(800, 600, MainSceneContent)
@@ -31,7 +31,7 @@ class MainScene extends Scene {
         textStyle(BOLD)
         textAlign(CENTER, CENTER)
         rectMode(CENTER)
-        text("Chào mừng đến với Lớp Học!", width/2, height/2 - 200, 600, 200)
+        text("Chào mừng đến với Lớp Học!", width/2, height/2 - 150, 600, 100)
         pop()
         super.draw();
     }

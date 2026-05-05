@@ -115,7 +115,7 @@ const SKIN_HOTSPOTS = [
     {
         id: 'lo_tuyen_mo_hoi', label: 'Lỗ tuyến mồ hôi',
         x: 145, y: 108, w: 35, h: 35,
-        pinX: 452, pinY: 229, r: 12,
+        pinX: 452, pinY: 229, r: 15,
         desc: 'Lỗ nhỏ trên bề mặt da là nơi mồ hôi thoát ra từ ống tuyến mồ hôi. Khi cơ thể nóng, mồ hôi tiết qua lỗ này, bay hơi và lấy đi nhiệt lượng, giúp hạ thân nhiệt hiệu quả.',
         sgk: 'Bài 39, tr.154', pron: 'lỗ tuyến mồ hôi — Sweat pore',
         diseases: ['Bít lỗ mồ hôi → rôm sảy', 'Mất nước, mất điện giải khi sốt cao'],
@@ -301,9 +301,9 @@ class SkinScene extends Scene {
         this.skipBtn = new Button(1120, 40, 100, 35, 'SKIP >>>',   'SWITCH_SCENE', 'BodyMap');
         this.nextBtn = new Button( 600, 730, 180, 46, 'Tiếp theo →','SKIN_NEXT',    null);
 
-        this.zoom3DPlusBtn   = new Button(440, 730,  88, 34, 'Zoom +', 'SKIN_3D_ZOOM_IN',  null);
-        this.zoom3DMinusBtn  = new Button(536, 730,  88, 34, 'Zoom −', 'SKIN_3D_ZOOM_OUT', null);
-        this.zoom3DResetBtn  = new Button(632, 730,  88, 34, 'Reset',  'SKIN_3D_RESET',    null);
+        this.zoom3DPlusBtn   = new Button(120, 730,  88, 34, 'Zoom +', 'SKIN_3D_ZOOM_IN',  null);
+        this.zoom3DMinusBtn  = new Button(220, 730,  88, 34, 'Zoom −', 'SKIN_3D_ZOOM_OUT', null);
+        this.zoom3DResetBtn  = new Button(320, 730,  88, 34, 'Reset',  'SKIN_3D_RESET',    null);
         this.zoom3DPlusBtn.hide();
         this.zoom3DMinusBtn.hide();
         this.zoom3DResetBtn.hide();
@@ -877,6 +877,7 @@ class SkinScene extends Scene {
         textStyle(NORMAL);
 
         // Legend panel
+        textAlign(LEFT);
         fill(250, 250, 246); stroke(180, 175, 160); strokeWeight(1);
         rect(lx, ly, lw, lh, 8);
         fill(55, 45, 25); noStroke(); textSize(13); textStyle(BOLD);
@@ -947,7 +948,7 @@ class SkinScene extends Scene {
         pop();
 
         if (this.step2Tab === 'diseases') {
-            const cw = 230, ch = 560, gap = 10, startX = 30, startY = 62;
+            const cw = 240, ch = 560, gap = 10, startX = 15, startY = 62;
             for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
                 this._drawDiseaseCard(i, startX + i * (cw + gap), startY, cw, ch);
             }
@@ -1156,7 +1157,7 @@ class SkinScene extends Scene {
     }
 
     _drawDiseaseDetail() {
-        const rx = 762, ry = 62, rw = 415, rh = 630;
+        const rx = 768, ry = 62, rw = 409, rh = 630;
         push();
         rectMode(CORNER);
         fill(248, 252, 248); stroke(160, 200, 165); strokeWeight(1.5);
@@ -1404,7 +1405,7 @@ class SkinScene extends Scene {
         }
 
         if (this.step2Tab === 'diseases') {
-            const cw = 230, ch = 560, gap = 10, startX = 30, startY = 62;
+            const cw = 240, ch = 560, gap = 10, startX = 15, startY = 62;
             for (let i = 0; i < SKIN_DISEASES_VIZ.length; i++) {
                 const cx = startX + i * (cw + gap);
                 if (mouseX >= cx && mouseX <= cx + cw &&
@@ -1566,7 +1567,7 @@ class SkinScene extends Scene {
             this.nextBtn.eventData = null;
         } else {
             this.nextBtn.show();
-            this.nextBtn.x = 1050; // shift right so it clears the 3D control buttons
+            this.nextBtn.x = 600;
             this.nextBtn.label     = '← Về trang chủ';
             this.nextBtn.eventTag  = 'SWITCH_SCENE';
             this.nextBtn.eventData = 'BodyMap';

@@ -3,11 +3,11 @@ class BodyMapScene extends ZoomableScene {
         super();
 
         this.human     = new ImageEntity(width/2, height/2, 0, height, "male_xray", true)
-        this.leftHand  = new CircleButton(494, 337, 16, "SWITCH_SCENE", "Skin")
-        this.rightHand = new CircleButton(710, 337, 16, "SWITCH_SCENE", "Skin")
-        this.brain     = new ImageButton(width/2, height/2 - 330, 100, 100, "brain",  false, "SWITCH_SCENE", "Nervous")
+        this.leftHand  = new CircleButton(494, 337, 22, "SWITCH_SCENE", "Skin", "Da")
+        this.rightHand = new CircleButton(710, 337, 22, "SWITCH_SCENE", "Skin", "Da")
+        this.brain     = new ImageButton(width/2, height/2 - 300, 100, 100, "brain",  false, "SWITCH_SCENE", "Nervous")
         this.kidney    = new ImageButton(width/2, height/2 - 80,  100, 100, "kidney", false, "SWITCH_SCENE", "Endocrine")
-        this.balls     = new ImageButton(width/2, height/2 + 50,   50,  50, "balls",  false, "SWITCH_SCENE", "Reproductive")
+        this.balls     = new ImageButton(width/2, height/2 + 50,   80,  80, "balls",  false, "SWITCH_SCENE", "Reproductive")
 
         this.zoomableObjects.push(this.human, this.leftHand, this.rightHand, this.brain, this.kidney, this.balls)
     }
@@ -18,8 +18,28 @@ class BodyMapScene extends ZoomableScene {
         this.camera.zoom = 1.0;
     }
 
-    // Body map uses fixed camera — no accidental panning
     checkMouseDragged() {}
+
+    drawZoomable(mx, my) {
+        super.drawZoomable(mx, my);
+        push();
+        applyVietFont();
+        textAlign(CENTER, TOP);
+        noStroke();
+
+        fill(this.brain.isHovered ? color(255) : color(30));
+        textSize(13); textStyle(BOLD);
+        text('Thần kinh', this.brain.x, this.brain.y + 50 + 6);
+
+        fill(this.kidney.isHovered ? color(255) : color(30));
+        text('Nội tiết', this.kidney.x, this.kidney.y + 50 + 6);
+
+        fill(this.balls.isHovered ? color(255) : color(30));
+        text('Sinh dục', this.balls.x, this.balls.y + 40 + 6);
+
+        textStyle(NORMAL);
+        pop();
+    }
 
     draw() {
         background(200)
