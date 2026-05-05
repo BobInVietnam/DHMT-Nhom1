@@ -2,6 +2,7 @@
     "data2d": [
         { "name": "liver",               "path": "g403.jpg"                  },
         { "name": "male_xray",           "path": "male_xray.png"             },
+        { "name": "male_nerve",           "path": "male_nerve.png"             },
         { "name": "female_xray",         "path": "female_xray.png"           },
         { "name": "kidney",              "path": "kidney.png"                },
         { "name": "brain",               "path": "brain.png"                 },

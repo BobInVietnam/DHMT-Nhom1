@@ -19,20 +19,33 @@ class NervousScene extends Scene {
     constructor() {
         super();
 
+        this.step = 0
         this.backBtn = new Button(100, 50, 150, 40, "Quay lại", "SWITCH_SCENE", "BodyMap");
-        this.eyeBtn = new Button(width / 2 - 120, height / 2 - 150, 120, 40, "Mắt (Thị giác)", "SWITCH_SCENE", "EyeDetail");
-        this.earBtn = new Button(width / 2 + 120, height / 2 - 100, 120, 40, "Tai (Thính giác)", "SWITCH_SCENE", "EarDetail");
+        this.eyeBtn = new CircleButton(width / 2 - 120, height / 2 - 150, 30, "NEXT_NERVE_STEP", 1, "Mắt");
+        this.earBtn = new CircleButton(width / 2 + 120, height / 2 - 100, 30, "NEXT_NERVE_STEP", 2, "Tai");
+        this.nervous = new ImageEntity(width/2, height/2, 0, height - 100, "male_nerve", true)
 
-        this.narration = new Narration(950, 350);
         this.narrator = new Narrator(800, 600, NervousSceneContent);
+        this.narration = new Narration(950, 350);
 
         this.objects.push(
+            this.nervous,
             this.backBtn, 
             this.eyeBtn, 
             this.earBtn, 
             this.narration, 
-            this.narrator
+            this.narrator,
         );
+
+
+    }
+
+    enter() {
+        this.step = 0
+        this.eyeBtn.hide()
+        this.earBtn.hide()
+        this.narrator.show();
+        bus.emit('SHOW_NARRATION', NervousSceneContent);
     }
 
     draw() {
@@ -46,32 +59,7 @@ class NervousScene extends Scene {
         text("HỆ THẦN KINH", width / 2, 60);
         pop();
 
-        this.drawNervousSystem2D();
-
         super.draw();
     }
 
-    drawNervousSystem2D() {
-        push();
-        stroke(100, 150, 255);
-        strokeWeight(5);
-        line(width / 2, 180, width / 2, height - 150);
-        
-        fill(255, 200, 200);
-        stroke(200, 50, 50);
-        ellipse(width / 2, 150, 100, 80);
-        
-        strokeWeight(2);
-        for(let i = 0; i < 5; i++) {
-            line(width/2, 250 + i*50, width/2 - 100, 280 + i*60);
-            line(width/2, 250 + i*50, width/2 + 100, 280 + i*60);
-        }
-        
-        fill(0);
-        noStroke();
-        textSize(16);
-        textAlign(CENTER);
-        text("Sơ đồ hệ thần kinh 2D", width/2, height - 100);
-        pop();
-    }
 }
