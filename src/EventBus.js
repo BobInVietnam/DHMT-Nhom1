@@ -5,8 +5,11 @@ class EventBus {
 
   // Subscribe to an event
   on(event, callback) {
-    if (!this.listeners[event]) this.listeners[event] = [];
-    this.listeners[event].push(callback);
+    if (!this.listeners[event]) {
+      this.listeners[event] = new Set();
+    }
+    // Sets automatically ignore duplicate function references
+    this.listeners[event].add(callback);
   }
 
   // Broadcast an event
