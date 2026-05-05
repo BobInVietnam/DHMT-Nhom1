@@ -145,7 +145,7 @@ class ReproductiveScene extends Scene {
         this.narrator     = new Narrator(980, 390, ReproNarrationFemale);
         this._modalOpen   = false;
         this.backBtn      = new Button(80,   40, 130, 40, "← Quay lại",    "SWITCH_SCENE", "BodyMap");
-        this.skipBtn      = new Button(1120, 40, 100, 35, "SKIP >>>",       "SWITCH_SCENE", "BodyMap");
+        this.skipBtn      = new Button(1120, 40, 100, 35, "Bỏ qua >>>",       "REPRO_NEXT", null);
         this.nextBtn      = new Button(520, 730, 160, 46, "Tiếp theo →",    "REPRO_NEXT",   null);
 
         // Step 0 gender toggle (left-edge of group at x=230 per design; Button uses rectMode CENTER)
@@ -211,6 +211,7 @@ class ReproductiveScene extends Scene {
         this.narrator.show();
         this.narrator.eventData = ReproNarrationFemale;
         bus.emit("SHOW_NARRATION", ReproNarrationFemale);
+        bus.emit('SCENE_ENTER');
         this._modalOpen = true;
         this._syncButtons();
         this._initGame();
@@ -218,6 +219,7 @@ class ReproductiveScene extends Scene {
     }
 
     exit() {
+        bus.emit('SCENE_EXIT');
         soundManager.stopAll();
     }
 

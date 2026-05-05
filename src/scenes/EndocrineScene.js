@@ -166,6 +166,7 @@ class EndocrineScene extends ZoomableScene {
     }
 
     enter() {
+        bus.emit('SCENE_ENTER');
         this.isActive = true;
         
         this.camera = { x: 0, y: 0, zoom: 1.0, minZoom: 0.2, maxZoom: 5.0 };
@@ -185,6 +186,7 @@ class EndocrineScene extends ZoomableScene {
     }
 
     exit() {
+        bus.emit('SCENE_EXIT');
         this.isActive = false;
         this.narratorEntity.isVisible = false;
         this.narrationEntity.isVisible = false;
@@ -317,7 +319,8 @@ class EndocrineScene extends ZoomableScene {
         if (this.step === 0) {
             super.checkClick(); // Logic tour cũ
         } else {
-            // Logic Quiz Click
+            super.checkClick();
+
             const px = 50, py = 100, pw = 700;
             const optY0 = py + 140, optH = 70, optGap = 15;
             const answered = this._quizAnswers[this._quizIdx];
@@ -336,7 +339,6 @@ class EndocrineScene extends ZoomableScene {
                     this._quizIdx++;
                 }
             }
-            super.checkClick();
         }
     }
 }

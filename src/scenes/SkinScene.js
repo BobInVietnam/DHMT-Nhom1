@@ -298,7 +298,7 @@ class SkinScene extends Scene {
         this._modalOpen = false;
 
         this.backBtn = new Button( 80,  40, 130, 40, '← Quay lại', 'SWITCH_SCENE', 'BodyMap');
-        this.skipBtn = new Button(1120, 40, 100, 35, 'SKIP >>>',   'SWITCH_SCENE', 'BodyMap');
+        this.skipBtn = new Button(1120, 40, 100, 35, 'Bỏ qua >>>',   'SKIN_NEXT', null);
         this.nextBtn = new Button( 600, 730, 180, 46, 'Tiếp theo →','SKIN_NEXT',    null);
 
         this.zoom3DPlusBtn   = new Button(120, 730,  88, 34, 'Zoom +', 'SKIN_3D_ZOOM_IN',  null);
@@ -357,14 +357,14 @@ class SkinScene extends Scene {
         bus.emit('FINISH_NARRATION');
         bus.emit('SHOW_NARRATION', SkinNarration0);
         this._modalOpen = true;
-        bus.emit('SKIN_ENTER');
+        bus.emit('SCENE_ENTER');
         model3DViewer.hide();
         this._syncButtons();
     }
 
     exit() {
         model3DViewer.hide();
-        bus.emit('SKIN_EXIT');
+        bus.emit('SCENE_EXIT');
     }
 
     nextStep() {

@@ -51,8 +51,8 @@ class SoundManager {
         bus.on("SHOW_NARRATION",     ()      => this.play("narration_open"));
         bus.on("RUN_NARRATION",      ()      => this.play("narration_next"));
 
-        bus.on("SKIN_ENTER",         ()      => this.loop("skin_ambient"));
-        bus.on("SKIN_EXIT",          ()      => this.stopAll());
+        bus.on("SCENE_ENTER",         ()      => this.loop("skin_ambient"));
+        bus.on("SCENE_EXIT",          ()      => this.stopAll());
         bus.on("SKIN_NEXT",          ()      => this.play("scene_transition"));
         bus.on("SKIN_3D_LOADED",     ()      => this.play("model_load"));
         bus.on("SKIN_THERMO_CHANGE", (isHot) => {

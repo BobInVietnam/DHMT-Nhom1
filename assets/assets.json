@@ -26,6 +26,14 @@
         { "name": "skin_cold_3",         "path": "skin_cold_3.png"           },
         { "name": "skin_cold_4",         "path": "skin_cold_4.png"           },
         {
+            "name": "ear",
+            "path": "ear.png"
+        },
+        {
+            "name": "eye",
+            "path": "eye.png"
+        },
+        {
             "name": "game_bg",
             "path": "game_bg.png"
         },
